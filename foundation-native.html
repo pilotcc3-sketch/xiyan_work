@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的工作视图 · 原生板块（样式生产 owner 交付）</title>
+<style>
+/* ========================================
+   完全沿用基座 styles.css 的设计 token，确保拼回基座零违和
+   原始基座：https://yi0702.github.io/workbench-foundation/index.html
+   ======================================== */
+:root {
+  --primary: #2b6cb0;
+  --primary-dark: #1e4a8a;
+  --primary-light: #4299e1;
+  --accent: #ed8936;
+  --success: #38a169;
+  --warn: #d69e2e;
+  --danger: #c53030;
+  --text: #1a202c;
+  --text-sub: #4a5568;
+  --text-light: #718096;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e0;
+  --bg: #f7fafc;
+  --bg-section: #fff;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --meta-bg: #fafaf6;
+  --meta-border: #d4d4cf;
+  --meta-text: #6b6857;
+  --meta-tag-bg: #ebe9d9;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 14px; line-height: 1.6;
+  color: var(--text); background: var(--bg);
+}
+
+/* 顶部交付说明条 */
+.deliver-banner {
+  background: linear-gradient(90deg, #ebf8ff 0%, #fff 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+}
+.deliver-banner-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--text-sub); }
+.deliver-tag { background: var(--primary); color: #fff; padding: 3px 10px; border-radius: 4px; font-weight: 600; font-size: 11px; }
+.deliver-banner b { color: var(--text); }
+
+main { max-width: 1280px; margin: 0 auto; padding: 24px; }
+
+/* 模拟基座的"我的工作视图"层 */
+.layer-board {
+  background: var(--bg-section);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+.layer-header { margin-bottom: 16px; }
+.layer-header h2 { font-size: 20px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.layer-sub { font-size: 13px; color: var(--text-light); }
+
+/* 视角条（模拟基座的筛选器，已锁定为"原生"） */
+.view-filters {
+  background: #f8fafc; border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 14px; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.filter-label { font-size: 12px; color: var(--text-sub); font-weight: 500; }
+.filter-mode {
+  font-size: 12px; padding: 4px 12px; border-radius: 4px;
+  background: #fff; border: 1px solid var(--border); cursor: pointer;
+}
+.filter-mode.active {
+  background: var(--primary); color: #fff; border-color: var(--primary);
+}
+.filter-chip {
+  font-size: 12px; padding: 4px 10px; border-radius: 12px;
+  background: #fff; border: 1px solid var(--border); color: var(--text-sub);
+}
+.filter-chip.active {
+  background: #ebf8ff; border-color: var(--primary); color: var(--primary); font-weight: 500;
+}
+.filter-help { font-size: 11px; color: var(--text-light); margin-left: auto; font-style: italic; }
+
+/* ========== 看板区 · 与基座完全一致 ========== */
+.board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.board-card {
+  background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px;
+}
+.card-w2 { grid-column: span 2; }
+.card-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+}
+.card-title { font-size: 14px; font-weight: 600; }
+.card-owner { font-size: 11px; color: var(--text-light); }
+.card-owner strong { color: var(--text-sub); font-weight: 500; }
+.card-link { font-size: 12px; color: var(--primary); cursor: pointer; }
+.card-link:hover { text-decoration: underline; }
+
+/* 占位卡 */
+.card-body-pending {
+  background: var(--meta-bg); border: 1px dashed var(--meta-border);
+  border-radius: 6px; padding: 14px;
+}
+.pending-text { font-size: 12px; color: var(--meta-text); line-height: 1.7; font-style: italic; }
+.pending-text strong { color: var(--text-sub); font-style: normal; font-weight: 600; }
+
+/* ========== 「📋 模板全局视图 · 原生」内容 ========== */
+.tpl-global { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; align-items: stretch; }
+.tpl-stat {
+  background: #f8fafc; border: 1px solid var(--border); border-radius: 8px;
+  padding: 12px 14px;
+}
+.tpl-stat-label { font-size: 11px; color: var(--text-light); margin-bottom: 6px; }
+.tpl-stat-num { font-size: 22px; font-weight: 700; color: var(--text); line-height: 1; }
+.tpl-stat-unit { font-size: 12px; color: var(--text-sub); margin-left: 4px; font-weight: 500; }
+.tpl-stat-delta { font-size: 11px; margin-top: 6px; }
+.delta-up { color: var(--success); }
+.delta-down { color: var(--danger); }
+.delta-warn { color: var(--warn); }
+.tpl-stat-side { font-size: 11px; color: var(--text-light); margin-top: 4px; }
+.tpl-stat-side a { color: var(--primary); cursor: pointer; }
+
+.tpl-stack {
+  margin-top: 14px;
+  background: #f8fafc; border: 1px solid var(--border); border-radius: 8px;
+  padding: 12px 14px;
+}
+.tpl-stack-title { font-size: 12px; color: var(--text-sub); font-weight: 600; margin-bottom: 10px; }
+.tpl-stack-bar { display: flex; height: 14px; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+.stack-seg { height: 100%; transition: opacity .2s; }
+.stack-seg:hover { opacity: 0.8; }
+.s1 { background: #2b6cb0; } /* 蓝 */
+.s2 { background: #4299e1; } /* 蓝-淡 */
+.s3 { background: #63b3ed; } /* 蓝-更淡 */
+.s4 { background: #cbd5e0; } /* 灰，长尾 */
+.tpl-stack-legend { font-size: 11px; color: var(--text-sub); display: flex; flex-wrap: wrap; gap: 14px; }
+.tpl-stack-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+
+/* ========== 「💰 关键数据表现 · 原生」内容 ========== */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.kpi {
+  background: #f8fafc; border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 12px;
+}
+.kpi-label { font-size: 11px; color: var(--text-light); }
+.kpi-num { font-size: 18px; font-weight: 700; color: var(--text); margin-top: 4px; }
+.kpi-delta { font-size: 11px; margin-top: 4px; }
+.long-tail {
+  margin-top: 12px;
+  background: #fffbeb; border: 1px solid #fbd38d; border-radius: 6px;
+  padding: 10px 12px; font-size: 12px; color: var(--text-sub);
+}
+.long-tail b { color: var(--warn); }
+
+/* ========== 「⚠️ 建议关注 · 原生」内容 ========== */
+.attn-list { display: flex; flex-direction: column; gap: 6px; }
+.attn-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: 6px;
+  font-size: 12px; color: var(--text-sub);
+  border: 1px solid transparent;
+}
+.attn-item:hover { background: #f8fafc; border-color: var(--border); }
+.attn-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-red { background: var(--danger); }
+.dot-yellow { background: var(--warn); }
+.dot-green { background: var(--success); }
+.attn-text { flex: 1; }
+.attn-text b { color: var(--text); font-weight: 500; }
+.attn-action {
+  font-size: 11px; color: var(--primary); cursor: pointer;
+  padding: 3px 8px; border: 1px solid var(--border); border-radius: 3px;
+  background: #fff; flex-shrink: 0;
+}
+.attn-action:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+.attn-section-title {
+  font-size: 11px; color: var(--text-light); margin: 8px 0 4px;
+  display: flex; align-items: center; gap: 6px;
+}
+.attn-section-title:first-child { margin-top: 0; }
+.attn-count { background: #edf2f7; padding: 1px 6px; border-radius: 8px; font-weight: 500; }
+
+/* ========== 「💡 洞察迭代建议 · 原生」内容 ========== */
+.ai-list { display: flex; flex-direction: column; gap: 10px; }
+.ai-item {
+  background: linear-gradient(135deg, #ebf4ff 0%, #f0fff4 100%);
+  border: 1px solid #bee3f8; border-left: 3px solid var(--primary);
+  border-radius: 6px; padding: 10px 12px;
+}
+.ai-item-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 4px; }
+.ai-item-title { font-size: 13px; font-weight: 500; color: var(--text); flex: 1; }
+.ai-conf { font-size: 11px; color: var(--text-sub); white-space: nowrap; }
+.ai-item-body { font-size: 11px; color: var(--text-sub); line-height: 1.6; }
+.ai-item-body b { color: var(--success); font-weight: 600; }
+.ai-item-foot { margin-top: 8px; display: flex; gap: 8px; }
+.ai-btn {
+  font-size: 11px; padding: 3px 10px; border-radius: 3px;
+  background: #fff; border: 1px solid var(--primary); color: var(--primary); cursor: pointer;
+}
+.ai-btn:hover { background: var(--primary); color: #fff; }
+.ai-more { text-align: center; font-size: 11px; color: var(--text-light); padding: 4px 0; cursor: pointer; }
+.ai-more:hover { color: var(--primary); }
+
+/* 元注释 */
+.meta-note {
+  margin-top: 14px;
+  background: var(--meta-bg); border: 1px dashed var(--meta-border);
+  border-left: 3px solid var(--meta-tag-bg);
+  border-radius: 6px; padding: 10px 14px;
+  font-size: 11px; color: var(--meta-text); line-height: 1.7;
+}
+.meta-note-tag {
+  background: var(--meta-tag-bg); color: var(--meta-text);
+  padding: 1px 8px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-right: 8px;
+}
+
+/* 区块小标题（讲稿用） */
+.section-anchor {
+  font-size: 12px; color: var(--primary); font-weight: 600;
+  margin: 24px 0 8px; padding-left: 8px; border-left: 3px solid var(--primary);
+}
+
+/* 响应式 */
+@media (max-width: 1024px) {
+  .board { grid-template-columns: 1fr; }
+  .card-w2 { grid-column: span 1; }
+  .tpl-global { grid-template-columns: 1fr 1fr; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ============== 顶部交付说明（仅本预览页用，拼回基座时删除） ============== -->
+<div class="deliver-banner">
+  <div class="deliver-banner-inner">
+    <span class="deliver-tag">交付物</span>
+    <span><b>样式生产 owner · 小樊</b> · 5/29 路演 · 「我的工作视图」原生板块</span>
+    <span style="color:var(--text-light)">|</span>
+    <span>视觉沿用基座 styles.css 真实 token · 可直接拼回 <code style="background:#edf2f7;padding:1px 6px;border-radius:3px">workbench-foundation/index.html</code></span>
+    <span style="margin-left:auto">基座地址：<a href="https://yi0702.github.io/workbench-foundation/index.html" target="_blank" style="color:var(--primary)">yi0702.github.io/workbench-foundation</a></span>
+  </div>
+</div>
+
+<main>
+
+  <!-- 模拟基座的"我的工作视图"层 -->
+  <section class="layer-board">
+
+    <div class="layer-header">
+      <h2>我的工作视图 · 原生场景</h2>
+      <span class="layer-sub">视角已锁定 = <b style="color:var(--primary)">场景：原生</b>，下方所有数字均为原生形态下的口径</span>
+    </div>
+
+    <!-- 视角筛选条（已选中"原生"） -->
+    <div class="view-filters">
+      <span class="filter-label">📊 视角范围</span>
+      <button class="filter-mode active">大盘全量</button>
+      <button class="filter-mode">自定义视角</button>
+      <span style="width:1px;height:14px;background:var(--border);margin:0 4px"></span>
+      <span class="filter-label">🎬 场景</span>
+      <span class="filter-chip">开屏</span>
+      <span class="filter-chip">插屏</span>
+      <span class="filter-chip">激励</span>
+      <span class="filter-chip active">✓ 原生</span>
+      <span class="filter-help">演示态：仅勾选"原生"以展示本板块</span>
+    </div>
+
+    <!-- 看板 5 张卡片，与基座 1:1 对应 -->
+    <div class="board">
+
+      <!-- ============ 卡片①：📋 模板全局视图（原生）============ -->
+      <div class="board-card card-w2">
+        <div class="card-header">
+          <span class="card-title">📋 模板全局视图 · 原生</span>
+          <span class="card-owner">由 <strong>样式生产</strong> owner 共建 · 小樊</span>
+        </div>
+
+        <div class="tpl-global">
+          <div class="tpl-stat">
+            <div class="tpl-stat-label">在投模板</div>
+            <div><span class="tpl-stat-num">128</span><span class="tpl-stat-unit">个</span></div>
+            <div class="tpl-stat-delta delta-up">↑ 12（近 30 天净增）</div>
+          </div>
+          <div class="tpl-stat">
+            <div class="tpl-stat-label">本周新增</div>
+            <div><span class="tpl-stat-num">7</span><span class="tpl-stat-unit">个</span></div>
+            <div class="tpl-stat-delta delta-warn">⚠ 待审批 3 · <a>去审批</a></div>
+          </div>
+          <div class="tpl-stat">
+            <div class="tpl-stat-label">暂停中</div>
+            <div><span class="tpl-stat-num">14</span><span class="tpl-stat-unit">个</span></div>
+            <div class="tpl-stat-delta delta-down">↓ 其中过保 5 · <a>批量下线</a></div>
+          </div>
+        </div>
+
+        <div class="tpl-stack">
+          <div class="tpl-stack-title">主力模板分布（按近 7 天消耗）</div>
+          <div class="tpl-stack-bar">
+            <div class="stack-seg s1" style="width:22.4%" title="原生大图_v3 22.4%"></div>
+            <div class="stack-seg s2" style="width:14.1%" title="原生组图_游戏IP 14.1%"></div>
+            <div class="stack-seg s3" style="width:9.8%" title="原生视频_本地生活 9.8%"></div>
+            <div class="stack-seg s4" style="width:53.7%" title="其他 118 个长尾模板"></div>
+          </div>
+          <div class="tpl-stack-legend">
+            <span><i class="s1"></i>① 原生大图_v3_金融通用 · 22.4%</span>
+            <span><i class="s2"></i>② 原生组图_游戏IP通用 · 14.1%</span>
+            <span><i class="s3"></i>③ 原生视频_本地生活 · 9.8%</span>
+            <span><i class="s4"></i>其他 118 个长尾 · 53.7%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 卡片②：🕐 近期操作（基座原样保留，不改） ============ -->
+      <div class="board-card">
+        <div class="card-header">
+          <span class="card-title">🕐 近期操作</span>
+          <a class="card-link">查看日志 →</a>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:12px;padding:6px 0;border-bottom:1px dashed var(--border);color:var(--text-sub);display:flex;align-items:center;gap:6px">
+            <span style="font-size:11px;color:var(--text-light);min-width:40px">10:32</span>
+            <span style="font-size:10px;background:#e6fffa;color:#234e52;padding:1px 6px;border-radius:3px">模板</span>
+            小樊 上线了「原生大图_v3_金融通用」
+          </div>
+          <div style="font-size:12px;padding:6px 0;border-bottom:1px dashed var(--border);color:var(--text-sub);display:flex;align-items:center;gap:6px">
+            <span style="font-size:11px;color:var(--text-light);min-width:40px">09:18</span>
+            <span style="font-size:10px;background:#e6fffa;color:#234e52;padding:1px 6px;border-radius:3px">模板</span>
+            阿伦 在创意广场提交「原生视频_本地生活_v2」草稿
+          </div>
+          <div style="font-size:12px;padding:6px 0;border-bottom:1px dashed var(--border);color:var(--text-sub);display:flex;align-items:center;gap:6px">
+            <span style="font-size:11px;color:var(--text-light);min-width:40px">昨日</span>
+            <span style="font-size:10px;background:#fef5e7;color:#7c2d12;padding:1px 6px;border-radius:3px">规则</span>
+            昌仔 调整了「原生形态-游戏赛道」白名单
+          </div>
+          <div style="font-size:12px;padding:6px 0;border-bottom:1px dashed var(--border);color:var(--text-sub);display:flex;align-items:center;gap:6px">
+            <span style="font-size:11px;color:var(--text-light);min-width:40px">昨日</span>
+            <span style="font-size:10px;background:#e6fffa;color:#234e52;padding:1px 6px;border-radius:3px">模板</span>
+            小樊 暂停了「原生组图_v1_老规格」
+          </div>
+          <div style="font-size:12px;padding:6px 0;color:var(--text-sub);display:flex;align-items:center;gap:6px">
+            <span style="font-size:11px;color:var(--text-light);min-width:40px">前日</span>
+            <span style="font-size:10px;background:#e6fffa;color:#234e52;padding:1px 6px;border-radius:3px">模板</span>
+            坤婧 上线了「原生大图_v3_金融通用」实验
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--text-light);margin-top:10px;font-style:italic">本质：把平台的模板/规则等异动统一晾晒</div>
+      </div>
+
+      <!-- ============ 卡片③：💰 关键数据表现 · 原生 ============ -->
+      <div class="board-card card-w2">
+        <div class="card-header">
+          <span class="card-title">💰 关键数据表现 · 原生</span>
+          <span class="card-owner">由 <strong>洞察归因</strong> owner 共建（本板块由生产 owner 提供原生口径示例）</span>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="kpi-label">消耗（近 7 天）</div>
+            <div class="kpi-num">¥8,432<span style="font-size:12px;color:var(--text-sub)">万</span></div>
+            <div class="kpi-delta delta-up">+3.2% vs 上周</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">CTR</div>
+            <div class="kpi-num">2.18%</div>
+            <div class="kpi-delta delta-down">−0.05pp ⚠</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">深转率</div>
+            <div class="kpi-num">4.36%</div>
+            <div class="kpi-delta delta-up">+0.12pp</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">eCPM</div>
+            <div class="kpi-num">¥38.7</div>
+            <div class="kpi-delta delta-up">+1.8%</div>
+          </div>
+        </div>
+
+        <div class="long-tail">
+          <b>⚠ 长尾问题：</b>TOP10 模板贡献 <b>68%</b> 消耗，剩余 <b>118 个</b>模板仅贡献 32%
+          —— 这是原生形态特有的集中度矛盾，建议结合「建议关注」批量处理。
+        </div>
+      </div>
+
+      <!-- ============ 卡片④：⚠️ 建议关注 · 原生 ============ -->
+      <div class="board-card">
+        <div class="card-header">
+          <span class="card-title">⚠️ 建议关注 · 原生</span>
+          <span class="card-owner">5 项待办</span>
+        </div>
+
+        <div class="attn-list">
+          <div class="attn-section-title">🔴 高优 <span class="attn-count">2</span></div>
+
+          <div class="attn-item">
+            <span class="attn-dot dot-red"></span>
+            <span class="attn-text"><b>原生大图_v2_金融</b> CTR 周环比 −8.4%</span>
+            <span class="attn-action">查成绩单</span>
+          </div>
+          <div class="attn-item">
+            <span class="attn-dot dot-red"></span>
+            <span class="attn-text"><b>原生组图_网服_v5</b> 三天未起量</span>
+            <span class="attn-action">查实验</span>
+          </div>
+
+          <div class="attn-section-title">🟡 中优 <span class="attn-count">2</span></div>
+
+          <div class="attn-item">
+            <span class="attn-dot dot-yellow"></span>
+            <span class="attn-text"><b>14 个</b>模板消耗连续 7 天为 0</span>
+            <span class="attn-action">批量下线</span>
+          </div>
+          <div class="attn-item">
+            <span class="attn-dot dot-yellow"></span>
+            <span class="attn-text">物理属性合规告警 <b>3 条</b></span>
+            <span class="attn-action">去修复</span>
+          </div>
+
+          <div class="attn-section-title">🟢 低优 <span class="attn-count">1</span></div>
+
+          <div class="attn-item">
+            <span class="attn-dot dot-green"></span>
+            <span class="attn-text"><b>7 个</b>新模板待第二审</span>
+            <span class="attn-action">去审批</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 卡片⑤：💡 洞察迭代建议 · 原生（AI） ============ -->
+      <div class="board-card card-w2">
+        <div class="card-header">
+          <span class="card-title">💡 洞察迭代建议 · 原生 <span style="font-size:10px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:2px 6px;border-radius:3px;margin-left:6px">🤖 AI</span></span>
+          <span class="card-owner">本周 5 条建议 · 由 <strong>洞察归因</strong> AI 引擎生成</span>
+        </div>
+
+        <div class="ai-list">
+          <div class="ai-item">
+            <div class="ai-item-head">
+              <span class="ai-item-title">建议 1 · 克隆「原生大图_v3」→ 适配游戏 IP 赛道</span>
+              <span class="ai-conf">置信度 78%</span>
+            </div>
+            <div class="ai-item-body">
+              <b>预期：消耗 +¥120万/周</b> · 依据：v3 在金融赛道 CTR 高于基线 18%，结构与游戏 IP 赛道历史成功模板高度相似
+            </div>
+            <div class="ai-item-foot">
+              <button class="ai-btn">一键克隆到创意广场</button>
+              <button class="ai-btn" style="border-color:var(--border);color:var(--text-sub)">不感兴趣</button>
+            </div>
+          </div>
+
+          <div class="ai-item">
+            <div class="ai-item-head">
+              <span class="ai-item-title">建议 2 · 「原生视频_本地生活」素材封面替换</span>
+              <span class="ai-conf">置信度 65%</span>
+            </div>
+            <div class="ai-item-body">
+              <b>预期：CTR +0.4pp</b> · 依据：当前封面与正文画面冲突，AI 抽取了 3 张同类高 CTR 封面作为候选
+            </div>
+            <div class="ai-item-foot">
+              <button class="ai-btn">生成 v2 草稿</button>
+            </div>
+          </div>
+
+          <div class="ai-item">
+            <div class="ai-item-head">
+              <span class="ai-item-title">建议 3 · 下线长尾 14 个零消耗模板，释放配额</span>
+              <span class="ai-conf">置信度 92%</span>
+            </div>
+            <div class="ai-item-body">
+              <b>预期：审批负载 −22% · 模板池更聚焦</b> · 依据：14 个模板连续 7 天 0 消耗，且关联实验均已结束
+            </div>
+            <div class="ai-item-foot">
+              <button class="ai-btn">批量处理</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-more">⌄ 还有 2 条建议 · 展开</div>
+      </div>
+
+    </div>
+
+    <!-- 元注释（保留基座的设计语言） -->
+    <div class="meta-note">
+      <span class="meta-note-tag">设计注释</span>
+      本板块由 <b style="color:var(--text-sub)">样式生产 owner</b> 交付，覆盖基座「我的工作视图」中 4 张共建卡片在<b style="color:var(--text-sub)">「原生」</b>形态下的具体内容。
+      所有数字为演示数据；点击任意卡片中的<a style="color:var(--primary)">行动按钮</a>，将跳转到「样式生产管理」模块的对应工作流（见 <a style="color:var(--primary)" href="index.html">demo-生产.html</a>）。
+    </div>
+
+  </section>
+
+  <!-- 讲稿提示（仅本预览页用） -->
+  <div class="section-anchor">📣 路演 30 秒口径（讲这一屏时念）</div>
+  <div class="meta-note" style="font-style:normal;color:var(--text-sub);font-size:13px;line-height:1.8">
+    "把场景筛成<b>原生</b>之后，整个工作视图就变成原生口径。<br>
+    左上看到我手里有 <b>128 个在投模板，本周新增 7 个、待审 3 个</b>——这是模板生产 owner 的责任田；<br>
+    右上看到 <b>近期操作</b>，最近的事都是原生相关的；<br>
+    左下 <b>关键数据</b>，原生周消耗 8432 万、CTR 在掉、长尾 118 个模板只贡献 32% 消耗，这是原生形态最大的集中度矛盾；<br>
+    右下 <b>建议关注</b>，红黄绿三级 5 项待办——一眼知道今天先干哪件事；<br>
+    最后 <b>AI 迭代建议</b>，每条都有动作 + 预期收益 + 置信度 + 一键执行入口——这就是『AI 协作』在工作台落地的样子。<br>
+    任何卡片点进去，都会跳到我的<b>『样式生产管理』模块</b>对应工作流。"
+  </div>
+
+</main>
+
+</body>
+</html>
