@@ -275,13 +275,15 @@
     '编辑中':       '3',
     '测试中':       '4',
     '草稿上线':     '5',
-    '实验中':       '6',
-    '已上线':       '8',
+    '规则配置':     '6',
+    '实验中':       '7',
+    '已上线':       '9',
     // 模板池 badge
     '待入库':       '5',
-    '正式草稿':     '7',
-    '待上线审批':   '7',
-    '已发布':       '8'
+    '待配规则':     '6',
+    '正式草稿':     '8',
+    '待上线审批':   '8',
+    '已发布':       '9'
   };
 
   // 哪些阶段算"已上线"（即 ⑧ 成绩单有数据）
@@ -565,7 +567,7 @@
       document.getElementById('pipelineDrawerSub').textContent =
         `模板ID：${tplId} · 当前阶段：${stageText} · 已上线后自动出 v1 报告`;
       renderReport(tplId, stageText);
-      activateStep('8');           // 直接定位到 ⑧
+      activateStep('9');           // 直接定位到 ⑨ 成绩单
       showDrawer(pipelineDrawer);
     });
   });
@@ -748,4 +750,186 @@
     if (tt) tt.textContent = `我的实验 · 共 8 个（3 在跑 / 5 已全量）`;
     showDrawer(formDrawer);
   });
+  // ============ v0.5 新增 · ⑥ 规则配置助手（AI 精简版）交互 ============
+  // 出量行为 → 大盘联动锁定的映射表
+  // - only(只出) → 大盘强制 不可出（锁定，可出禁用）
+  // - ratio(按比例出) → 大盘可在 可出/不可出 间选择，提示"按映射建议为'可出'"
+  // - prio(高优出) → 大盘强制 可出（锁定，不可出禁用）
+  // - no(不可出) → 大盘强制 不可出（锁定）
+  const RULE_MAP = {
+    only:  { lock: 'no',  enable: ['no'],          hint: '只出 → 大盘"不可出"' },
+    ratio: { lock: null,  enable: ['yes', 'no'],   hint: '按比例出 → 大盘可选"可出/不可出"，建议"可出"' },
+    prio:  { lock: 'yes', enable: ['yes'],         hint: '高优出 → 大盘"可出"' },
+    no:    { lock: 'no',  enable: ['no'],          hint: '不可出 → 大盘"不可出"' },
+  };
+
+  // 模式切换：选项填空 / 文字描述 / 重新开始
+  document.querySelectorAll('.ra-mode-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      const mode = b.dataset.raMode;
+      if (b.id === 'raResetBtn') {
+        // 重新开始：清空输入、所有 seg 重置为默认
+        document.querySelectorAll('.ra-card .ra-input').forEach(inp => { inp.value = ''; });
+        document.querySelectorAll('[data-ra-seg]').forEach(seg => {
+          seg.querySelectorAll('.ra-seg-btn').forEach((x, i) => {
+            x.classList.toggle('active', i === 0);
+          });
+        });
+        showToast('已重置规则配置助手');
+        return;
+      }
+      document.querySelectorAll('.ra-mode-btn[data-ra-mode]').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      if (mode === 'text') {
+        showToast('文字描述模式 · demo 占位（精简版聚焦"选项填空"）');
+      }
+    });
+  });
+
+  // 卡片启用开关：点开关切 .active / .disabled
+  document.querySelectorAll('[data-ra-toggle]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const card = cb.closest('.ra-card');
+      if (!card) return;
+      if (cb.checked) { card.classList.add('active'); card.classList.remove('disabled'); }
+      else { card.classList.remove('active'); card.classList.add('disabled'); }
+    });
+  });
+
+  // 出量行为 segmented：点击切 active + 联动大盘锁定
+  document.querySelectorAll('[data-ra-seg]').forEach(seg => {
+    const segName = seg.dataset.raSeg;
+    seg.querySelectorAll('.ra-seg-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('disabled')) {
+          showToast('该选项已被映射规则锁定，不可选择');
+          return;
+        }
+        seg.querySelectorAll('.ra-seg-btn').forEach(x => x.classList.remove('active'));
+        btn.classList.add('active');
+
+        // 如果是"特定流量/特定预算"那一行 → 联动大盘
+        if (segName === 'flowY' || segName === 'budgetZ') {
+          const mainSegName = segName === 'flowY' ? 'flowMain' : 'budgetMain';
+          const mainSeg = document.querySelector(`[data-ra-seg="${mainSegName}"]`);
+          const lockRow = document.querySelector(`[data-ra-locked-row="${mainSegName}"]`);
+          if (!mainSeg) return;
+          const map = RULE_MAP[btn.dataset.act];
+          if (!map) return;
+
+          // 重置所有 → 重设可用性
+          mainSeg.querySelectorAll('.ra-seg-btn').forEach(x => {
+            const allowed = map.enable.includes(x.dataset.act);
+            x.classList.toggle('disabled', !allowed);
+          });
+
+          // 处理 active：锁定值优先，否则保留旧 active 或选第一个允许的
+          let activeBtn = null;
+          if (map.lock) {
+            mainSeg.querySelectorAll('.ra-seg-btn').forEach(x => {
+              if (x.dataset.act === map.lock) activeBtn = x;
+            });
+          } else {
+            // 不锁定：如果当前 active 仍在 enable 里就保留，否则选第一个允许的
+            const cur = mainSeg.querySelector('.ra-seg-btn.active');
+            if (cur && map.enable.includes(cur.dataset.act)) {
+              activeBtn = cur;
+            } else {
+              activeBtn = mainSeg.querySelector('.ra-seg-btn:not(.disabled)');
+            }
+          }
+          mainSeg.querySelectorAll('.ra-seg-btn').forEach(x => x.classList.remove('active'));
+          if (activeBtn) activeBtn.classList.add('active');
+
+          // 锁定提示文案
+          if (lockRow) {
+            const hintEl = lockRow.querySelector('.ra-lock-hint');
+            if (hintEl) {
+              if (map.lock) {
+                const lockText = map.lock === 'yes' ? '可出' : '不可出';
+                hintEl.innerHTML = `🔒 <b>已锁定为"${lockText}"</b>（按映射表，仅此一种合法组合）`;
+                hintEl.style.display = '';
+              } else {
+                hintEl.innerHTML = `💡 <b>大盘可选</b>（${map.hint}）`;
+                hintEl.style.display = '';
+              }
+            }
+          }
+
+          // 同步更新映射规则提示
+          const mapping = seg.closest('.ra-card')?.querySelector('.ra-mapping-text');
+          if (mapping) {
+            mapping.innerHTML = `映射规则：<b>${map.hint}</b>；映射逻辑：固定`;
+          }
+        }
+      });
+    });
+  });
+
+  // 一键新建规则
+  document.getElementById('raCreateBtn')?.addEventListener('click', () => {
+    const nameInput = document.getElementById('raRuleName');
+    let ruleName = nameInput?.value.trim();
+    // 取启用的卡片信息生成默认名
+    const activeCards = document.querySelectorAll('.ra-card.active');
+    if (!activeCards.length) {
+      showToast('请至少启用一张诉求卡（流量 / 预算）');
+      return;
+    }
+    if (!ruleName) {
+      // AI 自动生成：取第一张启用卡的模板名 + Y/Z + 出量行为
+      const card = activeCards[0];
+      const tplVal = card.querySelector('.ra-input')?.value.trim() || '未命名模板';
+      const yVal = card.querySelector('.ra-input.slim')?.value.trim() || '全量';
+      const actBtn = card.querySelector('[data-ra-seg$="Y"] .ra-seg-btn.active, [data-ra-seg$="Z"] .ra-seg-btn.active');
+      const actMap = { only: '只出', ratio: '按比例出', prio: '高优出', no: '不可出' };
+      const actText = actMap[actBtn?.dataset.act] || '只出';
+      ruleName = `${tplVal}·${yVal}·${actText}`;
+    }
+
+    // 追加到迷你规则列表
+    const list = document.getElementById('raRulesMini');
+    if (!list) return;
+    const idx = list.querySelectorAll('.ra-mini-row').length + 1;
+    const numText = ['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩'][idx - 1] || `${idx}`;
+
+    const row = document.createElement('div');
+    row.className = 'ra-mini-row ai-blink';
+    row.innerHTML = `
+      <span class="ra-mini-no">${numText}</span>
+      <span class="ra-mini-name">${ruleName}</span>
+      <span class="ra-mini-desc muted">由助手新建 · ${new Date().toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'})}</span>
+      <label class="switch-mini"><input type="checkbox" checked /><span></span></label>
+    `;
+    list.appendChild(row);
+
+    // 更新计数
+    const cnt = list.querySelector('.ra-rules-mini-head .muted');
+    if (cnt) cnt.textContent = `${list.querySelectorAll('.ra-mini-row').length} 条`;
+
+    if (nameInput) nameInput.value = '';
+    showToast(`✓ 已新建规则：${ruleName}`);
+    setTimeout(() => row.classList.remove('ai-blink'), 1600);
+  });
+
+  // 查看映射表（demo 占位）
+  document.getElementById('raMappingBtn')?.addEventListener('click', () => {
+    showToast('映射表：只出↔不可出 / 按比例出↔可出建议 / 高优出↔可出 / 不可出↔不可出（路演 demo）');
+  });
+
+  // 极简 toast
+  function showToast(msg) {
+    let t = document.getElementById('claw-toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'claw-toast';
+      t.className = 'claw-toast';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
 })();

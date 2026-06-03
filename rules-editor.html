@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>规则编辑器 · 联盟样式工作台</title>
+<link rel="stylesheet" href="./styles/tokens.css" />
+<link rel="stylesheet" href="./styles/main.css" />
+<style>
+  body { padding: 0; }
+  .re-shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+  .re-side { background: #1f2a3a; color: #e5ecf5; padding: 20px 0; }
+  .re-side-logo { padding: 0 20px 20px; font-size: 14px; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .re-side-nav { padding: 12px 0; }
+  .re-side-nav a { display: block; padding: 9px 20px; font-size: 13px; color: #b0bccd; transition: all .15s; }
+  .re-side-nav a:hover { background: rgba(255,255,255,.04); color: #fff; }
+  .re-side-nav a.active { background: rgba(51,112,255,.18); color: #fff; border-left: 3px solid #3370FF; padding-left: 17px; }
+  .re-main { padding: 24px 32px; background: var(--color-bg); }
+  .re-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .re-head h1 { font-size: 20px; font-weight: 600; }
+  .re-back { font-size: 13px; color: var(--color-primary); }
+  .re-card { background: #fff; border: 1px solid var(--color-border-2); border-radius: var(--radius-card); padding: 20px; margin-bottom: 16px; }
+  .re-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+  .re-detail-grid { display: grid; grid-template-columns: 100px 1fr; gap: 12px 16px; align-items: center; }
+  .re-detail-grid label { font-size: 13px; color: var(--color-text-2); }
+  .re-detail-grid input[type=text], .re-detail-grid select {
+    padding: 6px 10px; border: 1px solid var(--color-border-2); border-radius: 5px; font-size: 13px; width: 100%;
+  }
+  .re-cond-list { display: flex; flex-direction: column; gap: 10px; }
+  .re-cond-row { display: grid; grid-template-columns: 140px 90px 1fr 32px; gap: 8px; align-items: center; }
+  .re-cond-row select, .re-cond-row input { padding: 6px 10px; border: 1px solid var(--color-border-2); border-radius: 5px; font-size: 13px; }
+  .re-cond-del { color: #f5222d; cursor: pointer; text-align: center; }
+  .re-cond-add { margin-top: 8px; padding: 6px 14px; border: 1px dashed var(--color-primary); color: var(--color-primary); border-radius: 6px; font-size: 12.5px; }
+  .re-foot { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+</style>
+</head>
+<body>
+<div class="re-shell">
+  <aside class="re-side">
+    <div class="re-side-logo">🏛️ 样式工作台 · 规则编辑器</div>
+    <nav class="re-side-nav">
+      <a href="#">业务概览</a>
+      <a href="#">资产管理</a>
+      <a href="#" class="active">规则配置</a>
+      <a href="#">投放计划</a>
+      <a href="#">实验中心</a>
+    </nav>
+  </aside>
+
+  <main class="re-main">
+    <div class="re-head">
+      <h1>规则编辑器 · 夏日冰镇风开屏 v1</h1>
+      <a class="re-back" href="./index.html">← 返回流水线</a>
+    </div>
+
+    <div class="re-card">
+      <h3>规则基础信息</h3>
+      <div class="re-detail-grid">
+        <label>规则名称</label><input type="text" value="夏季·一线城市·年轻女性" />
+        <label>归属模板</label><input type="text" value="夏日冰镇风开屏 v1" disabled />
+        <label>优先级</label><input type="text" value="1" style="width:80px;" />
+        <label>启用</label>
+        <div><label class="switch-mini"><input type="checkbox" checked /><span></span></label></div>
+      </div>
+    </div>
+
+    <div class="re-card">
+      <h3>标签条件 <span class="muted">（条件之间 AND，全部满足时命中）</span></h3>
+      <div class="re-cond-list" id="reCondList">
+        <div class="re-cond-row">
+          <select><option>季节</option><option>城市等级</option><option>年龄</option><option>性别</option></select>
+          <select><option>=</option><option>≠</option><option>∈</option><option>≥</option><option>≤</option></select>
+          <input type="text" value="夏" />
+          <span class="re-cond-del" title="删除">✕</span>
+        </div>
+        <div class="re-cond-row">
+          <select><option>城市等级</option><option>季节</option><option>年龄</option></select>
+          <select><option>∈</option><option>=</option></select>
+          <input type="text" value="一线 / 新一线" />
+          <span class="re-cond-del">✕</span>
+        </div>
+        <div class="re-cond-row">
+          <select><option>年龄</option><option>性别</option></select>
+          <select><option>∈</option><option>=</option></select>
+          <input type="text" value="18-35" />
+          <span class="re-cond-del">✕</span>
+        </div>
+        <div class="re-cond-row">
+          <select><option>性别</option></select>
+          <select><option>=</option></select>
+          <input type="text" value="女" />
+          <span class="re-cond-del">✕</span>
+        </div>
+      </div>
+      <button class="re-cond-add">+ 添加条件</button>
+    </div>
+
+    <div class="re-card">
+      <h3>命中预估 <span class="muted">（基于近 7 日大盘流量回放）</span></h3>
+      <div class="muted" style="font-size:13px;">预计每日命中：<b style="color:var(--color-primary);">28.4 万</b> 次曝光机会，占大盘 <b>18.4%</b>；与同模板其他规则的覆盖重叠率 <b>3.2%</b>（无显著冲突）。</div>
+    </div>
+
+    <div class="re-foot">
+      <button class="btn-ghost">取消</button>
+      <button class="btn-primary">保存并返回流水线</button>
+    </div>
+  </main>
+</div>
+</body>
+</html>

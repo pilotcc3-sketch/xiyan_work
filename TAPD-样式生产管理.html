@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>样式生产管理 TAPD · 富文本版（可复制）</title>
+<style>
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; max-width: 980px; margin: 32px auto; padding: 0 24px 64px; color: #1f2329; line-height: 1.7; font-size: 14px; }
+  .copy-bar { position: sticky; top: 0; background: #fff; border-bottom: 1px solid #eee; padding: 12px 0; z-index: 99; display: flex; gap: 12px; align-items: center; }
+  .copy-bar button { padding: 6px 14px; background: #2d6cdf; color: #fff; border: 0; border-radius: 4px; cursor: pointer; font-size: 13px; }
+  .copy-bar button:hover { background: #1a55c4; }
+  .copy-bar .hint { color: #888; font-size: 12px; }
+  #content h1 { font-size: 22px; border-bottom: 2px solid #2d6cdf; padding-bottom: 8px; margin-top: 28px; }
+  #content h2 { font-size: 18px; background: #f5f7fa; padding: 8px 12px; border-left: 4px solid #2d6cdf; margin-top: 28px; }
+  #content h3 { font-size: 16px; margin-top: 22px; color: #2d6cdf; }
+  #content h4 { font-size: 14px; margin-top: 16px; }
+  #content table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 13px; }
+  #content th, #content td { border: 1px solid #d4d7de; padding: 8px 10px; text-align: left; vertical-align: top; }
+  #content th { background: #f5f7fa; font-weight: 600; }
+  #content blockquote { border-left: 4px solid #ffb02e; background: #fff8e6; padding: 10px 14px; margin: 12px 0; color: #5c4a1d; }
+  #content code { background: #f5f7fa; padding: 1px 6px; border-radius: 3px; font-family: Menlo, Consolas, monospace; font-size: 12px; }
+  #content .badge-mvp { background: #e6f4ea; color: #1d6f42; padding: 2px 6px; border-radius: 3px; font-size: 12px; font-weight: 600; }
+  #content .badge-half { background: #fff4e5; color: #b86600; padding: 2px 6px; border-radius: 3px; font-size: 12px; font-weight: 600; }
+  #content .badge-no { background: #fde7e9; color: #b00020; padding: 2px 6px; border-radius: 3px; font-size: 12px; font-weight: 600; }
+  #content .pain-card { background: #fff6f6; border-left: 4px solid #e34d59; padding: 8px 14px; margin: 8px 0; border-radius: 0 4px 4px 0; }
+  #content .value-card { background: #f0f7ff; border-left: 4px solid #2d6cdf; padding: 8px 14px; margin: 8px 0; border-radius: 0 4px 4px 0; }
+  #content ul, #content ol { padding-left: 24px; }
+  #content .meta { color: #888; font-size: 13px; }
+  hr { border: 0; border-top: 1px dashed #ccc; margin: 28px 0; }
+</style>
+</head>
+<body>
+
+<div class="copy-bar">
+  <button onclick="copyAll()">📋 复制全文（带格式）</button>
+  <button onclick="copyReview()">📋 仅复制「评审版速览」</button>
+  <span class="hint">点击后直接到 TAPD / 飞书 / 腾讯文档粘贴即可保留格式</span>
+</div>
+
+<div id="content">
+
+<h1>联盟样式工作台 · 样式生产管理模块 TAPD</h1>
+
+<p class="meta">
+  作者：小樊（产品）　归属：联盟样式工作台 · 模块 ②　版本：v0.6 · 路演态<br>
+  配套 Demo：./index.html　基座 Demo：https://yi0702.github.io/workbench-foundation/index.html
+</p>
+
+<blockquote>
+  <strong>🔥 MVP 边界（v0.6 校准）</strong><br>
+  6/30 交付收窄为两件事：<strong>① 生产流水线</strong>（端到端 9 步 UI 跑通 + 开屏真实用例） + <strong>② 数据成绩单</strong>（模板维度回流 + 向基座看板推卡片）。<br>
+  其余能力（规则配置助手深度版、上线实验内嵌、回滚接真后台、个人 Skills、跨模块带状态跳转）全部进入二期。
+</blockquote>
+
+<div id="review-section">
+
+<h2>📣 评审版速览（6/3 下午专用）</h2>
+
+<blockquote>评审重心：<strong>业务价值 + 痛点</strong>。产品愿景略讲。本节是 5 分钟讲述脚本，按顺序走，被追问细节再翻到对应章节。</blockquote>
+
+<h3>0. 一句话讲清楚我在干什么</h3>
+<p>用 AI 把"造一个联盟样式模板"这件事，从一条 <strong>7-15 天</strong>的跨工种接力赛，重构成 <strong>1-3 天</strong>的工作台单流。</p>
+
+<h3>1. 痛点：今天造一个模板有多痛（讲 90 秒）</h3>
+
+<table>
+  <tr><th width="40">#</th><th>痛点</th><th>现状（数据 / 事实）</th><th>谁在受罪</th></tr>
+  <tr><td>①</td><td><strong>工具链碎成 7 截</strong></td><td>需求在 TAPD、创意在企微、设计在 Figma、落码在本地、测试靠人工跑机、审批走 OA、上线后看效果又跳回 TAPD 提单</td><td>联盟产运（每个模板要切 7+ 工具，没一个串起来的）</td></tr>
+  <tr><td>②</td><td><strong>AI 在每一截里都是"外挂"</strong></td><td>即便每一截都用了 AI（D2C / 文案生成 / 异常归因），但 AI 输出的产物没标准化承接，下一截还得人肉翻译重新喂</td><td>产运 / 设计（"用了 AI 反而更累"）</td></tr>
+  <tr><td>③</td><td><strong>从想法到出量平均 7-15 天</strong></td><td>3 天等设计排期 + 2 天等研发档期 + 2 天测试 + 2 天审批 + 上线后 3 天才看到数据 → 错过热点窗口</td><td>业务（旺季只能复用旧模板，新创意进不来）</td></tr>
+  <tr><td>④</td><td><strong>造完之后死活不知道造得好不好</strong></td><td>模板上线后数据散在多个看板，没有"模板维度成绩单"，迭代靠拍脑袋</td><td>模板 owner（无法横向 review、无法系统性沉淀爆款规律）</td></tr>
+  <tr><td>⑤</td><td><strong>回滚靠工单 + 找研发</strong></td><td>出问题时回滚链路平均 2-4 小时，且没有风险预评估</td><td>风控 / 产运（不敢大胆试新模板）</td></tr>
+</table>
+
+<h3>2. 业务价值：MVP 跑通后能换到什么（讲 90 秒）</h3>
+<blockquote>重点：<strong>这两个 MVP 不是 demo，是直接对账业务收益的两件事。</strong></blockquote>
+
+<h4>价值 ①：生产流水线 → 提效 + 试错成本降低</h4>
+<table>
+  <tr><th>维度</th><th>现状</th><th>MVP 后（开屏验证）</th><th>收益逻辑</th></tr>
+  <tr><td>单个模板上线时长</td><td>7-15 天</td><td><strong>1-3 天</strong></td><td>工具链合一 + AI 介入每一步、产物在工作台内自动承接</td></tr>
+  <tr><td>单人单周可产出新模板数</td><td>0.5-1 个</td><td><strong>3-5 个</strong></td><td>重复劳动（自测、说明书、风险评估）由 AI 接管</td></tr>
+  <tr><td>新模板首次上线失败率</td><td>经验数 ~30%</td><td><strong>目标 &lt;10%</strong></td><td>step ④ 自动化测试 + step ⑤ AI 风险点提示前置拦截</td></tr>
+  <tr><td>设计 / 研发被打断次数</td><td>每模板 5-8 次</td><td><strong>1-2 次</strong></td><td>D2C + 自动化测试把"问设计能不能改一下""请研发跑一下"的来回吃掉</td></tr>
+</table>
+<div class="value-card"><strong>直接业务结果：</strong>旺季可上新模板数 ×3-5 倍，对应"新模板驱动消耗占比"指标可显著拉升（这是基座看板的 KPI 之一）。</div>
+
+<h4>价值 ②：数据成绩单 → 从"凭手感迭代"到"按数据迭代"</h4>
+<table>
+  <tr><th>维度</th><th>现状</th><th>MVP 后（开屏验证）</th><th>收益逻辑</th></tr>
+  <tr><td>模板效果可见性</td><td>数据散落在多个看板，无模板维度聚合</td><td><strong>单模板成绩单一屏看完</strong></td><td>模块本地按模板维度聚合 + AI 归因卡</td></tr>
+  <tr><td>迭代决策依据</td><td>拍脑袋 / 经验</td><td><strong>AI 给出具体动作建议</strong></td><td>step ⑧ AI 归因</td></tr>
+  <tr><td>横向 review 成本</td><td>翻多个表，靠人脑对比</td><td><strong>基座看板红榜直出 Top 模板</strong></td><td>卡片回推基座第三层看板</td></tr>
+</table>
+<div class="value-card"><strong>直接业务结果：</strong>模板迭代周期缩短 50%+，且迭代方向有数据依据可追溯，让"造完就完了"变成"造完→看数→迭代→再造"的正循环。</div>
+
+<h3>3. 为什么是现在做、为什么是 AI 重构（讲 30 秒）</h3>
+<ul>
+  <li><strong>不是"加个 AI 助手"：</strong>是把整条链路按 AI 原生重构——9 步里每一步的产物都是结构化的、可被下一步 AI 直接消费的，不是简单地在旧链路上挂 AI 插件。</li>
+  <li><strong>基座已就绪：</strong>基座的入口路由 / 卡片注册表 / Skills 协议同期建设，本模块作为"造"端最大供给方，630 是与基座咬合的最佳窗口。</li>
+  <li><strong>开屏是最佳切入点：</strong>开屏样式是联盟最高频、单价值最高、A/B 反馈最快的形态，跑通一个就能验证整条链路。</li>
+</ul>
+
+<h3>4. MVP 边界与不做的事（讲 30 秒，避免被追问越界）</h3>
+<ul>
+  <li><span class="badge-mvp">✅ 做</span> 生产流水线（9 步 UI 全打通 + 开屏端到端真实用例） + 数据成绩单（开屏真数据 + 卡片回推基座）</li>
+  <li><span class="badge-no">❌ 不做</span> 规则下发真后台、上线实验内嵌、回滚真后台、个人 Skills、跨模块带状态跳转 → 全部二期</li>
+</ul>
+
+<h3>5. 产品愿景（被问到再讲，30 秒）</h3>
+<p>终态是：<strong>联盟样式从需求到出量的全链路在一个工作台内完成，AI 不是工具，而是协作者</strong>。最终形态包括跨模块状态机闭环、个人 Skills 收编、操作日志全审计——但这些都是二期之后的事，今天评审不展开。</p>
+
+<h3>📋 评审 Q&amp;A 预案</h3>
+<table>
+  <tr><th width="38%">评审可能问</th><th>准备的答案</th></tr>
+  <tr><td>为什么不直接复用现有 TAPD？</td><td>TAPD 是事务管理系统，不是生产工具；它解决"谁该做什么"，不解决"怎么做得快"。本模块解决后者。</td></tr>
+  <tr><td>提效 7-15 天到 1-3 天的依据是什么？</td><td>拆解 9 步：现状每步平均 1-2 天卡在工具切换 / 排期，MVP 后 6 步可用 AI 在工作台内即时完成，剩 3 步串行预计 1-3 天。开屏跑通后会出真实埋点数据复盘。</td></tr>
+  <tr><td>数据成绩单和洞察归因模块边界？</td><td>本模块只看<strong>模板自身维度</strong>（一个模板表现如何）；洞察归因看<strong>业务结果维度</strong>（为什么某场景大盘掉了）。step ⑧ 是模板 owner 视角，洞察归因是流量 / 预算 owner 视角。</td></tr>
+  <tr><td>为什么 step ⑥ 不接真规则下发？</td><td>规则下发属规则配置模块的 owner 边界，630 我们先把"造模板"这一截做扎实；step ⑥ 给 UI Demo 是为二期对接铺路。</td></tr>
+  <tr><td>万一基座入口参数协议 6/15 没定稿？</td><td>模块本地用约定参数先跑，协议 ready 后切换；不阻塞 MVP。已在风险章节标出。</td></tr>
+  <tr><td>个人 Skills 为什么不做？</td><td>个人 Skills 需要"评分 + 收编"机制，这是治理问题不是技术问题，治理共识没拉齐前不做、避免半成品。</td></tr>
+</table>
+
+</div><!-- /review-section -->
+
+<hr>
+
+<h2>一、业务背景 &amp; 模块整体说明</h2>
+
+<h3>1. 模块介绍</h3>
+<p>样式生产管理是联盟样式工作台的<strong>「造」</strong>端模块（对应基座 ① 模板生产）。面向联盟产运 / 设计 / 研发，把过去散落在 TAPD、企微、设计稿、研发自测、上线审批、回滚操作中的样式生产工作收拢为<strong>一条 AI 原生的端到端流水线</strong>。</p>
+<p>核心命题：<strong>让"想做一个样式模板"到"模板真实跑出量"之间的链路从 7-15 天压缩到 1-3 天，且每一步都可被审计、可被复用、可被回滚。</strong></p>
+
+<h3>2. 模块建设目标</h3>
+<ol>
+  <li><strong>对联盟产运（使用者）：</strong>提供"造模板"的端到端流水线，每一步用 AI 把试错成本降到最低；</li>
+  <li><strong>对基座（被调度方）：</strong>按基座规定的入口参数协议接收跳转，按卡片格式向第三层看板推送数据，向第四层注册官方 Skills；</li>
+  <li><strong>对其他三个模块（被联动方）：</strong>模块产出的"模板"是规则配置 / 洞察归因 / 问题排查的共同输入，需保证模板的 ID / 版本 / 标签 / 上线状态在四模块间口径一致。</li>
+</ol>
+
+<h3>3. 用户视角 · 流水线 9 步</h3>
+<table>
+  <tr><th>步骤</th><th>名称</th><th>服务对象</th><th>AI 角色</th></tr>
+  <tr><td>①</td><td>需求来源</td><td>知道"要做什么样式"的产运</td><td>从 TAPD / 企微抽取诉求、把竞品截图反推出可编辑的模板骨架</td></tr>
+  <tr><td>②</td><td>创意脑暴</td><td>从需求到具体 idea 的产运 / 设计</td><td>基于行业 / 场景 / 历史爆款 给出多版文案与卖点假设</td></tr>
+  <tr><td>③</td><td>视觉生成</td><td>设计 / 半设计能力的产运</td><td>D2C 解析、自动适配多尺寸、自动套品牌规范</td></tr>
+  <tr><td>④</td><td>落码草稿</td><td>研发 / 提交模板的产运</td><td>自动跑兼容性测试、性能预警、生成 Mock 数据</td></tr>
+  <tr><td>⑤</td><td>草稿入库</td><td>模板 owner + 审批方</td><td>自动生成模板说明书、风险点提示、关联历史相似模板</td></tr>
+  <tr><td>⑥</td><td>规则配置</td><td>流量 / 预算 owner</td><td>用 2 句标准化诉求表达「模板↔流量 / 预算」的出量关系，按映射表自动联动大盘锁定</td></tr>
+  <tr><td>⑦</td><td>上线实验</td><td>模板 owner</td><td>基座统一调度，本模块只负责 hand-off</td></tr>
+  <tr><td>⑧</td><td>模板成绩单</td><td>模板 owner / 横向 review</td><td>异常归因、迭代建议</td></tr>
+  <tr><td>⑨</td><td>迭代 / 回滚</td><td>模板 owner</td><td>回滚前风险评估、迭代前 diff 摘要</td></tr>
+</table>
+
+<h3>4. 共用基础设施视角（与基座的契约）</h3>
+<table>
+  <tr><th>基础设施</th><th>基座负责</th><th>本模块负责</th><th>6/30 MVP</th></tr>
+  <tr><td>AI 对话路由</td><td>意图识别 + 路由</td><td>注册关键词、Prompt/Skills、按入口参数协议接收跳转</td><td><span class="badge-half">🔶 仅注册开屏关键词</span></td></tr>
+  <tr><td>通用组件库</td><td>提供组件库与口径</td><td>接入并按口径展示</td><td><span class="badge-mvp">✅</span></td></tr>
+  <tr><td>统一鉴权</td><td>提供登录态 + 框架</td><td>内部分层（产/设/研/运 4 视角）</td><td><span class="badge-half">🔶 仅 4 视角切换</span></td></tr>
+  <tr><td>数据口径</td><td>提供口径字典</td><td>按字典上报；模板维度数据源头</td><td><span class="badge-half">🔶 仅对齐开屏</span></td></tr>
+  <tr><td>操作日志</td><td>标准接口</td><td>生命周期关键节点写日志</td><td><span class="badge-no">⬜ 二期</span></td></tr>
+  <tr><td>Skills 嵌入</td><td>挂载机制</td><td>提报 Skill、声明分级</td><td><span class="badge-half">🔶 官方默认挂；个人二期</span></td></tr>
+  <tr><td>入口参数协议</td><td>协议定义</td><td>解析参数自动定位到 9 步中某步</td><td><span class="badge-mvp">✅</span></td></tr>
+  <tr><td>卡片回推</td><td>注册表 + 渲染</td><td>计算并推送（消耗/CTR/CVR/新模板占比）</td><td><span class="badge-mvp">✅</span></td></tr>
+</table>
+
+<hr>
+
+<h2>二、模块四层需求详述</h2>
+
+<h3>第一层：模块入口（接收基座路由 + 模块内导航）</h3>
+<p>两类入口共存：</p>
+<ul>
+  <li><strong>外部入口：</strong>基座第一层对话路由 / 第二层场景卡片 / 第三层看板下钻 都按入口参数协议跳到本模块的某一步；</li>
+  <li><strong>内部入口：</strong>模块顶部 Tab（首页 / 我的工作台 / 模板池 / 流水线 / 模板成绩单），切 Tab 即切场景。</li>
+</ul>
+
+<h4>关键词注册（向基座第一层注册）</h4>
+<table>
+  <tr><th>关键词</th><th>落点</th><th>备注</th></tr>
+  <tr><td>新建/迭代模板、新做一个开屏</td><td>流水线 step ①</td><td>从空白起步</td></tr>
+  <tr><td>D2C / 截图变模板 / 把竞品做成模板</td><td>流水线 step ③</td><td>带图入参</td></tr>
+  <tr><td>导入 TAPD / 把这个 TAPD 变模板</td><td>流水线 step ①</td><td>带 TAPD ID</td></tr>
+  <tr><td>模板成绩单 / xx 模板效果怎么样</td><td>step ⑧</td><td>带 templateId</td></tr>
+  <tr><td>上线审批 / 帮我把 xx 模板提上线</td><td>step ⑤</td><td>带 templateId</td></tr>
+  <tr><td>自动化测试 / 把 xx 模板跑一遍兼容性</td><td>step ④</td><td>带 templateId</td></tr>
+  <tr><td>回滚模板 / xx 模板回到上一版</td><td>step ⑨</td><td>带 templateId</td></tr>
+</table>
+
+<h3>第二层：工作流（9 步流水线核心）</h3>
+<blockquote><strong>MVP 收窄说明：</strong>630 的 MVP 是「流水线（端到端跑通） + 数据成绩单（开屏真数据）」两件事。step ①②③④⑤⑧ 为深做范围，step ⑥⑦⑨ 仅 UI / hand-off，不在 MVP 深度交付内。</blockquote>
+
+<table>
+  <tr><th>Step</th><th>名称</th><th>核心交互</th><th>AI 介入点</th><th>630 状态</th></tr>
+  <tr><td>①</td><td>需求来源</td><td>6 入口卡（TAPD / 企微 / 截图 / AI 衍生 / 历史复用 / 空白）</td><td>自动抽取诉求摘要</td><td><span class="badge-mvp">✅ 深做（属 MVP-流水线）</span></td></tr>
+  <tr><td>②</td><td>创意脑暴</td><td>idomo-editor · 文案/卖点/转化点三栏</td><td>多版文案 + 卖点假设生成</td><td><span class="badge-mvp">✅ 深做（属 MVP-流水线）</span></td></tr>
+  <tr><td>③</td><td>视觉生成</td><td>D2C 上传 / 组件树编辑 / 多尺寸适配</td><td>自动套品牌规范</td><td><span class="badge-mvp">✅ 深做（属 MVP-流水线）</span></td></tr>
+  <tr><td>④</td><td>落码草稿</td><td>preview.html · 多端预览 + 自动化测试报告</td><td>兼容性 / 性能 / Mock 数据</td><td><span class="badge-mvp">✅ 深做（属 MVP-流水线）</span></td></tr>
+  <tr><td>⑤</td><td>草稿入库</td><td>版本号管理 + 提交审批</td><td>自动生成说明书 + 风险点</td><td><span class="badge-mvp">✅ 深做（属 MVP-流水线）</span></td></tr>
+  <tr><td>⑥</td><td>规则配置</td><td>规则配置助手 · AI 精简版</td><td>历史规则复用、AI 自动起名</td><td><span class="badge-half">🔶 仅 UI Demo，不接真规则下发</span></td></tr>
+  <tr><td>⑦</td><td>上线实验</td><td>hand-off 到基座 → 跳到洞察归因模块的实验视图</td><td>基座统一调度</td><td><span class="badge-half">🔶 仅 hand-off 跳转</span></td></tr>
+  <tr><td>⑧</td><td>模板成绩单</td><td>单模板的消耗 / CTR / CVR / 异常曲线 + AI 归因卡</td><td>异常归因 + 迭代建议</td><td><span class="badge-mvp">✅ 深做（属 MVP-数据成绩单）</span></td></tr>
+  <tr><td>⑨</td><td>迭代 / 回滚</td><td>一键回滚（带风险评估） / 一键迭代成新版本（带 diff 摘要）</td><td>回滚风险评估、迭代 diff</td><td><span class="badge-half">🔶 仅 UI 跑通，回滚不接真后台</span></td></tr>
+</table>
+
+<h4>step ⑥ 出量行为 → 大盘联动锁定真值表</h4>
+<table>
+  <tr><th>子流量 / 子预算选</th><th>大盘自动</th></tr>
+  <tr><td>只出</td><td>锁定为「不可出」</td></tr>
+  <tr><td>按比例出</td><td>可选「可出 / 不可出」</td></tr>
+  <tr><td>高优出</td><td>锁定为「可出」</td></tr>
+  <tr><td>不可出</td><td>锁定为「不可出」</td></tr>
+</table>
+
+<h3>第三层：数据回流（模板成绩单 + 向基座推卡片）</h3>
+<p>模板上线后的数据反哺。两个去向：</p>
+<ul>
+  <li><strong>本模块内：</strong>step ⑧ 模板成绩单，单模板视图，看每个模板自身表现 + AI 归因；</li>
+  <li><strong>基座看板：</strong>按基座规定的卡片格式，把"模板维度的消耗 / CTR / CVR / 新模板驱动消耗占比 / 红榜"推到基座第三层看板。</li>
+</ul>
+
+<h4>数据口径（与基座对齐）</h4>
+<ul>
+  <li><strong>维度：</strong>预算（KPI 一级行业 + 生态一级名称）/ 场景（开屏/插屏/激励/原生/Banner）/ 赛道（集团一级行业 ID）；</li>
+  <li><strong>时间：</strong>昨日 / 近三天 / 近七天 / 自定义（≤1 个月）；</li>
+  <li><strong>刷新：</strong>天级别；</li>
+  <li><strong>指标（模板维度）：</strong>消耗、CTR、CVR、新模板占比、模板数（新上线/总）。</li>
+</ul>
+<p><strong>630 交付范围：</strong>仅"开屏"场景跑通真实数据；其他场景仅 UI 占位 + 假数据。</p>
+
+<h3>第四层：资产沉淀（Skills + 模板池）</h3>
+<h4>官方 Skills（630 默认挂）</h4>
+<table>
+  <tr><th>Skill 名</th><th>来源步骤</th><th>作用</th><th>安全分级</th></tr>
+  <tr><td><code>skill.template.create</code></td><td>①</td><td>从 TAPD/截图/空白创建模板骨架</td><td>C 自助</td></tr>
+  <tr><td><code>skill.template.idomo</code></td><td>②</td><td>创意脑暴文案/卖点</td><td>C 自助</td></tr>
+  <tr><td><code>skill.template.d2c</code></td><td>③</td><td>设计稿/截图 → 组件树</td><td>B 团队审</td></tr>
+  <tr><td><code>skill.template.test</code></td><td>④</td><td>自动化兼容性 + 性能测试</td><td>C 自助</td></tr>
+  <tr><td><code>skill.template.review</code></td><td>⑤</td><td>自动生成模板说明书 + 风险点</td><td>B 团队审</td></tr>
+  <tr><td><code>skill.template.rule</code></td><td>⑥</td><td>规则配置助手（AI 精简版）</td><td>B 团队审</td></tr>
+  <tr><td><code>skill.template.report</code></td><td>⑧</td><td>模板成绩单 + AI 归因</td><td>C 自助</td></tr>
+  <tr><td><code>skill.template.rollback</code></td><td>⑨</td><td>一键回滚 + 风险评估</td><td>A 平台审</td></tr>
+</table>
+
+<hr>
+
+<h2>三、贯穿性系统逻辑说明</h2>
+
+<h3>1. 跨模块跳转：统一入口参数协议</h3>
+<table>
+  <tr><th>场景</th><th>URL 示例</th></tr>
+  <tr><td>基座对话 → 本模块 step ⑥</td><td><code>/index.html?step=6&amp;templateId=tpl_summer_v1&amp;from=workbench-chat</code></td></tr>
+  <tr><td>基座场景卡片 → 本模块 step ①</td><td><code>/index.html?step=1&amp;scene=screen&amp;from=workbench-card-create</code></td></tr>
+  <tr><td>本模块 step ⑥ → 规则配置模块</td><td><code>/rules/?templateId=tpl_summer_v1&amp;from=template-step-6</code></td></tr>
+  <tr><td>本模块 step ⑦ → 洞察归因（实验视图）</td><td><code>/insight/?templateId=tpl_summer_v1&amp;view=experiment&amp;from=template-step-7</code></td></tr>
+  <tr><td>本模块 step ⑧ → 问题排查（异常时）</td><td><code>/debug/?templateId=tpl_summer_v1&amp;errorId=xxx&amp;from=template-step-8</code></td></tr>
+</table>
+<ul>
+  <li><strong>一期：</strong>无状态跳转。本模块只把 templateId / step / from 三个参数透传，不带会话态。</li>
+  <li><strong>二期：</strong>带上下文跳转。把 step ⑥ 规则配置助手的中间结论、step ⑧ 的归因摘要直接塞给下个模块。</li>
+</ul>
+
+<h3>2. 跨模块互动闭环</h3>
+<p><strong>一期：</strong>本模块不直连其他三模块，所有互动经基座中转或经入口参数协议（参数级）传递。<br>
+<strong>二期：</strong>本模块的"草稿入库 → 规则配置 → 上线 → 数据回流 → 异常排查"形成跨模块状态机闭环。</p>
+
+<hr>
+
+<h2>四、MVP 范围与验收</h2>
+
+<h3>0. MVP 一句话</h3>
+<p><strong>6/30 只交付两件事：① 生产流水线（端到端跑通） + ② 数据成绩单（开屏真数据 + 卡片回推基座）。其他都是二期。</strong></p>
+
+<h3>1. MVP 核心交付物（仅此两项）</h3>
+<table>
+  <tr><th width="20%">交付物</th><th>范围</th><th>验收标准</th></tr>
+  <tr><td><strong>① 生产流水线</strong></td><td>9 步 UI 全打通；开屏场景端到端真实用例可演示；step ①②③④⑤为重点深做，step ⑥⑦⑨ 仅 UI 占位/hand-off</td><td>用真实开屏需求从 step ① 走到 step ⑨，每一步都能点、参数能透传</td></tr>
+  <tr><td><strong>② 数据成绩单</strong></td><td>step ⑧ 单模板视图通；按基座卡片注册表向第三层看板推送 5 张 KPI 卡 + 红榜；仅开屏场景真实数据</td><td>在基座看板能看到本模块推送的开屏卡片；点「查看更多 →」能下钻回 step ⑧</td></tr>
+</table>
+
+<h3>2. 分层交付明细</h3>
+<table>
+  <tr><th>层 / 机制</th><th>630 做（属 MVP 两件事之一）</th><th>二期</th></tr>
+  <tr><td>第一层 模块入口</td><td>接收基座路由的 7 个开屏关键词；模块内 5 个 Tab 全打通（属 ①）</td><td>全场景关键词；@ 提及、附件上传</td></tr>
+  <tr><td>第二层 工作流</td><td>9 步 UI 全打通（属 ①），step ①②③④⑤ 深做、⑥仅 UI Demo、⑦仅 hand-off、⑨仅 UI</td><td>step ⑥ 接真后台；step ⑦ 内嵌；step ⑨ 回滚接真后台；个人 skill 挂载</td></tr>
+  <tr><td>第三层 数据回流</td><td>开屏场景真实数据跑通（属 ②）；step ⑧ 通；向基座推 5 张 KPI 卡 + 形态红榜</td><td>全场景真数据；自定义视角；操作日志</td></tr>
+  <tr><td>第四层 资产沉淀</td><td>8 个官方 Skills 元数据注册并默认挂；模板池 UI 可筛选</td><td>个人 Skills 提报 + 评分 + 收编</td></tr>
+  <tr><td>入口参数协议</td><td>无状态跳转</td><td>带状态跳转</td></tr>
+</table>
+
+<h3>3. 验收用例</h3>
+
+<h4>主用例（开屏场景，端到端 1 个真实模板，验证"流水线"）</h4>
+<ol>
+  <li>用户在基座对话框输入"我要做一个夏季冰镇风的开屏模板"</li>
+  <li>→ 路由到本模块 step ①，自动带上"夏季 / 冰镇风 / 开屏"作为初始诉求</li>
+  <li>→ 用户在 step ② idomo 编辑器生成 3 版文案，选定 1 版</li>
+  <li>→ 跳到 step ③ D2C 上传一张参考图，自动反推组件树</li>
+  <li>→ step ④ preview.html 多端预览 + 自动化测试通过</li>
+  <li>→ step ⑤ 草稿入库，AI 生成模板说明书</li>
+  <li>→ step ⑥（UI Demo）填出量诉求 + 大盘联动锁定演示，不接真规则下发</li>
+  <li>→ step ⑦ hand-off 跳到基座（不内嵌）</li>
+  <li>→ step ⑧ 模板成绩单，AI 给出"建议在 xx 流量段调整封面色温"——<strong>这一步 + 卡片回推基座 = MVP 的"数据成绩单"</strong></li>
+  <li>→ 异常时跳问题排查模块；正常迭代时 step ⑨ 一键迭代为 v2（仅 UI）</li>
+</ol>
+
+<h4>子用例（验证"数据成绩单"）</h4>
+<ul>
+  <li>在基座第三层看板看到本模块推送的"模板消耗 / CTR / CVR / 新模板占比 / 形态红榜"5 张卡片，数据为开屏场景真值；</li>
+  <li>点任一卡片的「查看更多 →」，按入口参数协议跳到本模块 step ⑧ 对应模板的成绩单页；</li>
+  <li>step ⑧ 内可切换时间维度（昨日 / 近三天 / 近七天）和模板，AI 归因卡能给出迭代建议。</li>
+</ul>
+
+<h3>4. 非目标（明确不做）</h3>
+<ul>
+  <li>不替代设计 / 研发自身工具链（只做"造模板"那一段被用最高频的能力）；</li>
+  <li>不在 630 做规则配置助手的真规则下发（属规则配置模块 + 后端服务）；</li>
+  <li>不在 630 做上线实验内嵌（step ⑦ 仅 hand-off）；</li>
+  <li>不在 630 做回滚真后台（step ⑨ 仅 UI）；</li>
+  <li>不在 630 做个人 Skills 挂载；</li>
+  <li>不在 630 做跨模块带状态跳转。</li>
+</ul>
+
+<hr>
+
+<h2>五、风险与依赖</h2>
+<table>
+  <tr><th>项</th><th>风险 / 依赖</th><th>应对</th></tr>
+  <tr><td>入口参数协议</td><td>强依赖基座先定稿</td><td>6/15 前与基座 owner 对齐参数清单</td></tr>
+  <tr><td>卡片回推格式</td><td>依赖基座第三层卡片注册表</td><td>模块本地先用假数据跑通，注册表 ready 后切真</td></tr>
+  <tr><td>Skills 注册</td><td>依赖基座 Skills 挂载机制</td><td>提前提报 8 个官方 skill 的元数据</td></tr>
+  <tr><td>数据口径</td><td>仅开屏对齐，其他场景占位</td><td>文档显式标注「假数据」，避免路演误读</td></tr>
+  <tr><td>step ⑦ hand-off</td><td>依赖洞察归因模块的实验视图 ready</td><td>6/30 前未 ready 则降级为占位页</td></tr>
+</table>
+
+<hr>
+
+<h2>六、配套交付物</h2>
+<table>
+  <tr><th>交付物</th><th>形式</th><th>链接</th></tr>
+  <tr><td>模块 Demo（一站式）</td><td>静态 HTML</td><td><code>./index.html</code></td></tr>
+  <tr><td>规则配置助手 Demo（独立页）</td><td>静态 HTML</td><td><code>./rules-editor.html</code></td></tr>
+  <tr><td>idomo 创意脑暴 Demo</td><td>静态 HTML</td><td><code>./idomo-editor.html</code></td></tr>
+  <tr><td>多端预览 Demo</td><td>静态 HTML</td><td><code>./preview.html</code></td></tr>
+  <tr><td>一页纸</td><td>HTML</td><td><code>./onepager.html</code></td></tr>
+  <tr><td>决策档案</td><td>HTML</td><td><code>./decisions.html</code></td></tr>
+</table>
+
+</div><!-- /content -->
+
+<script>
+function copyHtmlNode(node) {
+  const range = document.createRange();
+  range.selectNode(node);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+  try {
+    document.execCommand('copy');
+    return true;
+  } catch (e) {
+    return false;
+  } finally {
+    sel.removeAllRanges();
+  }
+}
+function copyAll() {
+  const ok = copyHtmlNode(document.getElementById('content'));
+  alert(ok ? '✅ 已复制全文。直接到 TAPD / 飞书 / 腾讯文档粘贴即可。' : '❌ 复制失败，请手动选中复制。');
+}
+function copyReview() {
+  const ok = copyHtmlNode(document.getElementById('review-section'));
+  alert(ok ? '✅ 已复制「评审版速览」段。' : '❌ 复制失败，请手动选中复制。');
+}
+</script>
+
+</body>
+</html>
