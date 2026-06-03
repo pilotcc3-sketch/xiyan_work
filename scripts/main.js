@@ -932,4 +932,34 @@
     t._timer = setTimeout(() => t.classList.remove('show'), 2200);
   }
 
+  // ④ 测试 · 自动化测试 / 人工测试 按钮
+  const btnRunAutoTest = document.getElementById('btnRunAutoTest');
+  if (btnRunAutoTest) {
+    btnRunAutoTest.addEventListener('click', () => {
+      const orig = btnRunAutoTest.textContent;
+      btnRunAutoTest.disabled = true;
+      btnRunAutoTest.textContent = '⏳ 自动化测试运行中…';
+      showToast('已启动自动化测试 · AI 已生成 24 条 case');
+      setTimeout(() => {
+        btnRunAutoTest.disabled = false;
+        btnRunAutoTest.textContent = '✓ 测试完成 (24/24)';
+        showToast('测试完成 · 通过率 24/24 · 报告单 #16364 已生成');
+      }, 2000);
+    });
+  }
+
+  const btnUrgeQA = document.getElementById('btnUrgeQA');
+  if (btnUrgeQA) {
+    btnUrgeQA.addEventListener('click', () => {
+      showToast('催办已发送 · 已通知 @test_lily（企微 + 测试单评论区）');
+    });
+  }
+
+  const btnOpenQATicket = document.getElementById('btnOpenQATicket');
+  if (btnOpenQATicket) {
+    btnOpenQATicket.addEventListener('click', () => {
+      showToast('（demo）打开测试单 #QA-2026-0603-007');
+    });
+  }
+
 })();

@@ -1364,9 +1364,30 @@
         <div class="card"><div class="card-sub">→ 跳转 iDOMO 编辑 · 编辑完成后自动回到本流水线步骤④。</div><a class="btn-primary sm" style="margin-top:12px; display:inline-block; text-decoration:none;" href="https://tsa.woa.com/domo-admin/union-form-editor?id=1002924" target="_blank" rel="noopener">打开 iDOMO 编辑</a></div>
       </div>
       <div class="step-content" data-step-content="4">
-        <div class="step-content-head"><h3>④ 测试 <span class="badge skill">Skill: 模板自动化测试 (A)</span></h3><p class="muted">自动跑模板回归用例 · 物理属性合规 · 多分辨率适配 · 多机型预览。</p></div>
+        <div class="step-content-head"><h3>④ 测试 <span class="badge skill">Skill: 模板自动化测试 (A)</span></h3><p class="muted">两部分：A. 自动化测试（AI 生成 case + 一键跑）&nbsp;·&nbsp;B. 人工测试（向测试催办 + 跟踪测试单）。</p></div>
         <div class="ai-line">🤖 <b>AI 在这里做什么：</b>读取模板 DSL + 历史 bug 库，<b>自动生成本次回归测试 case</b>（覆盖物理属性 / 多分辨率 / 多机型），无需人工编排。</div>
-        <div class="card"><div class="card-sub">最近一次测试 · 通过率 24/24 · 用时 38s · 其中 9 条由 AI 新增</div></div>
+
+        <!-- A. 自动化测试 -->
+        <div class="card">
+          <div class="card-title"><b>A. 自动化测试</b> <span class="muted">· AI 生成 case · 一键开跑 · 跑完直出报告单</span></div>
+          <div class="card-sub" style="margin-top:6px;">最近一次测试 · 通过率 24/24 · 用时 38s · 其中 9 条由 AI 新增</div>
+          <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <button class="btn-primary sm" id="btnRunAutoTest">▶ 开始自动化测试</button>
+            <a class="btn-ghost sm" style="display:inline-block; text-decoration:none;" href="https://qianxun.woa.com/v2/templateReportByID?reportId=16364" target="_blank" rel="noopener">📄 查看测试报告单 (#16364)</a>
+            <span class="muted">报告单由「千寻」平台承载，跑完自动回填本流水线</span>
+          </div>
+        </div>
+
+        <!-- B. 人工测试 -->
+        <div class="card mt-16">
+          <div class="card-title"><b>B. 人工测试</b> <span class="muted">· 复杂兼容性 / 真机体验由测试同学补测</span></div>
+          <div class="card-sub" style="margin-top:6px;">测试单 · #QA-2026-0603-007 · 受理人：@test_lily · 状态：<span class="stage-pill stage-test">测试中</span> · 预计 06-04 17:00 前出结论</div>
+          <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <button class="btn-primary sm" id="btnUrgeQA">📣 向测试催办</button>
+            <button class="btn-ghost sm" id="btnOpenQATicket">📋 查看测试单</button>
+            <span class="muted">催办会同步到企微 + 测试单评论区</span>
+          </div>
+        </div>
       </div>
       <div class="step-content" data-step-content="7">
         <div class="step-content-head"><h3>⑦ 实验</h3><p class="muted">配置 AB 实验 · 流量分桶 · 指标观测窗口（CTR/CVR/GMV）。已自动带入 ⑥ 配置的下发规则。</p></div>
