@@ -1012,17 +1012,16 @@
       <!-- Step 5 · 草稿上线（入库审批） -->
       <div class="step-content" data-step-content="5">
         <div class="step-content-head">
-          <h3>⑤ 草稿上线 · 入库审批 <span class="badge wait">D2 · 双审批 · 第一道</span></h3>
-          <p class="muted">本平台新增「草稿入库审批」· 限制：仅产品角色可审批。</p>
+          <h3>⑤ 草稿上线</h3>
+          <p class="muted">把通过测试的草稿模板提交上线 · 上线后即可在「⑥ 规则配置 / ⑦ 实验」中被引用。</p>
         </div>
-        <div class="card approve-card">
-          <div class="card-title">第一道 · 草稿入库审批</div>
-          <div class="card-sub">通过后进入公共草稿池，可被其他模板复用</div>
-          <ul class="rule-list">
-            <li class="ok">✅ 编辑 / 测试 / 自动化回归</li>
-            <li class="no">❌ 未通过则不可被搜到 / 不可被复用 / 不可上线</li>
-          </ul>
-          <div class="card-state"><span class="badge ok">已通过 · 入库</span> by 产品·小樊 · 5h 前</div>
+        <div class="card">
+          <div class="card-title">模板上线状态</div>
+          <div class="card-sub" style="margin-top:6px;" id="onlineStatusSub">当前模板：<b>开屏-夏日冰镇风 v1</b> · 状态：<span class="badge wait" id="onlineStatusBadge">未上线</span></div>
+          <div style="margin-top:14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <button class="btn-primary sm" id="btnSubmitOnline">🚀 提交上线</button>
+            <span class="muted" id="onlineStatusTip">点击后立即上线 · 完成后将在此显示「已上线」</span>
+          </div>
         </div>
       </div>
 
@@ -1249,9 +1248,9 @@
       <div class="step-content" data-step-content="9">
         <div class="step-content-head">
           <h3>⑨ 模板数据成绩单 <span class="badge ok" id="reportOnlineBadge">已上线 7 天</span></h3>
-          <p class="muted">本成绩单按模板维度生成，包含模板基础信息、核心指标、关联实验、异常归因与调优建议；上线满 7 天后自动出 v1 报告。</p>
+          <p class="muted">两部分：A. <b>基础数据</b>（消耗 / CTR / CVR 等绝对值）&nbsp;·&nbsp;B. <b>效果判定</b>（在「同流量×同预算」可比场景中，是否跑赢同场景均值）。</p>
         </div>
-        <div class="ai-line">🤖 <b>AI 在这里做什么：</b>对比模板表现 vs 大盘 / 同形态基线，<b>自动归因</b>（CTR 异常 → 是封面图、文案、还是落地页）+ <b>给出调优建议</b>（克隆为 v2 / 调整素材 / 回滚），并自动生成企微战报。</div>
+        <div class="ai-line">🤖 <b>AI 在这里做什么：</b>① 把模板放进「同流量档×同预算档」的可比场景中算<b>消耗增量、CTR/CVR vs 场景均值</b>，输出「跑赢/持平/跑输」结论；② 基于结论<b>归因</b>（封面图 / 文案 / 落地页 / 投放时段）+ <b>调优建议</b>（克隆 v2 / 调素材 / 回滚），并自动生成企微战报。</div>
 
         <!-- 空态：未上线模板 -->
         <div class="report-empty" id="reportEmpty" style="display:none;">
@@ -1284,21 +1283,89 @@
             </div>
           </div>
 
-          <!-- 核心指标 6 宫格 -->
-          <div class="report-kpi-grid">
+          <!-- ============ A. 基础数据 ============ -->
+          <div class="report-section-title" style="margin-top:20px; font-size:15px; font-weight:600; color:var(--color-text-1);">
+            📊 A. 基础数据 <span class="muted" style="font-weight:400; font-size:12px;">· 模板自身的绝对表现</span>
+          </div>
+          <div class="report-kpi-grid" style="margin-top:10px;">
             <div class="report-kpi"><div class="rk-label">累计消耗</div><div class="rk-num" id="rkCost">—</div></div>
+            <div class="report-kpi"><div class="rk-label">日均消耗</div><div class="rk-num" id="rkDailyCost">—</div></div>
             <div class="report-kpi"><div class="rk-label">CTR</div><div class="rk-num" id="rkCtr">—</div></div>
             <div class="report-kpi"><div class="rk-label">CVR</div><div class="rk-num" id="rkCvr">—</div></div>
-            <div class="report-kpi"><div class="rk-label">GMV 提升</div><div class="rk-num up" id="rkGmv">—</div></div>
             <div class="report-kpi"><div class="rk-label">日均曝光</div><div class="rk-num" id="rkImp">—</div></div>
-            <div class="report-kpi"><div class="rk-label">大盘排名</div><div class="rk-num" id="rkRank">—</div></div>
+            <div class="report-kpi"><div class="rk-label">GMV 提升</div><div class="rk-num up" id="rkGmv">—</div></div>
           </div>
 
+          <!-- ============ B. 效果判定（同流量×同预算 场景对比） ============ -->
+          <div class="report-section-title" style="margin-top:24px; font-size:15px; font-weight:600; color:var(--color-text-1);">
+            🎯 B. 效果判定 <span class="muted" style="font-weight:400; font-size:12px;">· 在「同流量档×同预算档」可比场景中，是否跑赢同场景均值</span>
+          </div>
+
+          <div class="card" style="margin-top:10px;">
+            <!-- 可比场景标识 -->
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; padding-bottom:10px; border-bottom:1px dashed var(--color-border);">
+              <span class="muted">本模板归属场景：</span>
+              <span class="badge ok">流量档：开屏-高曝光池</span>
+              <span class="badge ok">预算档：日预算 50w-100w</span>
+              <span class="muted">· 同场景模板数：<b>23</b></span>
+            </div>
+
+            <!-- 对比表 -->
+            <table class="form-table" style="margin-top:12px;">
+              <thead>
+                <tr>
+                  <th>判定维度</th>
+                  <th>本模板</th>
+                  <th>同场景均值</th>
+                  <th>差值</th>
+                  <th>判定</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>消耗增量</b><div class="muted" style="font-size:12px;">同预算下花得出去吗</div></td>
+                  <td>+12.4%</td>
+                  <td>+3.1%</td>
+                  <td><span class="cell-trend up">▲ +9.3pp</span></td>
+                  <td><span class="badge ok">✅ 跑赢</span></td>
+                </tr>
+                <tr>
+                  <td><b>CTR</b><div class="muted" style="font-size:12px;">同流量下点击力</div></td>
+                  <td>9.85%</td>
+                  <td>8.21%</td>
+                  <td><span class="cell-trend up">▲ +1.64pp</span></td>
+                  <td><span class="badge ok">✅ 跑赢</span></td>
+                </tr>
+                <tr>
+                  <td><b>CVR</b><div class="muted" style="font-size:12px;">同流量下转化力</div></td>
+                  <td>20.44%</td>
+                  <td>19.80%</td>
+                  <td><span class="cell-trend up">▲ +0.64pp</span></td>
+                  <td><span class="badge wait">≈ 持平</span></td>
+                </tr>
+                <tr>
+                  <td><b>千次曝光收益</b><div class="muted" style="font-size:12px;">eCPM 维度对比</div></td>
+                  <td>¥38.6</td>
+                  <td>¥31.2</td>
+                  <td><span class="cell-trend up">▲ +23.7%</span></td>
+                  <td><span class="badge ok">✅ 跑赢</span></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- 综合结论 -->
+            <div style="margin-top:14px; padding:12px 14px; background:rgba(0,185,107,.08); border-left:3px solid #00B96B; border-radius:4px;">
+              <div style="font-weight:600; color:#00B96B; margin-bottom:4px;">🏆 综合结论：跑赢同场景</div>
+              <div class="muted" style="font-size:13px; line-height:1.6;">本模板在「开屏-高曝光池 × 日预算 50w-100w」场景中，<b>4 项判定 3 项跑赢、1 项持平</b>，无跑输项；建议进入红榜并扩大流量配比。<b>大盘排名（同形态）：</b><span id="rkRank">—</span></div>
+            </div>
+          </div>
+
+          <!-- ============ 归因 + 建议 + 战报 ============ -->
           <div class="grid-2" style="margin-top:16px;">
             <!-- 卡片报告 -->
             <div class="card report-card">
               <div class="report-head">
-                <div class="report-title">📊 卡片报告</div>
+                <div class="report-title">📋 归因与建议</div>
                 <div class="report-meta" id="reportSubMeta">—</div>
               </div>
 
@@ -1310,7 +1377,7 @@
               </div>
 
               <div class="report-block">
-                <div class="report-block-title">⚠️ 异常归因</div>
+                <div class="report-block-title">⚠️ 异常归因 <span class="muted" style="font-weight:400; font-size:12px;">· 基于 B 判定结果</span></div>
                 <div class="report-block-text" id="reportAnomaly">—</div>
               </div>
               <div class="report-block">
@@ -1337,6 +1404,9 @@
                 <div class="wecom-h1">📈 模板表现速报</div>
                 <div class="wecom-row"><b id="wecomTplName">—</b></div>
                 <div class="wecom-row">CTR <b id="wecomCtr">—</b> · 消耗 <b id="wecomCost">—</b> · GMV <b style="color:#00B96B" id="wecomGmv">—</b></div>
+                <div class="wecom-divider"></div>
+                <div class="wecom-h2">🎯 同场景判定</div>
+                <div class="wecom-row" style="color:#00B96B;"><b>跑赢同场景</b>（4 维度 3 赢 1 平）</div>
                 <div class="wecom-divider"></div>
                 <div class="wecom-h2">⚠️ 提醒</div>
                 <div class="wecom-row" id="wecomAnomaly">—</div>
@@ -1390,8 +1460,15 @@
         </div>
       </div>
       <div class="step-content" data-step-content="7">
-        <div class="step-content-head"><h3>⑦ 实验</h3><p class="muted">配置 AB 实验 · 流量分桶 · 指标观测窗口（CTR/CVR/GMV）。已自动带入 ⑥ 配置的下发规则。</p></div>
-        <div class="card"><div class="card-sub">实验 ID：EXP-2026-0529-01 · 实验期 · 10% 流量灰度 · 已绑定 2 条规则（夏季·一线·年轻女性 / 高消费力·iOS·夜间）</div></div>
+        <div class="step-content-head"><h3>⑦ 实验</h3><p class="muted">配置 AB 实验 · 流量分桶 · 指标观测窗口（CTR/CVR/GMV）· 由「TAB 实验平台」承载，本环节直跳过去。</p></div>
+        <div class="card">
+          <div class="card-title">当前实验</div>
+          <div class="card-sub" style="margin-top:6px;">实验 ID：EXP-2026-0529-01 · 实验期 · 10% 流量灰度 · 已绑定 2 条规则（夏季·一线·年轻女性 / 高消费力·iOS·夜间）</div>
+          <div style="margin-top:14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <a class="btn-primary sm" style="display:inline-block; text-decoration:none;" href="https://tab.woa.com/tab/experiment/list?business=1888&trace_id=96bc672e-96c4-440f-8936-d31d7d53621e&appGroup=abtest" target="_blank" rel="noopener">🧪 跳转 TAB 实验系统</a>
+            <span class="muted">实验配置 / 分桶 / 指标观测在 TAB 平台完成，回流的核心指标会出现在 ⑨ 成绩单</span>
+          </div>
+        </div>
       </div>
 
     </div>

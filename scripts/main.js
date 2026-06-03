@@ -464,12 +464,13 @@
     set('reportOnlineDays', data.onlineDays);
     set('reportSpecIds', data.specIds);
 
-    // 6 宫格
+    // A. 基础数据
     set('rkCost', data.cost);
+    set('rkDailyCost', data.dailyCost || '—');
     set('rkCtr', data.ctr);
     set('rkCvr', data.cvr);
-    set('rkGmv', data.gmv);
     set('rkImp', data.imp);
+    set('rkGmv', data.gmv);
     set('rkRank', data.rank);
 
     // 卡片副标
@@ -959,6 +960,27 @@
   if (btnOpenQATicket) {
     btnOpenQATicket.addEventListener('click', () => {
       showToast('（demo）打开测试单 #QA-2026-0603-007');
+    });
+  }
+
+  // ⑤ 草稿上线 · 提交上线按钮
+  const btnSubmitOnline = document.getElementById('btnSubmitOnline');
+  if (btnSubmitOnline) {
+    btnSubmitOnline.addEventListener('click', () => {
+      btnSubmitOnline.disabled = true;
+      btnSubmitOnline.textContent = '⏳ 上线中…';
+      showToast('正在提交上线…');
+      setTimeout(() => {
+        const badge = document.getElementById('onlineStatusBadge');
+        const tip = document.getElementById('onlineStatusTip');
+        if (badge) {
+          badge.textContent = '已上线';
+          badge.className = 'badge ok';
+        }
+        if (tip) tip.textContent = '上线成功 · 该模板已可在「⑥ 规则配置 / ⑦ 实验」中被引用';
+        btnSubmitOnline.textContent = '✓ 已上线';
+        showToast('上线成功');
+      }, 1500);
     });
   }
 
