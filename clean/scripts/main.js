@@ -185,17 +185,20 @@
   }
 
   // ============ 模板行点击 → 流水线抽屉 ============
-  // 阶段（pill / badge 文案）→ 步骤号 映射（精简版去掉「待入库」）
+  // 阶段（pill / badge 文案）→ 步骤号 映射（v0.4：10 节点版）
   const STAGE_TO_STEP = {
     '编辑中':       '3',
+    '调整中':       '3',
     '测试中':       '4',
     '草稿上线':     '5',
-    '规则配置':     '6',
-    '实验中':       '7',
-    '已上线':       '9',
-    '正式草稿':     '8',
-    '待上线审批':   '8',
-    '已发布':       '9'
+    '草稿发布':     '5',
+    '灰度回归':     '6',
+    '规则配置':     '7',
+    '实验中':       '8',
+    '待上线审批':   '9',
+    '正式草稿':     '9',
+    '已上线':       '10',
+    '已发布':       '10'
   };
 
   // ============ 模板成绩单数据 ============
@@ -424,7 +427,7 @@
       const stageText = inferStageText(row);
       document.getElementById('pipelineDrawerTitle').textContent = `模板生产流水线 · ${tplName}`;
       document.getElementById('pipelineDrawerSub').textContent =
-        `模板ID：${tplId}${stageText ? ' · 当前阶段：' + stageText : ''} · 编辑 → 测试 → 草稿上线 → 实验 → 正式上线`;
+        `模板ID：${tplId}${stageText ? ' · 当前阶段：' + stageText : ''} · 创建 → 设计 → 调整 → 测试 → 草稿发布 → 测试 → 规则配置 → 实验 → 全量上线 → 成绩单`;
       renderReport(tplId, stageText);
       activateStep(stepNo);
       showDrawer(pipelineDrawer);
@@ -442,7 +445,7 @@
       document.getElementById('pipelineDrawerSub').textContent =
         `模板ID：${tplId} · 当前阶段：${stageText} · 已上线后自动出 v1 报告`;
       renderReport(tplId, stageText);
-      activateStep('9');
+      activateStep('10');
       showDrawer(pipelineDrawer);
     });
   });
@@ -484,7 +487,7 @@
           trigger.click();
         } else {
           document.getElementById('pipelineDrawerTitle').textContent = '模板生产流水线 · 开屏-夏日冰镇风 v1';
-          document.getElementById('pipelineDrawerSub').textContent = '模板ID：1003638 · 模板创建 → 模板设计 → 编辑 → 测试 → 草稿上线 → 实验 → 正式上线';
+          document.getElementById('pipelineDrawerSub').textContent = '模板ID：1003638 · 创建 → 设计 → 调整 → 测试 → 草稿发布 → 测试 → 规则配置 → 实验 → 全量上线 → 成绩单';
           activateStep('1');
           showDrawer(pipelineDrawer);
         }
@@ -691,53 +694,150 @@
     t._timer = setTimeout(() => t.classList.remove('show'), 2200);
   }
 
-  // ④ 测试 · 自动化测试 / 人工测试 按钮
-  const btnRunAutoTest = document.getElementById('btnRunAutoTest');
-  if (btnRunAutoTest) {
-    btnRunAutoTest.addEventListener('click', () => {
-      btnRunAutoTest.disabled = true;
-      btnRunAutoTest.textContent = '⏳ 自动化测试运行中…';
-      showToast('已启动自动化测试 · AI 已生成 24 条 case');
+  // ============ ④/⑥ 模板测试 · 自动化测试 / 人工测试（可跳过） ============
+  function bindAutoTestBtn(id) {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      btn.disabled = true;
+      const old = btn.textContent;
+      btn.textContent = '⏳ 自动化测试运行中…';
+      showToast('已启动自动化测试 · AI 已生成 case');
       setTimeout(() => {
-        btnRunAutoTest.disabled = false;
-        btnRunAutoTest.textContent = '✓ 测试完成 (24/24)';
-        showToast('测试完成 · 通过率 24/24 · 报告单 #16364 已生成');
+        btn.disabled = false;
+        btn.textContent = '✓ 测试完成 (24/24)';
+        showToast('测试完成 · 通过率 24/24 · 报告单已生成');
       }, 2000);
     });
   }
+  bindAutoTestBtn('btnRunAutoTest');
+  bindAutoTestBtn('btnRunAutoTest2');
 
-  const btnUrgeQA = document.getElementById('btnUrgeQA');
-  if (btnUrgeQA) {
-    btnUrgeQA.addEventListener('click', () => {
-      showToast('催办已发送 · 已通知 @test_lily（企微 + 测试单评论区）');
+  function bindUrgeQA(id, who) {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      showToast(`催办已发送 · 已通知 ${who}（企微 + 测试单评论区）`);
     });
   }
+  bindUrgeQA('btnUrgeQA',  '@test_lily');
+  bindUrgeQA('btnUrgeQA2', '@test_lily');
 
-  const btnOpenQATicket = document.getElementById('btnOpenQATicket');
-  if (btnOpenQATicket) {
-    btnOpenQATicket.addEventListener('click', () => {
-      showToast('（demo）打开测试单 #QA-2026-0603-007');
+  function bindOpenQA(id, ticket) {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.addEventListener('click', () => showToast(`（demo）打开测试单 ${ticket}`));
+  }
+  bindOpenQA('btnOpenQATicket',  '#QA-2026-0603-007');
+  bindOpenQA('btnOpenQATicket2', '#QA-2026-0606-014');
+
+  function bindSkipQA(id, nextStep) {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      btn.disabled = true;
+      btn.textContent = '✓ 已跳过人工测试';
+      showToast('已跳过人工测试 · 自动化测试已通过 → 可继续下一步');
     });
   }
+  bindSkipQA('btnSkipQA',  '5');
+  bindSkipQA('btnSkipQA2', '7');
 
-  // ⑤ 草稿上线 · 提交上线按钮
+  // ============ 通用弹窗（tpl-dialog）============
+  function showDialog(id) {
+    const d = document.getElementById(id);
+    if (!d) return;
+    d.classList.add('show');
+    d.setAttribute('aria-hidden', 'false');
+  }
+  function hideDialog(id) {
+    const d = document.getElementById(id);
+    if (!d) return;
+    d.classList.remove('show');
+    d.setAttribute('aria-hidden', 'true');
+  }
+  document.querySelectorAll('[data-dlg-close]').forEach(el => {
+    el.addEventListener('click', () => hideDialog(el.dataset.dlgClose));
+  });
+
+  // ============ ⑤ 草稿发布 · 提交上线按钮（弹窗 + IOA 回填） ============
   const btnSubmitOnline = document.getElementById('btnSubmitOnline');
   if (btnSubmitOnline) {
-    btnSubmitOnline.addEventListener('click', () => {
-      btnSubmitOnline.disabled = true;
-      btnSubmitOnline.textContent = '⏳ 上线中…';
-      showToast('正在提交上线…');
-      setTimeout(() => {
-        const badge = document.getElementById('onlineStatusBadge');
-        const tip = document.getElementById('onlineStatusTip');
-        if (badge) {
-          badge.textContent = '已上线';
-          badge.className = 'badge ok';
-        }
-        if (tip) tip.textContent = '上线成功 · 该模板已可在「⑥ 规则配置 / ⑦ 实验」中被引用';
-        btnSubmitOnline.textContent = '✓ 已上线';
-        showToast('上线成功');
-      }, 1500);
+    btnSubmitOnline.addEventListener('click', () => showDialog('dlgDraftOnline'));
+  }
+  const dlgDraftSubmitBtn = document.getElementById('dlgDraftSubmitBtn');
+  if (dlgDraftSubmitBtn) {
+    dlgDraftSubmitBtn.addEventListener('click', () => {
+      const remark = (document.getElementById('draftRemarkInput')?.value || '').trim();
+      if (!remark) { showToast('请填写备注'); return; }
+      hideDialog('dlgDraftOnline');
+      showToast('IOA 审批单已下发 · 测试 / 产品 / 技术 三段审批');
+      const ioa = document.getElementById('ioaResultDraft');
+      if (ioa) ioa.style.display = 'block';
+      const r = document.getElementById('ioaResultRemarkDraft');
+      if (r) r.textContent = remark;
+      const badge = document.getElementById('onlineStatusBadge');
+      if (badge) { badge.textContent = '审批中'; badge.className = 'badge wait'; }
+      const tip = document.getElementById('onlineStatusTip');
+      if (tip) tip.textContent = 'IOA 审批已下发 · 完成后将解锁灰度环境';
+      if (btnSubmitOnline) {
+        btnSubmitOnline.disabled = true;
+        btnSubmitOnline.textContent = '✓ 已提交（审批中）';
+      }
+    });
+  }
+  const btnUrgeDraftIOA = document.getElementById('btnUrgeDraftIOA');
+  if (btnUrgeDraftIOA) {
+    btnUrgeDraftIOA.addEventListener('click', () => showToast('催办已发送 · IOA 当前节点审批人已收到企微提醒'));
+  }
+
+  // ============ ⑨ 全量上线 · 提交按钮（弹窗 + IOA 回填） ============
+  const btnSubmitFullOnline = document.getElementById('btnSubmitFullOnline');
+  if (btnSubmitFullOnline) {
+    btnSubmitFullOnline.addEventListener('click', () => showDialog('dlgFullOnline'));
+  }
+  const dlgFullSubmitBtn = document.getElementById('dlgFullSubmitBtn');
+  if (dlgFullSubmitBtn) {
+    dlgFullSubmitBtn.addEventListener('click', () => {
+      const remark = (document.getElementById('fullRemarkInput')?.value || '').trim();
+      if (!remark) { showToast('请填写备注'); return; }
+      hideDialog('dlgFullOnline');
+      showToast('IOA 全量上线审批单已下发');
+      const ioa = document.getElementById('ioaResultFull');
+      if (ioa) ioa.style.display = 'block';
+      const r = document.getElementById('ioaResultRemarkFull');
+      if (r) r.textContent = remark;
+      const badge = document.getElementById('fullOnlineBadge');
+      if (badge) { badge.textContent = '审批中'; badge.className = 'badge wait'; }
+      const tip = document.getElementById('fullOnlineTip');
+      if (tip) tip.textContent = 'IOA 审批已下发 · 完成后正式投放线上 100% 流量';
+      if (btnSubmitFullOnline) {
+        btnSubmitFullOnline.disabled = true;
+        btnSubmitFullOnline.textContent = '✓ 已提交（审批中）';
+      }
+    });
+  }
+  const btnUrgeFullIOA = document.getElementById('btnUrgeFullIOA');
+  if (btnUrgeFullIOA) {
+    btnUrgeFullIOA.addEventListener('click', () => showToast('催办已发送 · IOA 当前节点审批人已收到企微提醒'));
+  }
+
+  // ============ ⑧ 模板实验 · 跳过按钮（弹窗 + 产研审批） ============
+  const btnSkipExp = document.getElementById('btnSkipExp');
+  if (btnSkipExp) {
+    btnSkipExp.addEventListener('click', () => showDialog('dlgSkipExp'));
+  }
+  const dlgSkipExpSubmitBtn = document.getElementById('dlgSkipExpSubmitBtn');
+  if (dlgSkipExpSubmitBtn) {
+    dlgSkipExpSubmitBtn.addEventListener('click', () => {
+      const reason = (document.getElementById('skipExpReason')?.value || '').trim();
+      if (!reason) { showToast('请填写跳过原因'); return; }
+      hideDialog('dlgSkipExp');
+      showToast('已提交跳过申请 · 产品 + 技术审批中');
+      if (btnSkipExp) {
+        btnSkipExp.disabled = true;
+        btnSkipExp.textContent = '✓ 已申请跳过（审批中）';
+      }
     });
   }
 

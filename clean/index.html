@@ -612,23 +612,24 @@
   <div class="side-drawer-head">
     <div>
       <div class="side-drawer-title" id="pipelineDrawerTitle">模板生产流水线</div>
-      <div class="side-drawer-sub" id="pipelineDrawerSub">编辑 · 测试 · 草稿上线 · 实验 · 正式上线 · 底层画布：iDOMO 引擎</div>
+      <div class="side-drawer-sub" id="pipelineDrawerSub">模板创建 · 设计 · 调整 · 测试 · 草稿发布 · 测试 · 规则配置 · 实验 · 全量上线 · 成绩单</div>
     </div>
     <div class="side-drawer-close" data-close="pipeline">✕</div>
   </div>
   <div class="side-drawer-body">
 
-    <!-- Stepper -->
+    <!-- Stepper · 10 步 -->
     <div class="stepper">
       <div class="step done" data-step="1"><span class="step-no">1</span><span class="step-name">模板创建</span><span class="step-tag">来源</span></div>
-      <div class="step done active" data-step="2"><span class="step-no">2</span><span class="step-name">模板设计</span><span class="step-tag">D2C / C2D2C Agent</span></div>
-      <div class="step" data-step="3"><span class="step-no">3</span><span class="step-name">编辑</span></div>
-      <div class="step" data-step="4"><span class="step-no">4</span><span class="step-name">测试</span></div>
-      <div class="step" data-step="5"><span class="step-no">5</span><span class="step-name">草稿上线</span><span class="step-tag">上线审批</span></div>
-      <div class="step" data-step="6"><span class="step-no">6</span><span class="step-name">规则配置</span><span class="step-tag">闸门</span></div>
-      <div class="step" data-step="7"><span class="step-no">7</span><span class="step-name">实验</span></div>
-      <div class="step" data-step="8"><span class="step-no">8</span><span class="step-name">正式上线</span><span class="step-tag">上线审批</span></div>
-      <div class="step" data-step="9"><span class="step-no">9</span><span class="step-name">成绩单</span></div>
+      <div class="step done active" data-step="2"><span class="step-no">2</span><span class="step-name">模板设计</span><span class="step-tag">D2C / C2D2C</span></div>
+      <div class="step" data-step="3"><span class="step-no">3</span><span class="step-name">模板调整</span><span class="step-tag">iDOMO 编辑</span></div>
+      <div class="step" data-step="4"><span class="step-no">4</span><span class="step-name">模板测试</span><span class="step-tag">自动化必经</span></div>
+      <div class="step" data-step="5"><span class="step-no">5</span><span class="step-name">草稿发布</span><span class="step-tag">IOA 审批</span></div>
+      <div class="step" data-step="6"><span class="step-no">6</span><span class="step-name">模板测试</span><span class="step-tag">灰度回归</span></div>
+      <div class="step" data-step="7"><span class="step-no">7</span><span class="step-name">规则配置</span><span class="step-tag">闸门</span></div>
+      <div class="step" data-step="8"><span class="step-no">8</span><span class="step-name">模板实验</span><span class="step-tag">AB / 可跳过</span></div>
+      <div class="step" data-step="9"><span class="step-no">9</span><span class="step-name">全量上线</span><span class="step-tag">IOA 审批</span></div>
+      <div class="step" data-step="10"><span class="step-no">10</span><span class="step-name">成绩单</span></div>
     </div>
 
     <!-- Step Panel -->
@@ -776,32 +777,108 @@
           <div class="step-foot-actions">
             <button class="btn-text danger sm">❌ 设计 / 产品拒绝（终止流转）</button>
             <button class="btn-ghost">↷ 跳过本步</button>
-            <button class="btn-primary" data-jump-step="3">前往 ③ 编辑 ⟶</button>
+            <button class="btn-primary" data-jump-step="3">前往 ③ 模板调整 ⟶</button>
           </div>
         </div>
       </div>
 
       <!-- Step 5 · 草稿上线（上线审批） -->
+      <!-- Step 5 · 模板草稿发布（弹窗 备注+审批节点 → IOA） -->
       <div class="step-content" data-step-content="5">
         <div class="step-content-head">
-          <h3>⑤ 草稿上线</h3>
-          <p class="muted">把通过测试的草稿模板提交上线 · 上线后即可在「⑥ 规则配置 / ⑦ 实验」中被引用。</p>
+          <h3>⑤ 模板草稿发布 <span class="badge wait">IOA · 测试 / 产品 / 技术 三段审批</span></h3>
+          <p class="muted">点击"提交上线"将弹窗收集 <b>备注</b>（必填）并展示固定的 <b>审批节点</b>，提交后下发 IOA 流程；本面板会保留 IOA 链接 + 支持催办。</p>
         </div>
         <div class="card">
           <div class="card-title">模板上线状态</div>
-          <div class="card-sub" style="margin-top:6px;" id="onlineStatusSub">当前模板：<b>开屏-夏日冰镇风 v1</b> · 状态：<span class="badge wait" id="onlineStatusBadge">未上线</span></div>
+          <div class="card-sub" style="margin-top:6px;" id="onlineStatusSub">当前模板：<b>开屏-夏日冰镇风 v1</b> · 状态：<span class="badge wait" id="onlineStatusBadge">未提交</span></div>
           <div style="margin-top:14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
             <button class="btn-primary sm" id="btnSubmitOnline">🚀 提交上线</button>
-            <span class="muted" id="onlineStatusTip">点击后立即上线 · 完成后将在此显示「已上线」</span>
+            <span class="muted" id="onlineStatusTip">点击后弹窗填写备注 → 下发 IOA 审批 → 此处展示审批单链接</span>
           </div>
+
+          <!-- IOA 审批单回填区（提交后显示） -->
+          <div class="ioa-result" id="ioaResultDraft" style="display:none;">
+            <div class="ioa-result-head">
+              <span class="ioa-result-icon">📨</span>
+              <span class="ioa-result-title">IOA 审批单已下发</span>
+              <span class="badge wait" id="ioaResultStatusDraft">审批中</span>
+            </div>
+            <div class="ioa-result-row">
+              <span class="muted">审批单：</span>
+              <a class="link" href="https://my.woa.com/p2/applyList.html" target="_blank" rel="noopener" id="ioaResultLinkDraft">https://my.woa.com/p2/applyList.html ↗</a>
+            </div>
+            <div class="ioa-result-row">
+              <span class="muted">审批节点：</span>
+              <span>yoyooliu;serenejiao;looselordxu(测试审批) ━ ginjyu;minjchen;aaroncxu(产品审批) ━ vinsonliu;lulutian;nimomeng(技术审批)</span>
+            </div>
+            <div class="ioa-result-row">
+              <span class="muted">备注：</span>
+              <span id="ioaResultRemarkDraft">—</span>
+            </div>
+            <div class="ioa-result-actions">
+              <button class="btn-ghost sm" id="btnUrgeDraftIOA">📣 催办审批人</button>
+              <a class="btn-text sm" href="https://my.woa.com/p2/applyList.html" target="_blank" rel="noopener">前往 IOA ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-foot">
+          <button class="btn-ghost" data-jump-step="4">⟵ 返回 ④ 模板测试</button>
+          <button class="btn-primary" data-jump-step="6">前往 ⑥ 模板测试 ⟶</button>
         </div>
       </div>
 
-      <!-- Step 6 · 规则配置助手（AI · 精简版） -->
+      <!-- Step 6 · 模板测试（灰度后回归） -->
       <div class="step-content" data-step-content="6">
         <div class="step-content-head">
-          <h3>⑥ 规则配置 · 模板下发规则 <span class="badge skill">Skill: 规则编辑器</span></h3>
-          <p class="muted">在草稿上线后、上实验前，把"模板要在哪些流量 / 预算 上以什么方式出量"配置好。本步聚焦"出 / 不出"的诉求表达，曝光率与曝光概率走 ⑦ 实验 + 样式优选环节。</p>
+          <h3>⑥ 模板测试 <span class="badge skill">灰度回归 · 与 ④ 同型</span></h3>
+          <p class="muted">草稿上线后，针对线上灰度环境再做一次回归。<b>自动化测试必经</b>，<b>人工测试可跳过</b>。</p>
+        </div>
+        <div class="ai-line">🤖 <b>AI 在这里做什么：</b>对比 ④ 测试结果与本步上线后线上态，自动复跑差异 case；若发现新增异常，自动回流到 ⑤ 草稿发布的 IOA 单评论区。</div>
+
+        <!-- A. 自动化测试 · 必经 -->
+        <div class="card">
+          <div class="card-title"><b>A. 自动化测试</b> <span class="badge wait">必经</span> <span class="muted">· 灰度环境复跑</span></div>
+          <div class="card-sub" style="margin-top:6px;">本环境差异 case · AI 已生成 12 条（侧重线上灰度兼容）</div>
+          <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <button class="btn-primary sm" id="btnRunAutoTest2">▶ 开始灰度回归测试</button>
+            <a class="btn-ghost sm" style="display:inline-block; text-decoration:none;" href="https://qianxun.woa.com/v2/templateReportByID?reportId=16365" target="_blank" rel="noopener">📄 查看测试报告单 (#16365)</a>
+          </div>
+        </div>
+
+        <!-- B. 人工测试 · 可跳过 -->
+        <div class="card mt-16">
+          <div class="card-title"><b>B. 人工测试</b> <span class="badge ok">可跳过</span> <span class="muted">· 真机灰度回归</span></div>
+          <div class="card-sub" style="margin-top:6px;">测试单 · #QA-2026-0606-014 · 受理人：@test_lily · 状态：<span class="stage-pill stage-test">待测</span></div>
+          <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <button class="btn-primary sm" id="btnUrgeQA2">📣 向测试催办</button>
+            <button class="btn-ghost sm" id="btnOpenQATicket2">📋 查看测试单</button>
+            <button class="btn-text sm" id="btnSkipQA2">↷ 跳过人工测试</button>
+          </div>
+        </div>
+
+        <div class="step-foot">
+          <button class="btn-ghost" data-jump-step="5">⟵ 返回 ⑤ 草稿发布</button>
+          <button class="btn-primary" data-jump-step="7">前往 ⑦ 规则配置 ⟶</button>
+        </div>
+      </div>
+
+      <!-- Step 7 · 规则配置助手（AI · 精简版） -->
+      <div class="step-content" data-step-content="7">
+        <div class="step-content-head">
+          <h3>⑦ 规则配置 · 模板下发规则 <span class="badge skill">Skill: 规则编辑器</span></h3>
+          <p class="muted">在草稿上线后、上实验前，把"模板要在哪些流量 / 预算 上以什么方式出量"配置好。本步聚焦"出 / 不出"的诉求表达，曝光率与曝光概率走 ⑧ 实验 + 样式优选环节。</p>
+        </div>
+
+        <!-- 一期落地：直接跳现有规则配置系统 -->
+        <div class="rule-jump-card">
+          <div class="rule-jump-icon">🔗</div>
+          <div class="rule-jump-main">
+            <div class="rule-jump-title">一期 · 复用现有规则配置系统</div>
+            <div class="rule-jump-sub muted">本面板为「诉求表达层」，<b>规则真正落地仍在样式工厂规则配置页面</b>，便于一期上线。下方助手生成的规则会自动同步到该页面草稿。</div>
+          </div>
+          <a class="btn-primary sm" style="text-decoration:none;" href="https://tsa.woa.com/uniongame/oss#/ruleconfig/ruleConfigList" target="_blank" rel="noopener">前往规则配置 ↗</a>
         </div>
 
         <!-- ============== 规则配置助手 · AI 精简版 ============== -->
@@ -991,35 +1068,62 @@
         <!-- ============== /规则配置助手 ============== -->
 
         <div class="step-foot">
-          <button class="btn-ghost" data-jump="5">⟵ 返回 ⑤ 草稿上线</button>
-          <button class="btn-primary" data-jump="7">保存规则 · 进入 ⑦ 实验 ⟶</button>
+          <button class="btn-ghost" data-jump-step="6">⟵ 返回 ⑥ 模板测试</button>
+          <button class="btn-primary" data-jump-step="8">保存规则 · 进入 ⑧ 模板实验 ⟶</button>
         </div>
       </div>
 
       <!-- Step 8 · 正式上线（上线审批） -->
-      <div class="step-content" data-step-content="8">
+      <!-- Step 9 · 模板全量上线（弹窗 备注+实验数据+审批节点 → IOA） -->
+      <div class="step-content" data-step-content="9">
         <div class="step-content-head">
-          <h3>⑧ 正式上线 · 上线审批 <span class="badge wait">设计 + 产品双签</span></h3>
-          <p class="muted">沿用 iDOMO 现状 · 设计 + 产品双签。</p>
+          <h3>⑨ 模板全量上线 <span class="badge wait">IOA · 测试 / 产品 / 技术 三段审批</span></h3>
+          <p class="muted">点击"提交全量上线"将弹窗汇总实验数据 + 收集备注 + 展示固定审批节点；提交后下发 IOA 流程，本面板保留 IOA 链接 + 支持催办。</p>
         </div>
-        <div class="card approve-card">
-          <div class="card-title">第二道 · 上线审批</div>
-          <div class="card-sub">通过后正式投放线上流量</div>
-          <div class="approve-pending">
-            <div class="approve-pending-row"><span>设计 Review · 小桃</span><span class="badge wait">待审</span></div>
-            <div class="approve-pending-row"><span>产品复核 · 小樊</span><span class="badge wait">待审</span></div>
+        <div class="card">
+          <div class="card-title">全量上线状态</div>
+          <div class="card-sub" style="margin-top:6px;">当前模板：<b>开屏-夏日冰镇风 v1</b> · 状态：<span class="badge wait" id="fullOnlineBadge">未提交</span></div>
+          <div style="margin-top:14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <button class="btn-primary sm" id="btnSubmitFullOnline">🚀 提交全量上线</button>
+            <span class="muted" id="fullOnlineTip">点击后弹窗汇总实验数据 + 写备注 → 下发 IOA 审批 → 此处展示审批单链接</span>
           </div>
-          <div class="card-foot">
-            <button class="btn-primary sm">提交两位审批人</button>
-            <button class="btn-ghost sm">查看历史审批</button>
+
+          <!-- IOA 审批单回填区（提交后显示） -->
+          <div class="ioa-result" id="ioaResultFull" style="display:none;">
+            <div class="ioa-result-head">
+              <span class="ioa-result-icon">📨</span>
+              <span class="ioa-result-title">IOA 审批单已下发（全量上线）</span>
+              <span class="badge wait" id="ioaResultStatusFull">审批中</span>
+            </div>
+            <div class="ioa-result-row">
+              <span class="muted">审批单：</span>
+              <a class="link" href="https://my.woa.com/p2/applyList.html" target="_blank" rel="noopener">https://my.woa.com/p2/applyList.html ↗</a>
+            </div>
+            <div class="ioa-result-row">
+              <span class="muted">审批节点：</span>
+              <span>yoyooliu;serenejiao;looselordxu(测试审批) ━ ginjyu;minjchen;aaroncxu(产品审批) ━ vinsonliu;lulutian;nimomeng(技术审批)</span>
+            </div>
+            <div class="ioa-result-row">
+              <span class="muted">备注：</span>
+              <span id="ioaResultRemarkFull">—</span>
+            </div>
+            <div class="ioa-result-actions">
+              <button class="btn-ghost sm" id="btnUrgeFullIOA">📣 催办审批人</button>
+              <a class="btn-text sm" href="https://my.woa.com/p2/applyList.html" target="_blank" rel="noopener">前往 IOA ↗</a>
+            </div>
           </div>
+        </div>
+
+        <div class="step-foot">
+          <button class="btn-ghost" data-jump-step="8">⟵ 返回 ⑧ 模板实验</button>
+          <button class="btn-primary" data-jump-step="10">前往 ⑩ 成绩单 ⟶</button>
         </div>
       </div>
 
-      <!-- Step 9 · 成绩单（动态填充） -->
-      <div class="step-content" data-step-content="9">
+      <!-- Step 10 · 模板成绩单（动态填充） -->
+      <div class="step-content" data-step-content="10">
         <div class="step-content-head">
-          <h3>⑨ 模板数据成绩单 <span class="badge ok" id="reportOnlineBadge">已上线 7 天</span></h3>
+          <h3>⑩ 模板数据成绩单 <span class="badge ok" id="reportOnlineBadge">已上线 7 天</span></h3>
           <p class="muted">两部分：A. <b>基础数据</b>（消耗 / CTR / CVR 等绝对值）&nbsp;·&nbsp;B. <b>效果判定</b>（在「同流量×同预算」可比场景中，是否跑赢同场景均值）。</p>
         </div>
         <div class="ai-line">🤖 <b>AI 在这里做什么：</b>① 把模板放进「同流量档×同预算档」的可比场景中算<b>消耗增量、CTR/CVR vs 场景均值</b>，输出「跑赢/持平/跑输」结论；② 基于结论<b>归因</b>（封面图 / 文案 / 落地页 / 投放时段）+ <b>调优建议</b>（克隆 v2 / 调素材 / 回滚），并自动生成企微战报。</div>
@@ -1028,7 +1132,7 @@
         <div class="report-empty" id="reportEmpty" style="display:none;">
           <div class="report-empty-icon">📊</div>
           <div class="report-empty-title">成绩单尚未生成</div>
-          <div class="report-empty-sub">该模板还未上线，需走完 ⑤草稿上线 → ⑥规则配置 → ⑦实验 → ⑧正式上线，并积累至少 24h 真实曝光数据后，系统会自动出第一份成绩单。</div>
+          <div class="report-empty-sub">该模板还未上线，需走完 ⑤草稿发布 → ⑥测试 → ⑦规则 → ⑧实验 → ⑨全量上线，并积累至少 24h 真实曝光数据后，系统会自动出第一份成绩单。</div>
           <div class="report-empty-foot">
             <button class="btn-ghost sm" data-jump-empty="2">回到当前阶段</button>
           </div>
@@ -1306,17 +1410,86 @@
           <button class="btn-primary" data-jump-step="2">前往 ② 模板设计 ⟶</button>
         </div>
       </div>
+      <!-- Step 3 · 模板调整（沿用渲染外显 · 跳 iDOMO 编辑） -->
       <div class="step-content" data-step-content="3">
-        <div class="step-content-head"><h3>③ 编辑</h3><p class="muted">在 iDOMO 画布中编辑（D5：本平台不重做，作为上层壳）。</p></div>
-        <div class="card"><div class="card-sub">→ 跳转 iDOMO 编辑 · 编辑完成后自动回到本流水线步骤④。</div><a class="btn-primary sm" style="margin-top:12px; display:inline-block; text-decoration:none;" href="https://tsa.woa.com/domo-admin/union-form-editor?id=1002924" target="_blank" rel="noopener">打开 iDOMO 编辑</a></div>
+        <div class="step-content-head">
+          <h3>③ 模板调整 <span class="badge skill">底层画布：iDOMO 引擎</span></h3>
+          <p class="muted">模板设计后的精修阶段：直接外显当前 DSL 的渲染样式，对照基础机型逐项校对；如需深度修改，跳转到 iDOMO 编辑器（D5：本平台不重做画布，仅作上层壳）。</p>
+        </div>
+
+        <!-- 渲染视图 + 二维码（与 Step 2 同型） -->
+        <div class="design-preview">
+          <div class="dp-canvas-wrap">
+            <div class="dp-canvas-head">
+              <span>📱 当前基础机型 · iPhone 14 Pro · 1179×2556</span>
+              <select class="dp-device-select">
+                <option>iPhone 14 Pro</option>
+                <option>Pixel 7</option>
+                <option>iPhone SE</option>
+                <option>Galaxy S23</option>
+              </select>
+            </div>
+            <div class="dp-canvas">
+              <div class="ph-rect" style="top:6%;left:8%;width:84%;height:42%;background:linear-gradient(135deg,#a8edea,#fed6e3);border-radius:16px;"></div>
+              <div class="ph-text" style="top:52%;left:8%;font-size:24px;font-weight:600;color:#1a1a1a;">夏日冰镇风</div>
+              <div class="ph-text" style="top:60%;left:8%;font-size:14px;color:#666;">超值清凉 · 限时下单</div>
+              <div class="ph-btn" style="top:78%;left:8%;width:140px;height:44px;border-radius:22px;background:#3370FF;color:#fff;">立即查看</div>
+            </div>
+            <div class="dp-canvas-foot muted">DSL 实时渲染 · 引擎 iDOMO v3.2 · 最近调整：6/6 11:42</div>
+          </div>
+
+          <div class="dp-qr-wrap">
+            <div class="dp-qr-head">📲 真机预览</div>
+            <div class="dp-qr">
+              <svg viewBox="0 0 100 100" width="160" height="160">
+                <rect width="100" height="100" fill="#fff"/>
+                <g fill="#1a1a1a">
+                  <rect x="4" y="4" width="22" height="22"/><rect x="9" y="9" width="12" height="12" fill="#fff"/><rect x="12" y="12" width="6" height="6"/>
+                  <rect x="74" y="4" width="22" height="22"/><rect x="79" y="9" width="12" height="12" fill="#fff"/><rect x="82" y="12" width="6" height="6"/>
+                  <rect x="4" y="74" width="22" height="22"/><rect x="9" y="79" width="12" height="12" fill="#fff"/><rect x="12" y="82" width="6" height="6"/>
+                  <rect x="32" y="6" width="4" height="4"/><rect x="40" y="6" width="4" height="4"/><rect x="48" y="6" width="4" height="4"/><rect x="56" y="6" width="4" height="4"/>
+                  <rect x="6" y="32" width="4" height="4"/><rect x="14" y="32" width="4" height="4"/><rect x="32" y="32" width="4" height="4"/><rect x="48" y="32" width="4" height="4"/><rect x="64" y="32" width="4" height="4"/><rect x="80" y="32" width="4" height="4"/>
+                  <rect x="6" y="40" width="4" height="4"/><rect x="40" y="40" width="4" height="4"/><rect x="56" y="40" width="4" height="4"/><rect x="72" y="40" width="4" height="4"/><rect x="88" y="40" width="4" height="4"/>
+                  <rect x="22" y="48" width="4" height="4"/><rect x="48" y="48" width="4" height="4"/><rect x="64" y="48" width="4" height="4"/><rect x="80" y="48" width="4" height="4"/>
+                  <rect x="32" y="56" width="4" height="4"/><rect x="56" y="56" width="4" height="4"/><rect x="72" y="56" width="4" height="4"/>
+                  <rect x="14" y="64" width="4" height="4"/><rect x="40" y="64" width="4" height="4"/><rect x="64" y="64" width="4" height="4"/><rect x="88" y="64" width="4" height="4"/>
+                  <rect x="32" y="80" width="4" height="4"/><rect x="56" y="80" width="4" height="4"/><rect x="80" y="80" width="4" height="4"/>
+                  <rect x="48" y="88" width="4" height="4"/><rect x="72" y="88" width="4" height="4"/>
+                </g>
+              </svg>
+            </div>
+            <div class="dp-qr-tip">扫码即看真机效果<br/><span class="muted">链接 24h 内有效</span></div>
+            <button class="btn-text sm">复制预览链接</button>
+          </div>
+        </div>
+
+        <!-- 调整动作区 -->
+        <div class="card">
+          <div class="card-title">🛠 调整方式</div>
+          <div class="card-sub" style="margin-top:6px;">轻量改 DSL 字段（标题 / 颜色 / 按钮文案 / 图层位置）可在右侧机型预览实时回显；结构性修改、动效编辑请跳转 iDOMO 编辑器。</div>
+          <div style="margin-top:14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <a class="btn-primary sm" style="display:inline-block; text-decoration:none;" href="https://tsa.woa.com/domo-admin/union-form-editor?id=1003638" target="_blank" rel="noopener">🎛 打开 iDOMO 编辑器</a>
+            <button class="btn-ghost sm">🔄 重新渲染当前 DSL</button>
+            <span class="muted">编辑完成保存后，本流水线自动回到 ④ 模板测试</span>
+          </div>
+        </div>
+
+        <div class="step-foot">
+          <button class="btn-ghost" data-jump-step="2">⟵ 返回 ② 模板设计</button>
+          <div class="step-foot-actions">
+            <button class="btn-ghost">↷ 跳过本步</button>
+            <button class="btn-primary" data-jump-step="4">前往 ④ 模板测试 ⟶</button>
+          </div>
+        </div>
       </div>
+      <!-- Step 4 · 模板测试（自动化必经 / 人工可跳过） -->
       <div class="step-content" data-step-content="4">
-        <div class="step-content-head"><h3>④ 测试 <span class="badge skill">Skill: 模板自动化测试 (A)</span></h3><p class="muted">两部分：A. 自动化测试（AI 生成 case + 一键跑）&nbsp;·&nbsp;B. 人工测试（向测试催办 + 跟踪测试单）。</p></div>
+        <div class="step-content-head"><h3>④ 模板测试 <span class="badge skill">Skill: 模板自动化测试</span></h3><p class="muted">两部分：A. <b>自动化测试（必经）</b>—— AI 生成 case + 一键跑；B. <b>人工测试（可跳过）</b>—— 复杂兼容性 / 真机由测试同学补测，可一键跳过。</p></div>
         <div class="ai-line">🤖 <b>AI 在这里做什么：</b>读取模板 DSL + 历史 bug 库，<b>自动生成本次回归测试 case</b>（覆盖物理属性 / 多分辨率 / 多机型），无需人工编排。</div>
 
-        <!-- A. 自动化测试 -->
+        <!-- A. 自动化测试 · 必经 -->
         <div class="card">
-          <div class="card-title"><b>A. 自动化测试</b> <span class="muted">· AI 生成 case · 一键开跑 · 跑完直出报告单</span></div>
+          <div class="card-title"><b>A. 自动化测试</b> <span class="badge wait">必经</span> <span class="muted">· AI 生成 case · 一键开跑 · 跑完直出报告单</span></div>
           <div class="card-sub" style="margin-top:6px;">最近一次测试 · 通过率 24/24 · 用时 38s · 其中 9 条由 AI 新增</div>
           <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
             <button class="btn-primary sm" id="btnRunAutoTest">▶ 开始自动化测试</button>
@@ -1325,25 +1498,57 @@
           </div>
         </div>
 
-        <!-- B. 人工测试 -->
+        <!-- B. 人工测试 · 可跳过 -->
         <div class="card mt-16">
-          <div class="card-title"><b>B. 人工测试</b> <span class="muted">· 复杂兼容性 / 真机体验由测试同学补测</span></div>
+          <div class="card-title"><b>B. 人工测试</b> <span class="badge ok">可跳过</span> <span class="muted">· 复杂兼容性 / 真机体验由测试同学补测</span></div>
           <div class="card-sub" style="margin-top:6px;">测试单 · #QA-2026-0603-007 · 受理人：@test_lily · 状态：<span class="stage-pill stage-test">测试中</span> · 预计 06-04 17:00 前出结论</div>
           <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
             <button class="btn-primary sm" id="btnUrgeQA">📣 向测试催办</button>
             <button class="btn-ghost sm" id="btnOpenQATicket">📋 查看测试单</button>
+            <button class="btn-text sm" id="btnSkipQA">↷ 跳过人工测试</button>
             <span class="muted">催办会同步到企微 + 测试单评论区</span>
           </div>
         </div>
+
+        <div class="step-foot">
+          <button class="btn-ghost" data-jump-step="3">⟵ 返回 ③ 模板调整</button>
+          <button class="btn-primary" data-jump-step="5">前往 ⑤ 草稿发布 ⟶</button>
+        </div>
       </div>
-      <div class="step-content" data-step-content="7">
-        <div class="step-content-head"><h3>⑦ 实验</h3><p class="muted">配置 AB 实验 · 流量分桶 · 指标观测窗口（CTR/CVR/GMV）· 由「TAB 实验平台」承载，本环节直跳过去。</p></div>
+      <!-- Step 8 · 模板实验（外显数据 / 跳过需弹窗 + 产研审批） -->
+      <div class="step-content" data-step-content="8">
+        <div class="step-content-head"><h3>⑧ 模板实验 <span class="badge skill">TAB 实验平台</span></h3><p class="muted">配置 AB 实验 · 流量分桶 · 指标观测窗口（CTR/CVR/GMV）· 由「TAB 实验平台」承载；本面板外显核心实验数据，<b>本步可跳过</b>，但跳过需写明原因并走产品+研发审批。</p></div>
+
+        <!-- 实验基础信息 -->
         <div class="card">
           <div class="card-title">当前实验</div>
           <div class="card-sub" style="margin-top:6px;">实验 ID：EXP-2026-0529-01 · 实验期 · 10% 流量灰度 · 已绑定 2 条规则（夏季·一线·年轻女性 / 高消费力·iOS·夜间）</div>
           <div style="margin-top:14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
             <a class="btn-primary sm" style="display:inline-block; text-decoration:none;" href="https://tab.woa.com/tab/experiment/list?business=1888&trace_id=96bc672e-96c4-440f-8936-d31d7d53621e&appGroup=abtest" target="_blank" rel="noopener">🧪 跳转 TAB 实验系统</a>
-            <span class="muted">实验配置 / 分桶 / 指标观测在 TAB 平台完成，回流的核心指标会出现在 ⑨ 成绩单</span>
+            <span class="muted">实验配置 / 分桶 / 指标观测在 TAB 平台完成，回流的核心指标会出现在 ⑩ 成绩单</span>
+          </div>
+        </div>
+
+        <!-- 外显实验数据 -->
+        <div class="card mt-16">
+          <div class="card-title">📊 实验外显数据 <span class="muted">· TAB 平台回流 · 实验 7 天数据</span></div>
+          <div class="exp-kpi-grid">
+            <div class="exp-kpi"><div class="ek-label">实验组 CTR</div><div class="ek-num up" id="expCtr">9.85%</div><div class="ek-vs muted">对照组 8.21% · ▲ +1.64pp</div></div>
+            <div class="exp-kpi"><div class="ek-label">实验组 CVR</div><div class="ek-num up">20.44%</div><div class="ek-vs muted">对照组 19.80% · ▲ +0.64pp</div></div>
+            <div class="exp-kpi"><div class="ek-label">eCPM</div><div class="ek-num up">¥38.6</div><div class="ek-vs muted">对照组 ¥31.2 · ▲ +23.7%</div></div>
+            <div class="exp-kpi"><div class="ek-label">GMV 增量</div><div class="ek-num up">+12.4%</div><div class="ek-vs muted">置信度 95.6% · 显著</div></div>
+          </div>
+          <div class="exp-conclude">
+            <span class="exp-conclude-icon">🏆</span>
+            <span class="exp-conclude-text">实验结论：<b>跑赢对照组</b>（4 维度全部正向，3 项显著）· 推荐进入 ⑨ 全量上线</span>
+          </div>
+        </div>
+
+        <div class="step-foot">
+          <button class="btn-ghost" data-jump-step="7">⟵ 返回 ⑦ 规则配置</button>
+          <div class="step-foot-actions">
+            <button class="btn-text danger sm" id="btnSkipExp">↷ 跳过本步（需产研审批）</button>
+            <button class="btn-primary" data-jump-step="9">前往 ⑨ 全量上线 ⟶</button>
           </div>
         </div>
       </div>
@@ -1352,15 +1557,123 @@
 
     <div class="step-nav">
       <button class="step-nav-btn" data-jump="2">跳到 ② 模板设计</button>
-      <button class="step-nav-btn" data-jump="5">跳到 ⑤ 上线审批</button>
-      <button class="step-nav-btn" data-jump="6">跳到 ⑥ 规则配置</button>
-      <button class="step-nav-btn" data-jump="8">跳到 ⑧ 上线审批</button>
-      <button class="step-nav-btn" data-jump="9">跳到 ⑨ 成绩单</button>
+      <button class="step-nav-btn" data-jump="3">跳到 ③ 模板调整</button>
+      <button class="step-nav-btn" data-jump="5">跳到 ⑤ 草稿发布</button>
+      <button class="step-nav-btn" data-jump="7">跳到 ⑦ 规则配置</button>
+      <button class="step-nav-btn" data-jump="8">跳到 ⑧ 模板实验</button>
+      <button class="step-nav-btn" data-jump="9">跳到 ⑨ 全量上线</button>
+      <button class="step-nav-btn" data-jump="10">跳到 ⑩ 成绩单</button>
     </div>
   </div>
 </div>
 
 <div class="side-drawer-mask" id="sideDrawerMask"></div>
+
+<!-- ============ 弹窗 · 草稿上线（备注 + 审批节点） ============ -->
+<div class="tpl-dialog" id="dlgDraftOnline" aria-hidden="true">
+  <div class="tpl-dialog-mask" data-dlg-close="dlgDraftOnline"></div>
+  <div class="tpl-dialog-panel">
+    <div class="tpl-dialog-head">
+      <div class="tpl-dialog-title">🚀 提交草稿上线（IOA 审批）</div>
+      <button class="tpl-dialog-close" data-dlg-close="dlgDraftOnline">✕</button>
+    </div>
+    <div class="tpl-dialog-body">
+      <div class="dlg-row">
+        <div class="dlg-row-label"><span class="req">*</span>备注</div>
+        <textarea class="dlg-textarea" id="draftRemarkInput" placeholder="请输入上线申请理由"></textarea>
+      </div>
+      <div class="dlg-row">
+        <div class="dlg-row-label">审批节点</div>
+        <div class="dlg-approval-chain">
+          <span class="approval-seg">yoyooliu;serenejiao;looselordxu<span class="approval-tag">测试审批</span></span>
+          <span class="approval-arrow">━</span>
+          <span class="approval-seg">ginjyu;minjchen;aaroncxu<span class="approval-tag">产品审批</span></span>
+          <span class="approval-arrow">━</span>
+          <span class="approval-seg">vinsonliu;lulutian;nimomeng<span class="approval-tag">技术审批</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="tpl-dialog-foot">
+      <button class="btn-ghost sm" data-dlg-close="dlgDraftOnline">取消</button>
+      <button class="btn-primary sm" id="dlgDraftSubmitBtn">下发 IOA 审批 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 弹窗 · 全量上线（备注 + 实验数据 + 审批节点） ============ -->
+<div class="tpl-dialog" id="dlgFullOnline" aria-hidden="true">
+  <div class="tpl-dialog-mask" data-dlg-close="dlgFullOnline"></div>
+  <div class="tpl-dialog-panel wide">
+    <div class="tpl-dialog-head">
+      <div class="tpl-dialog-title">🚀 提交全量上线（IOA 审批）</div>
+      <button class="tpl-dialog-close" data-dlg-close="dlgFullOnline">✕</button>
+    </div>
+    <div class="tpl-dialog-body">
+      <!-- 实验数据汇总 -->
+      <div class="dlg-row">
+        <div class="dlg-row-label">实验数据</div>
+        <div class="dlg-exp-summary">
+          <div class="dlg-exp-cell"><div class="dec-l">实验ID</div><div class="dec-v">EXP-2026-0529-01</div></div>
+          <div class="dlg-exp-cell"><div class="dec-l">实验期</div><div class="dec-v">7天 · 10% 灰度</div></div>
+          <div class="dlg-exp-cell"><div class="dec-l">CTR</div><div class="dec-v up">9.85% ▲ +1.64pp</div></div>
+          <div class="dlg-exp-cell"><div class="dec-l">CVR</div><div class="dec-v up">20.44% ▲ +0.64pp</div></div>
+          <div class="dlg-exp-cell"><div class="dec-l">eCPM</div><div class="dec-v up">¥38.6 ▲ +23.7%</div></div>
+          <div class="dlg-exp-cell"><div class="dec-l">GMV 增量</div><div class="dec-v up">+12.4% · 显著</div></div>
+          <div class="dlg-exp-cell"><div class="dec-l">综合判定</div><div class="dec-v" style="color:var(--color-success);"><b>跑赢对照组</b>（4 维全正向，3 项显著）</div></div>
+        </div>
+      </div>
+
+      <div class="dlg-row">
+        <div class="dlg-row-label"><span class="req">*</span>备注</div>
+        <textarea class="dlg-textarea" id="fullRemarkInput" placeholder="请输入上线申请理由"></textarea>
+      </div>
+
+      <div class="dlg-row">
+        <div class="dlg-row-label">审批节点</div>
+        <div class="dlg-approval-chain">
+          <span class="approval-seg">yoyooliu;serenejiao;looselordxu<span class="approval-tag">测试审批</span></span>
+          <span class="approval-arrow">━</span>
+          <span class="approval-seg">ginjyu;minjchen;aaroncxu<span class="approval-tag">产品审批</span></span>
+          <span class="approval-arrow">━</span>
+          <span class="approval-seg">vinsonliu;lulutian;nimomeng<span class="approval-tag">技术审批</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="tpl-dialog-foot">
+      <button class="btn-ghost sm" data-dlg-close="dlgFullOnline">取消</button>
+      <button class="btn-primary sm" id="dlgFullSubmitBtn">下发 IOA 审批 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 弹窗 · 跳过实验（原因 + 产研审批） ============ -->
+<div class="tpl-dialog" id="dlgSkipExp" aria-hidden="true">
+  <div class="tpl-dialog-mask" data-dlg-close="dlgSkipExp"></div>
+  <div class="tpl-dialog-panel">
+    <div class="tpl-dialog-head">
+      <div class="tpl-dialog-title">↷ 跳过 ⑧ 模板实验（需产研审批）</div>
+      <button class="tpl-dialog-close" data-dlg-close="dlgSkipExp">✕</button>
+    </div>
+    <div class="tpl-dialog-body">
+      <div class="dlg-row">
+        <div class="dlg-row-label"><span class="req">*</span>跳过原因</div>
+        <textarea class="dlg-textarea" id="skipExpReason" placeholder="例：紧急 hotfix / 与父模板 1003213 已有同形态实验数据可复用 / 短期活动周期不足以支持 AB ……"></textarea>
+      </div>
+      <div class="dlg-row">
+        <div class="dlg-row-label">审批人</div>
+        <div class="dlg-approval-chain">
+          <span class="approval-seg">ginjyu;minjchen;aaroncxu<span class="approval-tag">产品审批</span></span>
+          <span class="approval-arrow">━</span>
+          <span class="approval-seg">vinsonliu;lulutian;nimomeng<span class="approval-tag">技术审批</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="tpl-dialog-foot">
+      <button class="btn-ghost sm" data-dlg-close="dlgSkipExp">取消</button>
+      <button class="btn-primary sm" id="dlgSkipExpSubmitBtn">提交跳过申请 →</button>
+    </div>
+  </div>
+</div>
 
 <script src="./scripts/main.js"></script>
 </body>
