@@ -78,7 +78,7 @@
             <table class="data-table plain-table">
               <thead><tr><th>模板ID</th><th>模板名称</th><th>父模板ID</th><th>模板宽高</th><th>状态</th><th>负责人</th><th class="col-act">操作</th></tr></thead>
               <tbody>
-                <tr class="tpl-row"><td>1003802</td><td>夏日冰镇风开屏 v1</td><td>1003062</td><td>9X16</td><td><span class="badge draft">编辑中</span></td><td>运营·阿伦</td><td class="col-act"><a class="link" href="javascript:void(0)" data-edit="1003802">编辑</a><span class="act-sep">·</span><a class="link" href="javascript:void(0)" data-pipeline="1003802">流水线 →</a></td></tr>
+                <tr class="tpl-row"><td>1003638</td><td>开屏-夏日冰镇风 v1</td><td>1003213</td><td>9X16</td><td><span class="badge draft">编辑中</span></td><td>运营·阿伦</td><td class="col-act"><a class="link" href="javascript:void(0)" data-edit="1003638">编辑</a><span class="act-sep">·</span><a class="link" href="javascript:void(0)" data-pipeline="1003638">流水线 →</a></td></tr>
                 <tr class="tpl-row"><td>1003805</td><td>开屏-母婴节-探索</td><td>1003062</td><td>9X16</td><td><span class="badge draft">正式草稿</span></td><td>产品·小樊</td><td class="col-act"><a class="link" href="javascript:void(0)" data-edit="1003805">编辑</a><span class="act-sep">·</span><a class="link" href="javascript:void(0)" data-pipeline="1003805">流水线 →</a></td></tr>
                 <tr class="tpl-row"><td>1003810</td><td>插屏-双十一预热</td><td>1003216</td><td>9X16</td><td><span class="badge wait">待上线审批</span></td><td>产品·小樊</td><td class="col-act"><a class="link" href="javascript:void(0)" data-edit="1003810">编辑</a><span class="act-sep">·</span><a class="link" href="javascript:void(0)" data-pipeline="1003810">流水线 →</a></td></tr>
                 <tr class="tpl-row"><td>1003815</td><td>原生-知识付费-暑期</td><td>1002449</td><td>0X0</td><td><span class="badge draft">编辑中</span></td><td>设计·小桃</td><td class="col-act"><a class="link" href="javascript:void(0)" data-edit="1003815">编辑</a><span class="act-sep">·</span><a class="link" href="javascript:void(0)" data-pipeline="1003815">流水线 →</a></td></tr>
@@ -620,8 +620,8 @@
 
     <!-- Stepper -->
     <div class="stepper">
-      <div class="step done" data-step="1"><span class="step-no">1</span><span class="step-name">需求&创建</span></div>
-      <div class="step done active" data-step="2"><span class="step-no">2</span><span class="step-name">设计对齐</span><span class="step-tag">嵌入对齐器</span></div>
+      <div class="step done" data-step="1"><span class="step-no">1</span><span class="step-name">模板创建</span><span class="step-tag">来源</span></div>
+      <div class="step done active" data-step="2"><span class="step-no">2</span><span class="step-name">模板设计</span><span class="step-tag">D2C / C2D2C Agent</span></div>
       <div class="step" data-step="3"><span class="step-no">3</span><span class="step-name">编辑</span></div>
       <div class="step" data-step="4"><span class="step-no">4</span><span class="step-name">测试</span></div>
       <div class="step" data-step="5"><span class="step-no">5</span><span class="step-name">草稿上线</span><span class="step-tag">上线审批</span></div>
@@ -634,58 +634,150 @@
     <!-- Step Panel -->
     <div class="step-panel">
 
-      <!-- Step 2 · 对齐器 -->
+      <!-- Step 2 · 模板设计（D2C / C2D2C Agent） -->
       <div class="step-content active" data-step-content="2">
         <div class="step-content-head">
-          <h3>② 设计对齐 · Figma vs DSL Diff <span class="badge skill">Skill: 设计稿对齐器 (B)</span></h3>
-          <p class="muted">D3 决策：不做"以谁为准"的强约束，让两边并排可见、人来定夺。</p>
+          <h3>② 模板设计 <span class="badge skill">Skill: 设计 Agent · D2C / C2D2C</span></h3>
+          <p class="muted">在模板创建之上，借助 Agent 把「设计稿 / 灵感截图 / 一句话描述」转化为可渲染的 DSL；下方实时渲染 + 预览二维码，支持全员走查。</p>
         </div>
-        <div class="aligner">
-          <div class="aligner-col">
-            <div class="aligner-col-head">🎨 Figma 视觉源（设计师上传）</div>
-            <div class="aligner-canvas figma-canvas">
-              <div class="ph-rect" style="top:8%;left:8%;width:84%;height:38%;background:linear-gradient(135deg,#a8edea,#fed6e3);border-radius:16px;"></div>
-              <div class="ph-text" style="top:50%;left:8%;font-size:22px;font-weight:600;">夏日冰镇风</div>
-              <div class="ph-text" style="top:58%;left:8%;font-size:14px;color:#666;">超值清凉 · 限时下单</div>
-              <div class="ph-btn" style="top:72%;left:8%;width:120px;height:40px;border-radius:20px;background:#3370FF;color:#fff;">立即查看</div>
+
+        <!-- 设计 Agent · 双 Tab -->
+        <div class="design-agent">
+          <div class="da-tabs" role="tablist">
+            <button class="da-tab active" data-datab="d2c">🎨 D2C · Figma 设计稿</button>
+            <button class="da-tab" data-datab="c2d2c">💡 C2D2C · 描述 / 灵感截图</button>
+          </div>
+
+          <!-- D2C Pane -->
+          <div class="da-pane active" data-dapane="d2c">
+            <div class="da-uploader">
+              <div class="da-uploader-icon">🎨</div>
+              <div class="da-uploader-main">
+                <div class="da-uploader-title">上传 Figma 设计稿</div>
+                <div class="da-uploader-sub">支持 .fig 文件 / Figma 链接 / 本地导出 PNG。Agent 自动识别图层 → 输出 DSL → 在右侧实时渲染。</div>
+                <div class="da-uploader-row">
+                  <input class="da-input" placeholder="粘贴 Figma 链接，例如 https://www.figma.com/file/xxx/夏日开屏 …" />
+                  <button class="btn-primary sm">解析 Figma →</button>
+                </div>
+                <div class="da-uploader-or">或</div>
+                <div class="da-uploader-drop">
+                  <span class="da-drop-icon">📁</span>
+                  <span>拖入 .fig / .png 文件，或 <a class="link" href="javascript:void(0)">点击上传</a></span>
+                </div>
+              </div>
+            </div>
+            <div class="da-trace">
+              <span class="da-trace-tag">最近一次解析</span>
+              <span>夏日冰镇风_v3.fig · 6/5 14:18 · 识别图层 24 个 · 自动转 DSL · 用时 12s</span>
+              <a class="link sm" href="javascript:void(0)">查看 diff 报告 →</a>
             </div>
           </div>
-          <div class="aligner-col">
-            <div class="aligner-col-head">⚙️ DSL 渲染（iDOMO 引擎实时）</div>
-            <div class="aligner-canvas dsl-canvas">
-              <div class="ph-rect diff" style="top:8%;left:8%;width:84%;height:38%;background:linear-gradient(135deg,#a8edea,#fed6e3);border-radius:8px;"></div>
-              <div class="ph-text" style="top:50%;left:8%;font-size:22px;font-weight:600;">夏日冰镇风</div>
-              <div class="ph-text diff" style="top:58%;left:8%;font-size:14px;color:#999;">超值清凉 · 限时下单</div>
-              <div class="ph-btn" style="top:72%;left:8%;width:120px;height:40px;border-radius:20px;background:#3370FF;color:#fff;">立即查看</div>
+
+          <!-- C2D2C Pane -->
+          <div class="da-pane" data-dapane="c2d2c">
+            <div class="da-c2d-row">
+              <textarea class="da-textarea" placeholder="一句话描述你想要的样式，例：开屏要有夏日清凉感，左下角有小冰块动效，主色调蓝白渐变…"></textarea>
+            </div>
+            <div class="da-uploader-or">同时可上传灵感截图（可选）</div>
+            <div class="da-uploader-drop">
+              <span class="da-drop-icon">🖼️</span>
+              <span>拖入截图，或 <a class="link" href="javascript:void(0)">点击上传</a>（支持多张，Agent 会做风格融合）</span>
+            </div>
+            <div class="da-c2d-actions">
+              <button class="btn-primary">生成模板 →</button>
+              <span class="muted">流程：描述 / 截图 → 设计稿 → DSL → 渲染（C → D → C）</span>
             </div>
           </div>
         </div>
-        <div class="diff-list">
-          <div class="diff-row">
-            <div class="diff-tag">差异 #1</div>
-            <div class="diff-desc"><b>主图圆角</b> · Figma 16px / DSL 8px</div>
-            <div class="diff-act">
-              <button class="btn-primary sm">采纳 Figma</button>
-              <button class="btn-ghost sm">保留 DSL</button>
+
+        <!-- 渲染视图 + 二维码 -->
+        <div class="design-preview">
+          <div class="dp-canvas-wrap">
+            <div class="dp-canvas-head">
+              <span>📱 当前基础机型 · iPhone 14 Pro · 1179×2556</span>
+              <select class="dp-device-select">
+                <option>iPhone 14 Pro</option>
+                <option>Pixel 7</option>
+                <option>iPhone SE</option>
+                <option>Galaxy S23</option>
+              </select>
             </div>
-          </div>
-          <div class="diff-row">
-            <div class="diff-tag">差异 #2</div>
-            <div class="diff-desc"><b>副标题颜色</b> · Figma #666 / DSL #999</div>
-            <div class="diff-act">
-              <button class="btn-primary sm">采纳 Figma</button>
-              <button class="btn-ghost sm">保留 DSL</button>
+            <div class="dp-canvas">
+              <div class="ph-rect" style="top:6%;left:8%;width:84%;height:42%;background:linear-gradient(135deg,#a8edea,#fed6e3);border-radius:16px;"></div>
+              <div class="ph-text" style="top:52%;left:8%;font-size:24px;font-weight:600;color:#1a1a1a;">夏日冰镇风</div>
+              <div class="ph-text" style="top:60%;left:8%;font-size:14px;color:#666;">超值清凉 · 限时下单</div>
+              <div class="ph-btn" style="top:78%;left:8%;width:140px;height:44px;border-radius:22px;background:#3370FF;color:#fff;">立即查看</div>
             </div>
+            <div class="dp-canvas-foot muted">DSL 实时渲染 · 引擎 iDOMO v3.2</div>
           </div>
-          <div class="diff-row resolved">
-            <div class="diff-tag ok">已对齐 ✓</div>
-            <div class="diff-desc"><b>按钮主色</b> · 一致 #3370FF</div>
-            <div class="diff-act"><span class="muted">无需处理</span></div>
+
+          <div class="dp-qr-wrap">
+            <div class="dp-qr-head">📲 真机预览</div>
+            <div class="dp-qr">
+              <!-- 简单 SVG 二维码占位 -->
+              <svg viewBox="0 0 100 100" width="160" height="160">
+                <rect width="100" height="100" fill="#fff"/>
+                <g fill="#1a1a1a">
+                  <rect x="4" y="4" width="22" height="22"/><rect x="9" y="9" width="12" height="12" fill="#fff"/><rect x="12" y="12" width="6" height="6"/>
+                  <rect x="74" y="4" width="22" height="22"/><rect x="79" y="9" width="12" height="12" fill="#fff"/><rect x="82" y="12" width="6" height="6"/>
+                  <rect x="4" y="74" width="22" height="22"/><rect x="9" y="79" width="12" height="12" fill="#fff"/><rect x="12" y="82" width="6" height="6"/>
+                  <rect x="32" y="6" width="4" height="4"/><rect x="40" y="6" width="4" height="4"/><rect x="48" y="6" width="4" height="4"/><rect x="56" y="6" width="4" height="4"/>
+                  <rect x="6" y="32" width="4" height="4"/><rect x="14" y="32" width="4" height="4"/><rect x="32" y="32" width="4" height="4"/><rect x="40" y="32" width="4" height="4"/><rect x="56" y="32" width="4" height="4"/><rect x="64" y="32" width="4" height="4"/><rect x="72" y="32" width="4" height="4"/><rect x="80" y="32" width="4" height="4"/>
+                  <rect x="6" y="40" width="4" height="4"/><rect x="22" y="40" width="4" height="4"/><rect x="32" y="40" width="4" height="4"/><rect x="48" y="40" width="4" height="4"/><rect x="64" y="40" width="4" height="4"/><rect x="80" y="40" width="4" height="4"/><rect x="88" y="40" width="4" height="4"/>
+                  <rect x="14" y="48" width="4" height="4"/><rect x="22" y="48" width="4" height="4"/><rect x="40" y="48" width="4" height="4"/><rect x="48" y="48" width="4" height="4"/><rect x="56" y="48" width="4" height="4"/><rect x="72" y="48" width="4" height="4"/><rect x="88" y="48" width="4" height="4"/>
+                  <rect x="6" y="56" width="4" height="4"/><rect x="32" y="56" width="4" height="4"/><rect x="40" y="56" width="4" height="4"/><rect x="64" y="56" width="4" height="4"/><rect x="72" y="56" width="4" height="4"/><rect x="80" y="56" width="4" height="4"/>
+                  <rect x="14" y="64" width="4" height="4"/><rect x="22" y="64" width="4" height="4"/><rect x="48" y="64" width="4" height="4"/><rect x="56" y="64" width="4" height="4"/><rect x="72" y="64" width="4" height="4"/><rect x="88" y="64" width="4" height="4"/>
+                  <rect x="32" y="80" width="4" height="4"/><rect x="40" y="80" width="4" height="4"/><rect x="56" y="80" width="4" height="4"/><rect x="64" y="80" width="4" height="4"/><rect x="80" y="80" width="4" height="4"/><rect x="88" y="80" width="4" height="4"/>
+                  <rect x="32" y="88" width="4" height="4"/><rect x="48" y="88" width="4" height="4"/><rect x="64" y="88" width="4" height="4"/><rect x="72" y="88" width="4" height="4"/><rect x="88" y="88" width="4" height="4"/>
+                </g>
+              </svg>
+            </div>
+            <div class="dp-qr-tip">用手机扫码 · 真机走查<br/><span class="muted">链接 24h 内有效</span></div>
+            <button class="btn-text sm">复制预览链接</button>
           </div>
         </div>
+
+        <!-- 走查面板 -->
+        <div class="review-panel">
+          <div class="review-head">
+            <span class="review-title">👀 全员走查</span>
+            <span class="muted">所有角色（产品 / 设计 / 运营 / 研发）均可在此提走查意见，意见会沉淀到模板的「走查记录」</span>
+          </div>
+          <div class="review-grid">
+            <div class="review-cell">
+              <div class="rc-role">🎨 设计·小桃</div>
+              <div class="rc-status pass">✓ 通过</div>
+              <div class="rc-cmt">主图圆角与品牌规范一致，副标题色阶建议轻微调高对比。</div>
+            </div>
+            <div class="review-cell">
+              <div class="rc-role">📦 产品·小樊</div>
+              <div class="rc-status pending">⏳ 待走查</div>
+              <div class="rc-cmt muted">尚未提交走查意见</div>
+            </div>
+            <div class="review-cell">
+              <div class="rc-role">📣 运营·阿伦</div>
+              <div class="rc-status pass">✓ 通过</div>
+              <div class="rc-cmt">CTA 文案"立即查看"符合 6/15 活动心智。</div>
+            </div>
+            <div class="review-cell">
+              <div class="rc-role">⚙️ 研发·楠楠</div>
+              <div class="rc-status pass">✓ 通过</div>
+              <div class="rc-cmt">DSL 结构对齐 iDOMO v3.2，可进入 ③ 编辑。</div>
+            </div>
+          </div>
+          <div class="review-input">
+            <input class="da-input" placeholder="留下你的走查意见…" />
+            <button class="btn-ghost sm">提交意见</button>
+          </div>
+        </div>
+
         <div class="step-foot">
-          <button class="btn-ghost">⟵ 返回 ① 需求&创建</button>
-          <button class="btn-primary">前往 ③ 编辑 ⟶</button>
+          <button class="btn-ghost" data-jump-step="1">⟵ 返回 ① 模板创建</button>
+          <div class="step-foot-actions">
+            <button class="btn-text danger sm">❌ 设计 / 产品拒绝（终止流转）</button>
+            <button class="btn-ghost">↷ 跳过本步</button>
+            <button class="btn-primary" data-jump-step="3">前往 ③ 编辑 ⟶</button>
+          </div>
         </div>
       </div>
 
@@ -1104,10 +1196,115 @@
         </div>
       </div>
 
-      <!-- 通用步骤兜底 -->
+      <!-- Step 1 · 模板创建 -->
       <div class="step-content" data-step-content="1">
-        <div class="step-content-head"><h3>① 需求 & 创建模板</h3><p class="muted">从 TAPD 拉取需求 → Skill: TAPD 体检 → 自动新建模板（物理属性 / 引擎版本 / 引用骨架）。</p></div>
-        <div class="card"><div class="card-sub">已完成。模板：开屏-夏日冰镇风 v1 · 1080×1920 · iDOMO 引擎 v3</div></div>
+        <div class="step-content-head">
+          <h3>① 模板创建 · 模板来源 <span class="badge skill">对标 样式工厂 · 模板来源板块</span></h3>
+          <p class="muted">能进流水线即说明模板已创建。本步沉淀「这个模板从哪里来」的全部上下文：形态系统 / 模板复制 / iDOMO（含 TAPD 需求单）。</p>
+        </div>
+
+        <!-- 模板基础信息卡 -->
+        <div class="card tpl-meta-card">
+          <div class="tpl-meta-head">
+            <span class="tpl-meta-title">📦 模板 · 1003638 · 开屏-夏日冰镇风 v1</span>
+            <a class="btn-text sm" href="https://tsa.woa.com/uniongame/oss#/template/draftEdit?id=3726&isCross=false&isReplace=false" target="_blank" rel="noopener">查看模板详情 ↗</a>
+          </div>
+          <div class="tpl-meta-grid">
+            <div class="tpl-meta-cell"><div class="tmc-label">模板宽高</div><div class="tmc-val">1080 × 1920（9×16）</div></div>
+            <div class="tpl-meta-cell"><div class="tmc-label">引擎版本</div><div class="tmc-val">iDOMO v3.2</div></div>
+            <div class="tpl-meta-cell"><div class="tmc-label">负责人</div><div class="tmc-val">运营·阿伦</div></div>
+            <div class="tpl-meta-cell"><div class="tmc-label">创建时间</div><div class="tmc-val">2026-06-05 14:22</div></div>
+          </div>
+        </div>
+
+        <!-- 来源切换 Tab（演示用：模板 1003638 来自「模板复制」） -->
+        <div class="src-tabs" role="tablist">
+          <button class="src-tab" data-srctab="form">🧬 形态管理系统</button>
+          <button class="src-tab active" data-srctab="copy">📋 模板复制 <span class="muted-num">本案例</span></button>
+          <button class="src-tab" data-srctab="idomo">🤖 iDOMO（TAPD 需求）</button>
+        </div>
+
+        <!-- 来源 1：形态管理系统 -->
+        <div class="src-pane" data-srcpane="form">
+          <div class="card src-card">
+            <div class="src-row">
+              <div class="src-row-icon">🧬</div>
+              <div class="src-row-main">
+                <div class="src-row-title">来自 <b>形态管理系统</b></div>
+                <div class="src-row-sub">由形态层下沉骨架自动生成的模板。形态决定：物理属性、引擎版本、骨架结构与可改区域。</div>
+              </div>
+            </div>
+            <div class="src-info-grid">
+              <div class="sig-cell"><div class="sig-label">来源形态</div><div class="sig-val">F-1024 · 开屏 / 9×16 / 视频+图文</div></div>
+              <div class="sig-cell"><div class="sig-label">骨架版本</div><div class="sig-val">v3.2.1 · 2026-05-28</div></div>
+              <div class="sig-cell"><div class="sig-label">可改区域</div><div class="sig-val">主图 · 主标题 · 副标题 · CTA</div></div>
+              <div class="sig-cell"><div class="sig-label">锁定区域</div><div class="sig-val">兜底 LOGO · 风险提示</div></div>
+            </div>
+            <div class="src-actions">
+              <a class="btn-text sm" href="https://tsa.woa.com/uniongame/oss#/template/draftEdit?id=3726&isCross=false&isReplace=false" target="_blank" rel="noopener">打开模板详情 ↗</a>
+              <a class="btn-text sm" href="javascript:void(0)">查看形态详情 ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 来源 2：模板复制（本案例） -->
+        <div class="src-pane active" data-srcpane="copy">
+          <div class="card src-card">
+            <div class="src-row">
+              <div class="src-row-icon">📋</div>
+              <div class="src-row-main">
+                <div class="src-row-title">来自 <b>模板复制</b> · 已基于父模板 <b>1003213</b> 派生</div>
+                <div class="src-row-sub">复制场景常见于「批量小改」「赛道适配」「分辨率扩展」。本模板继承父模板全部 DSL，仅在主图与文案上做差分。</div>
+              </div>
+            </div>
+            <div class="src-info-grid">
+              <div class="sig-cell"><div class="sig-label">父模板</div><div class="sig-val">
+                <a class="link" href="https://tsa.woa.com/uniongame/oss#/template/draftEdit?id=3310&isCross=false&isReplace=false" target="_blank" rel="noopener">1003213 ↗</a>
+              </div></div>
+              <div class="sig-cell"><div class="sig-label">父模板名称</div><div class="sig-val">开屏-母婴节-探索版</div></div>
+              <div class="sig-cell"><div class="sig-label">复制时间</div><div class="sig-val">2026-06-05 14:22</div></div>
+              <div class="sig-cell"><div class="sig-label">差分项</div><div class="sig-val">主图 · 主副标题 · CTA 文案</div></div>
+            </div>
+            <div class="src-diff-tip">
+              <span class="src-diff-tag">DIFF</span>
+              <span class="src-diff-text">已与父模板自动 diff：仅 3 处 DSL 差异，结构一致 ✓</span>
+            </div>
+            <div class="src-actions">
+              <a class="btn-text sm" href="https://tsa.woa.com/uniongame/oss#/template/draftEdit?id=3726&isCross=false&isReplace=false" target="_blank" rel="noopener">打开模板详情 ↗</a>
+              <a class="btn-text sm" href="https://tsa.woa.com/uniongame/oss#/template/draftEdit?id=3310&isCross=false&isReplace=false" target="_blank" rel="noopener">打开父模板 1003213 ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 来源 3：iDOMO（TAPD 需求） -->
+        <div class="src-pane" data-srcpane="idomo">
+          <div class="card src-card">
+            <div class="src-row">
+              <div class="src-row-icon">🤖</div>
+              <div class="src-row-main">
+                <div class="src-row-title">来自 <b>iDOMO</b> · 由 TAPD 需求自动建模</div>
+                <div class="src-row-sub">iDOMO 来源必须读取 TAPD 单：从需求描述 + 验收标准 + 设计稿 → Skill: TAPD 体检 → 自动新建模板。</div>
+              </div>
+            </div>
+            <div class="src-info-grid">
+              <div class="sig-cell"><div class="sig-label">TAPD 需求单</div><div class="sig-val">
+                <a class="link" href="https://tapd.woa.com/20422919/prong/stories/view/1020422919001234567" target="_blank" rel="noopener">#1234567 · 夏日冰镇风开屏 ↗</a>
+              </div></div>
+              <div class="sig-cell"><div class="sig-label">需求迭代</div><div class="sig-val">26Y6-S2 · 6/15 上线</div></div>
+              <div class="sig-cell"><div class="sig-label">TAPD 体检</div><div class="sig-val"><span class="badge ok">✓ 已通过</span> 物理属性齐全</div></div>
+              <div class="sig-cell"><div class="sig-label">建模时间</div><div class="sig-val">由 iDOMO 自动建模 · 38s</div></div>
+            </div>
+            <div class="src-actions">
+              <a class="btn-text sm" href="https://tsa.woa.com/uniongame/oss#/template/draftEdit?id=3726&isCross=false&isReplace=false" target="_blank" rel="noopener">打开模板详情 ↗</a>
+              <a class="btn-text sm" href="https://tapd.woa.com/20422919/prong/stories/view/1020422919001234567" target="_blank" rel="noopener">打开 TAPD 单 ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-foot">
+          <span class="muted">本步骤为信息呈现，无需操作。</span>
+          <button class="btn-primary" data-jump-step="2">前往 ② 模板设计 ⟶</button>
+        </div>
       </div>
       <div class="step-content" data-step-content="3">
         <div class="step-content-head"><h3>③ 编辑</h3><p class="muted">在 iDOMO 画布中编辑（D5：本平台不重做，作为上层壳）。</p></div>
@@ -1154,7 +1351,7 @@
     </div>
 
     <div class="step-nav">
-      <button class="step-nav-btn" data-jump="2">跳到 ② 对齐器</button>
+      <button class="step-nav-btn" data-jump="2">跳到 ② 模板设计</button>
       <button class="step-nav-btn" data-jump="5">跳到 ⑤ 上线审批</button>
       <button class="step-nav-btn" data-jump="6">跳到 ⑥ 规则配置</button>
       <button class="step-nav-btn" data-jump="8">跳到 ⑧ 上线审批</button>

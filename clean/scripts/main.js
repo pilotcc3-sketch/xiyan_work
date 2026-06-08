@@ -479,13 +479,13 @@
       const t = b.textContent.trim();
       if (t.includes('流水线')) {
         hideAgent();
-        const trigger = document.querySelector('[data-pipeline="1003802"]');
+        const trigger = document.querySelector('[data-pipeline="1003638"]');
         if (trigger) {
           trigger.click();
         } else {
-          document.getElementById('pipelineDrawerTitle').textContent = '模板生产流水线 · 夏日冰镇风开屏 v1';
-          document.getElementById('pipelineDrawerSub').textContent = '模板ID：1003802 · 编辑 → 测试 → 草稿上线 → 实验 → 正式上线';
-          activateStep('5');
+          document.getElementById('pipelineDrawerTitle').textContent = '模板生产流水线 · 开屏-夏日冰镇风 v1';
+          document.getElementById('pipelineDrawerSub').textContent = '模板ID：1003638 · 模板创建 → 模板设计 → 编辑 → 测试 → 草稿上线 → 实验 → 正式上线';
+          activateStep('1');
           showDrawer(pipelineDrawer);
         }
       }
@@ -740,5 +740,28 @@
       }, 1500);
     });
   }
+
+  // ============ Step 1 · 模板来源 Tab 切换 ============
+  document.querySelectorAll('#pipelineDrawer .src-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const key = tab.dataset.srctab;
+      document.querySelectorAll('#pipelineDrawer .src-tab').forEach(t => t.classList.toggle('active', t === tab));
+      document.querySelectorAll('#pipelineDrawer .src-pane').forEach(p => p.classList.toggle('active', p.dataset.srcpane === key));
+    });
+  });
+
+  // ============ Step 2 · 设计 Agent Tab 切换（D2C / C2D2C）============
+  document.querySelectorAll('#pipelineDrawer .da-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const key = tab.dataset.datab;
+      document.querySelectorAll('#pipelineDrawer .da-tab').forEach(t => t.classList.toggle('active', t === tab));
+      document.querySelectorAll('#pipelineDrawer .da-pane').forEach(p => p.classList.toggle('active', p.dataset.dapane === key));
+    });
+  });
+
+  // ============ 步骤内跳转（data-jump-step）============
+  document.querySelectorAll('#pipelineDrawer [data-jump-step]').forEach(b => {
+    b.addEventListener('click', () => activateStep(b.dataset.jumpStep));
+  });
 
 })();
