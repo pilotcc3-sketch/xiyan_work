@@ -637,7 +637,7 @@
       const reason = (document.getElementById('skipExpReason')?.value || '').trim();
       if (!reason) { showToast('请填写跳过原因'); return; }
       hideDialog('dlgSkipExp');
-      showToast('已提交跳过申请 · 产品 + 技术审批中');
+      showToast('已提交跳过申请 · 产品 + 研发审批中');
       if (btnSkipExp) {
         btnSkipExp.disabled = true;
         btnSkipExp.textContent = '✓ 已申请跳过（审批中）';
