@@ -4,43 +4,7 @@
 (function () {
   'use strict';
 
-  // ============ 视角切换 ============
-  const roleBtns = document.querySelectorAll('.role-btn');
-  roleBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      roleBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const role = btn.dataset.role;
 
-      if (role === 'product') {
-        activateTab('overview');
-      }
-
-      const av = document.querySelector('.user-avatar');
-      if (av) {
-        const map = { product: '樊', design: '桃', dev: '楠', ops: '伦' };
-        av.textContent = map[role] || '客';
-      }
-    });
-  });
-
-  // ============ 首页 / 我的工作台 ============
-  function activateTab(name) {
-    document.querySelectorAll('#dashboard > .section-head .tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
-    document.querySelectorAll('#dashboard > .tab-pane').forEach(p => p.classList.toggle('active', p.dataset.pane === name));
-  }
-  document.querySelectorAll('#dashboard > .section-head .tab').forEach(tab => {
-    tab.addEventListener('click', () => activateTab(tab.dataset.tab));
-  });
-
-  // ============ 我的工作台子 Tab ============
-  function activateSubTab(name) {
-    document.querySelectorAll('.subtab').forEach(t => t.classList.toggle('active', t.dataset.subtab === name));
-    document.querySelectorAll('.subtab-pane').forEach(p => p.classList.toggle('active', p.dataset.pane === name));
-  }
-  document.querySelectorAll('.subtab').forEach(tab => {
-    tab.addEventListener('click', () => activateSubTab(tab.dataset.subtab));
-  });
 
   // ============ 模板池 Tab ============
   function activatePoolTab(name) {
@@ -75,29 +39,6 @@
     });
   });
 
-  // ============ Agent 抽屉 ============
-  const agentDrawer = document.getElementById('agentDrawer');
-  const agentMask = document.getElementById('agentMask');
-  const openAgent = document.getElementById('openAgent');
-  const closeAgent = document.getElementById('closeAgent');
-  const agentBarInput = document.getElementById('agentBarInput');
-
-  function showAgent() { agentDrawer.classList.add('show'); agentMask.classList.add('show'); }
-  function hideAgent() { agentDrawer.classList.remove('show'); agentMask.classList.remove('show'); }
-  openAgent?.addEventListener('click', showAgent);
-  closeAgent?.addEventListener('click', hideAgent);
-  agentMask?.addEventListener('click', hideAgent);
-  agentBarInput?.addEventListener('focus', showAgent);
-
-  document.querySelectorAll('.agent-tab').forEach(t => {
-    t.addEventListener('click', () => {
-      document.querySelectorAll('.agent-tab').forEach(x => x.classList.remove('active'));
-      t.classList.add('active');
-      const target = t.dataset.agentTab;
-      document.querySelectorAll('.agent-pane').forEach(p => p.classList.toggle('active', p.dataset.pane === target));
-    });
-  });
-
   // ============ 二级抽屉通用 ============
   const sideMask = document.getElementById('sideDrawerMask');
   const formDrawer = document.getElementById('formDrawer');
@@ -121,32 +62,32 @@
   // 各形态实验数据
   const expData = {
     '原生': [
-      { name: 'Android_SDK_边下边播错误优化实验', status: '100%', cost: '+0.23%', gmv: '+0.48%', ctr: '+0.29%', cvr: '+0.24%' },
-      { name: 'iOS_全形态_SDN多链路优化实验', status: '100%', cost: '+0.13%', gmv: '-0.24%', ctr: '+0.05%', cvr: '-0.33%' },
-      { name: '【iOS】全屏广告点击时补曝光_半屏添加到window后立即检测曝光_2', status: '100%', cost: '+0.04%', gmv: '-0.25%', ctr: '-0.93%', cvr: '+0.02%', danger: true },
-      { name: '【iOS】【全形态】模板资源预加载实验', status: '100%', cost: '+0.03%', gmv: '-0.94%', ctr: '-0.11%', cvr: '+0.12%' },
-      { name: '联盟SDK流量_调整联盟视频播放上报时间_V1', status: '100%', cost: '0.00%', gmv: '0.00%', ctr: '-', cvr: '-' },
-      { name: 'Android_SDK_自渲染MediaView展示失败优化实验', status: '5%', cost: '-0.01%', gmv: '-0.54%', ctr: '+0.02%', cvr: '-0.04%' },
-      { name: '【iOS】NSTimer切换GCDTimer实验', status: '100%', cost: '-0.23%', gmv: '-0.05%', ctr: '+0.02%', cvr: '+0.13%' },
-      { name: 'Android_SDK_边下边播卡顿优化实验', status: '100%', cost: '-0.51%', gmv: '-0.75%', ctr: '-0.40%', cvr: '-0.20%', danger: true }
+      { name: 'Android_SDK_边下边播错误优化实验', status: '100%', cost: '+0.23%', ecpm: '+0.48%', ctr: '+0.29%', cvr: '+0.24%' },
+      { name: 'iOS_全形态_SDN多链路优化实验', status: '100%', cost: '+0.13%', ecpm: '-0.24%', ctr: '+0.05%', cvr: '-0.33%' },
+      { name: '【iOS】全屏广告点击时补曝光_半屏添加到window后立即检测曝光_2', status: '100%', cost: '+0.04%', ecpm: '-0.25%', ctr: '-0.93%', cvr: '+0.02%', danger: true },
+      { name: '【iOS】【全形态】模板资源预加载实验', status: '100%', cost: '+0.03%', ecpm: '-0.94%', ctr: '-0.11%', cvr: '+0.12%' },
+      { name: '联盟SDK流量_调整联盟视频播放上报时间_V1', status: '100%', cost: '0.00%', ecpm: '0.00%', ctr: '-', cvr: '-' },
+      { name: 'Android_SDK_自渲染MediaView展示失败优化实验', status: '5%', cost: '-0.01%', ecpm: '-0.54%', ctr: '+0.02%', cvr: '-0.04%' },
+      { name: '【iOS】NSTimer切换GCDTimer实验', status: '100%', cost: '-0.23%', ecpm: '-0.05%', ctr: '+0.02%', cvr: '+0.13%' },
+      { name: 'Android_SDK_边下边播卡顿优化实验', status: '100%', cost: '-0.51%', ecpm: '-0.75%', ctr: '-0.40%', cvr: '-0.20%', danger: true }
     ],
     '激励视频': [
-      { name: '双端_激励_1003723模板实验', status: '100%', cost: '+7.34%', gmv: '+5.36%', ctr: '-0.98%', cvr: '-0.33%', big: true, danger: true },
-      { name: '双端_开插激励原生_26Y618模板上线实验', status: '20%', cost: '+0.06%', gmv: '+0.17%', ctr: '-0.10%', cvr: '-0.01%' },
-      { name: 'Android_激励_1003718小游戏试玩规格2264模板实验', status: '1%', cost: '-', gmv: '-', ctr: '-', cvr: '-' },
-      { name: '双端_激励_蚂蚁阿福定制化点击激励模板', status: '100%', cost: '-0.29%', gmv: '+1.36%', ctr: '+0.05%', cvr: '-0.23%' }
+      { name: '双端_激励_1003723模板实验', status: '100%', cost: '+7.34%', ecpm: '+5.36%', ctr: '-0.98%', cvr: '-0.33%', big: true, danger: true },
+      { name: '双端_开插激励原生_26Y618模板上线实验', status: '20%', cost: '+0.06%', ecpm: '+0.17%', ctr: '-0.10%', cvr: '-0.01%' },
+      { name: 'Android_激励_1003718小游戏试玩规格2264模板实验', status: '1%', cost: '-', ecpm: '-', ctr: '-', cvr: '-' },
+      { name: '双端_激励_蚂蚁阿福定制化点击激励模板', status: '100%', cost: '-0.29%', ecpm: '+1.36%', ctr: '+0.05%', cvr: '-0.23%' }
     ],
     '开屏': [
-      { name: '双端_开屏_系统弹窗大按钮_v3', status: '100%', cost: '+1.85%', gmv: '+2.24%', ctr: '+0.45%', cvr: '+0.12%', big: true },
-      { name: 'iOS_开屏_竖滑视频实验', status: '10%', cost: '+0.62%', gmv: '+0.41%', ctr: '+0.18%', cvr: '+0.08%' },
-      { name: 'Android_开屏_摇扭用_启动延迟优化', status: '100%', cost: '-0.11%', gmv: '-0.02%', ctr: '+0.21%', cvr: '+0.05%' }
+      { name: '双端_开屏_系统弹窗大按钮_v3', status: '100%', cost: '+1.85%', ecpm: '+2.24%', ctr: '+0.45%', cvr: '+0.12%', big: true },
+      { name: 'iOS_开屏_竖滑视频实验', status: '10%', cost: '+0.62%', ecpm: '+0.41%', ctr: '+0.18%', cvr: '+0.08%' },
+      { name: 'Android_开屏_摇扭用_启动延迟优化', status: '100%', cost: '-0.11%', ecpm: '-0.02%', ctr: '+0.21%', cvr: '+0.05%' }
     ],
     '插屏': [
-      { name: '双端_插屏半屏_炫光岛屿模板实验', status: '100%', cost: '+2.41%', gmv: '+1.88%', ctr: '+0.62%', cvr: '+0.31%', big: true },
-      { name: 'iOS_插屏_点击区域优化', status: '5%', cost: '+0.18%', gmv: '+0.22%', ctr: '+0.08%', cvr: '+0.04%' }
+      { name: '双端_插屏半屏_炫光岛屿模板实验', status: '100%', cost: '+2.41%', ecpm: '+1.88%', ctr: '+0.62%', cvr: '+0.31%', big: true },
+      { name: 'iOS_插屏_点击区域优化', status: '5%', cost: '+0.18%', ecpm: '+0.22%', ctr: '+0.08%', cvr: '+0.04%' }
     ],
     'Banner': [
-      { name: 'Banner_品牌横版刷新频率实验', status: '20%', cost: '+0.05%', gmv: '+0.03%', ctr: '+0.02%', cvr: '+0.01%' }
+      { name: 'Banner_品牌横版刷新频率实验', status: '20%', cost: '+0.05%', ecpm: '+0.03%', ctr: '+0.02%', cvr: '+0.01%' }
     ]
   };
 
@@ -176,7 +117,7 @@
         <td>${e.name}</td>
         <td><span class="exp-status ${stCls}">${e.status}</span></td>
         <td class="${cls(e.cost)}${big}">${arrow(e.cost)}</td>
-        <td class="${cls(e.gmv)}${big}">${arrow(e.gmv)}</td>
+        <td class="${cls(e.ecpm)}${big}">${arrow(e.ecpm)}</td>
         <td class="${cls(e.ctr)}${danger}">${arrow(e.ctr)}</td>
         <td class="${cls(e.cvr)}${danger}">${arrow(e.cvr)}</td>
         <td class="col-act"><a class="link" href="javascript:void(0)">🔗 查看</a></td>
@@ -185,20 +126,19 @@
   }
 
   // ============ 模板行点击 → 流水线抽屉 ============
-  // 阶段（pill / badge 文案）→ 步骤号 映射（v0.4：10 节点版）
+  // 阶段（pill / badge 文案）→ 步骤号 映射（v0.6：8 节点版，原 ②设计+③调整 合并为 ② 模板编辑）
   const STAGE_TO_STEP = {
-    '编辑中':       '3',
-    '调整中':       '3',
-    '测试中':       '4',
-    '草稿上线':     '5',
-    '草稿发布':     '5',
-    '灰度回归':     '6',
-    '规则配置':     '7',
-    '实验中':       '8',
-    '待上线审批':   '9',
-    '正式草稿':     '9',
-    '已上线':       '10',
-    '已发布':       '10'
+    '编辑中':       '2',
+    '调整中':       '2',
+    '测试中':       '3',
+    '草稿上线':     '4',
+    '草稿发布':     '4',
+    '规则配置':     '5',
+    '实验中':       '6',
+    '待上线审批':   '7',
+    '正式草稿':     '7',
+    '已上线':       '8',
+    '已发布':       '8'
   };
 
   // ============ 模板成绩单数据 ============
@@ -207,7 +147,7 @@
       name: '【小店】弹窗+商品信息_自渲染_信息流_视频_图文',
       thumb: '🛍️',
       form: '原生 · 信息流',
-      parent: '1002819',
+      scene: '信息流',
       size: '0×0（自适应）',
       specIds: '2147,1766,351,865,2107,2106,1414,1413,1529,585,866,1874,862,1109',
       onlineDate: '2026-04-12',
@@ -215,12 +155,12 @@
       cost: '¥421w',
       ctr: '9.85%',
       cvr: '26.13%',
-      gmv: '+38%',
+      ecpm: '¥38.6',
       imp: '1,820w / 日',
       rank: '原生 TOP 2',
       experiments: [
-        { name: '双端_自渲染_信息流_小店弹窗模板上线实验', status: '已全量', delta: '消耗 +6.2% · GMV +12.4%' },
-        { name: 'iOS_全形态_SDN多链路优化实验', status: '已全量', delta: '消耗 +0.13% · GMV -0.24%' }
+        { name: '双端_自渲染_信息流_小店弹窗模板上线实验', status: '已全量', delta: '消耗 +6.2% · eCPM +12.4%' },
+        { name: 'iOS_全形态_SDN多链路优化实验', status: '已全量', delta: '消耗 +0.13% · eCPM -0.24%' }
       ],
       anomaly: '小米机型在折叠屏展开态下商品信息溢出（占曝光 1.8%），深度转化页 H5 加载 P95 偏高 2.1s。',
       suggest: '商品信息层切换到 ConstraintLayout 自适应；H5 引入预加载 prefetch；可一键克隆为 v2 继承数据。',
@@ -230,7 +170,7 @@
       name: '双端_激励_1003723模板',
       thumb: '🎮',
       form: '激励视频',
-      parent: '1003680',
+      scene: '激励视频',
       size: '9×16',
       specIds: '1735,1736,1874',
       onlineDate: '2026-04-25',
@@ -238,11 +178,11 @@
       cost: '¥412w',
       ctr: '62.5%',
       cvr: '34.2%',
-      gmv: '+27%',
+      ecpm: '¥56.2',
       imp: '720w / 日',
       rank: '激励视频 TOP 3',
       experiments: [
-        { name: '双端_激励_endcard交互重构实验', status: '已全量', delta: '消耗 +4.8% · GMV +9.1%' }
+        { name: '双端_激励_endcard交互重构实验', status: '已全量', delta: '消耗 +4.8% · eCPM +9.1%' }
       ],
       anomaly: 'OPPO ColorOS 13 部分机型 endcard 关闭按钮区域被系统返回手势遮挡（占曝光 1.2%）。',
       suggest: '关闭按钮 hit-area 上移 16dp，避开手势热区；可联动激励赛道全形态复制方案。',
@@ -252,7 +192,7 @@
       name: '商品信息_系统弹窗_插屏半屏-9x16视频-大区域-左下',
       thumb: '🎬',
       form: '插屏 · 半屏视频',
-      parent: '1003216',
+      scene: '插屏',
       size: '9×16',
       specIds: '1529,2107,2106,1414,1413,585,866,862,1109',
       onlineDate: '2026-05-02',
@@ -260,11 +200,11 @@
       cost: '¥182w',
       ctr: '25.6%',
       cvr: '14.8%',
-      gmv: '+24%',
+      ecpm: '¥43.4',
       imp: '420w / 日',
       rank: '插屏 TOP 6',
       experiments: [
-        { name: '双端_插屏半屏_左下大区域商品信息实验', status: '运行中 · 第 6 天', delta: '消耗 +2.1% · GMV +5.4%（中期）' }
+        { name: '双端_插屏半屏_左下大区域商品信息实验', status: '运行中 · 第 6 天', delta: '消耗 +2.1% · eCPM +5.4%（中期）' }
       ],
       anomaly: '半屏视频在 Android 13+ 系统手势区误触关闭率较 v0 上升 0.8pp。',
       suggest: '关闭按钮位置上移 24dp 避开手势区；商品信息卡片增加 8dp 阴影增强层级感。',
@@ -274,7 +214,7 @@
       name: '【全突破】自渲染_信息流_图片_透明模板',
       thumb: '🖼️',
       form: '原生 · 透明模板',
-      parent: '—',
+      scene: '信息流',
       size: '0×0（自适应）',
       specIds: '351,865,866,1413,1414',
       onlineDate: '2025-09-08',
@@ -282,7 +222,7 @@
       cost: '¥274w（近 30d）',
       ctr: '8.49%',
       cvr: '11.2%',
-      gmv: '基线',
+      ecpm: '¥20.0',
       imp: '610w / 日',
       rank: '原生 TOP 9',
       experiments: [
@@ -296,7 +236,7 @@
       name: '[小说短剧]标准版深转激励-激励浏览(1735)',
       thumb: '📚',
       form: '激励视频',
-      parent: '1003380',
+      scene: '激励视频',
       size: '0×0（自适应）',
       specIds: '1735',
       onlineDate: '2026-05-08',
@@ -304,11 +244,11 @@
       cost: '¥98.2w',
       ctr: '64.3%',
       cvr: '38.7%',
-      gmv: '+18.9%',
+      ecpm: '¥61.8',
       imp: '380w / 日',
       rank: '激励视频 TOP 5',
       experiments: [
-        { name: '双端_激励_深转激励浏览(1735)规格实验', status: '已全量', delta: '消耗 +5.1% · GMV +8.3%' }
+        { name: '双端_激励_深转激励浏览(1735)规格实验', status: '已全量', delta: '消耗 +5.1% · eCPM +8.3%' }
       ],
       anomaly: '激励满 30s 跳转外站 H5 时，部分 Vivo 设备返回键失效（占曝光 0.6%）。',
       suggest: '在 H5 容器内监听 hardwareBack，回流时强制返回原生页；可联动小说&短剧赛道复制规格。',
@@ -343,20 +283,16 @@
     document.getElementById('reportThumb').textContent = data.thumb;
     set('reportTplName', data.name);
     set('reportTplId', tplId);
-    set('reportParentId', data.parent);
-    set('reportForm', data.form);
-    set('reportSize', data.size);
+    set('reportScene', data.scene || data.form || '—');
     set('reportOnlineDate', data.onlineDate);
     set('reportOnlineDays', data.onlineDays);
-    set('reportSpecIds', data.specIds);
 
     set('rkCost', data.cost);
     set('rkDailyCost', data.dailyCost || '—');
     set('rkCtr', data.ctr);
     set('rkCvr', data.cvr);
     set('rkImp', data.imp);
-    set('rkGmv', data.gmv);
-    set('rkRank', data.rank);
+    set('rkEcpm', data.ecpm || '¥20');
 
     set('reportSubMeta', `${data.name} · 上线 ${data.onlineDate}`);
 
@@ -380,7 +316,6 @@
     set('wecomTplName', data.name);
     set('wecomCtr', data.ctr);
     set('wecomCost', data.cost);
-    set('wecomGmv', data.gmv);
     set('wecomAnomaly', data.anomaly);
     set('wecomSuggest', data.suggest);
     set('wecomFoot', `点击查看 · ${data.readers}`);
@@ -388,16 +323,63 @@
 
   function activateStep(no) {
     const current = parseInt(no, 10);
-    document.querySelectorAll('#pipelineDrawer .step').forEach(s => {
+    const steps = document.querySelectorAll('#pipelineDrawer .step');
+    steps.forEach(s => {
       const n = parseInt(s.dataset.step, 10);
       s.classList.remove('done', 'active');
       if (n < current) s.classList.add('done');
-      else if (n === current) s.classList.add('done', 'active');
+      else if (n === current) s.classList.add('active');
+    });
+    // 步骤间的连接线（.step-gap）·当左侧 step 为 done 时，连线置为 primary 色
+    document.querySelectorAll('#pipelineDrawer .step-gap').forEach(gap => {
+      const prev = gap.previousElementSibling;
+      const next = gap.nextElementSibling;
+      const prevDone = prev && prev.classList.contains('done') && !prev.classList.contains('active');
+      const bothDone = prevDone && next && next.classList.contains('done');
+      gap.classList.toggle('done', !!bothDone);
     });
     document.querySelectorAll('#pipelineDrawer .step-content').forEach(c => {
       c.classList.toggle('active', c.dataset.stepContent === no);
     });
+    renderStepGapTimes();
   }
+
+  // 把两步 done-at 时间戳之差渲染成「实际耗时」（不是预估时间）
+  // 规则：
+  //   - 两端都已完成 → 显示真实差值（5min / 1.2h / 1d3h …）
+  //   - 左端完成、右端未完成（含 active）→ 显示「进行中 · 已 xxx」用 now - leftDoneAt
+  //   - 否则 → 显示 "—"
+  function fmtDuration(ms) {
+    if (ms < 0) ms = 0;
+    const min = Math.round(ms / 60000);
+    if (min < 60) return `${min}min`;
+    const h = Math.floor(min / 60);
+    const m = min % 60;
+    if (h < 24) return m ? `${h}h${m}min` : `${h}h`;
+    const d = Math.floor(h / 24);
+    const rh = h % 24;
+    return rh ? `${d}d${rh}h` : `${d}d`;
+  }
+  function renderStepGapTimes() {
+    const gaps = document.querySelectorAll('#pipelineDrawer .step-gap');
+    const now = Date.now();
+    gaps.forEach(gap => {
+      const prev = gap.previousElementSibling;
+      const next = gap.nextElementSibling;
+      const label = gap.querySelector('.step-gap-time');
+      if (!label || !prev || !next) return;
+      const lAt = prev.dataset.doneAt ? new Date(prev.dataset.doneAt).getTime() : null;
+      const rAt = next.dataset.doneAt ? new Date(next.dataset.doneAt).getTime() : null;
+      if (lAt && rAt) {
+        label.textContent = `⏱ ${fmtDuration(rAt - lAt)}`;
+      } else if (lAt && next.classList.contains('active')) {
+        label.textContent = `⏱ 进行中 · 已 ${fmtDuration(now - lAt)}`;
+      } else {
+        label.textContent = '—';
+      }
+    });
+  }
+  renderStepGapTimes();
   document.querySelectorAll('#pipelineDrawer .step').forEach(s => {
     s.addEventListener('click', () => activateStep(s.dataset.step));
   });
@@ -427,7 +409,7 @@
       const stageText = inferStageText(row);
       document.getElementById('pipelineDrawerTitle').textContent = `模板生产流水线 · ${tplName}`;
       document.getElementById('pipelineDrawerSub').textContent =
-        `模板ID：${tplId}${stageText ? ' · 当前阶段：' + stageText : ''} · 创建 → 设计 → 调整 → 测试 → 草稿发布 → 测试 → 规则配置 → 实验 → 全量上线 → 成绩单`;
+        `模板ID：${tplId}${stageText ? ' · 当前阶段：' + stageText : ''} · 创建 → 编辑 → 测试 → 草稿发布 → 规则配置 → 实验 → 全量上线 → 成绩单`;
       renderReport(tplId, stageText);
       activateStep(stepNo);
       showDrawer(pipelineDrawer);
@@ -445,7 +427,7 @@
       document.getElementById('pipelineDrawerSub').textContent =
         `模板ID：${tplId} · 当前阶段：${stageText} · 已上线后自动出 v1 报告`;
       renderReport(tplId, stageText);
-      activateStep('10');
+      activateStep('8');
       showDrawer(pipelineDrawer);
     });
   });
@@ -487,42 +469,13 @@
           trigger.click();
         } else {
           document.getElementById('pipelineDrawerTitle').textContent = '模板生产流水线 · 开屏-夏日冰镇风 v1';
-          document.getElementById('pipelineDrawerSub').textContent = '模板ID：1003638 · 创建 → 设计 → 调整 → 测试 → 草稿发布 → 测试 → 规则配置 → 实验 → 全量上线 → 成绩单';
+          document.getElementById('pipelineDrawerSub').textContent = '模板ID：1003638 · 创建 → 编辑 → 测试 → 草稿发布 → 规则配置 → 实验 → 全量上线 → 成绩单';
           activateStep('1');
           showDrawer(pipelineDrawer);
         }
       }
     });
   });
-
-  // ============ 我参与的 · 阶段筛选 ============
-  const stageFilter = document.getElementById('myTplStageFilter');
-  if (stageFilter) {
-    const ownPane = document.querySelector('.subtab-pane[data-pane="own"]');
-    function applyMyTplFilter() {
-      if (!ownPane) return;
-      const activeStagePill = stageFilter.querySelector('.pill.active');
-      const stage = activeStagePill?.dataset.stage || 'all';
-      const kw = (document.getElementById('myTplSearch')?.value || '').trim().toLowerCase();
-      ownPane.querySelectorAll('table.plain-table .tpl-row').forEach(row => {
-        const pill = row.querySelector('.stage-pill, .badge');
-        const text = (pill?.textContent || '').trim();
-        const stageOk = stage === 'all' || text === stage;
-        const rowText = row.textContent.toLowerCase();
-        const kwOk = !kw || rowText.includes(kw);
-        row.classList.toggle('hide-by-stage', !stageOk);
-        row.classList.toggle('hide-by-search', !kwOk);
-      });
-    }
-    stageFilter.querySelectorAll('.pill').forEach(p => {
-      p.addEventListener('click', () => {
-        stageFilter.querySelectorAll('.pill').forEach(x => x.classList.remove('active'));
-        p.classList.add('active');
-        applyMyTplFilter();
-      });
-    });
-    document.getElementById('myTplSearch')?.addEventListener('input', applyMyTplFilter);
-  }
 
   // "我的实验数据看板"右上角"查看我的全部实验"按钮
   document.getElementById('goAllMyExp')?.addEventListener('click', () => {
@@ -534,151 +487,6 @@
     showDrawer(formDrawer);
   });
 
-  // ============ ⑥ 规则配置助手（AI 精简版）交互 ============
-  const RULE_MAP = {
-    only:  { lock: 'no',  enable: ['no'],          hint: '只出 → 大盘"不可出"' },
-    ratio: { lock: null,  enable: ['yes', 'no'],   hint: '按比例出 → 大盘可选"可出/不可出"，建议"可出"' },
-    prio:  { lock: 'yes', enable: ['yes'],         hint: '高优出 → 大盘"可出"' },
-    no:    { lock: 'no',  enable: ['no'],          hint: '不可出 → 大盘"不可出"' },
-  };
-
-  document.querySelectorAll('.ra-mode-btn').forEach(b => {
-    b.addEventListener('click', () => {
-      const mode = b.dataset.raMode;
-      if (b.id === 'raResetBtn') {
-        document.querySelectorAll('.ra-card .ra-input').forEach(inp => { inp.value = ''; });
-        document.querySelectorAll('[data-ra-seg]').forEach(seg => {
-          seg.querySelectorAll('.ra-seg-btn').forEach((x, i) => {
-            x.classList.toggle('active', i === 0);
-          });
-        });
-        showToast('已重置规则配置助手');
-        return;
-      }
-      document.querySelectorAll('.ra-mode-btn[data-ra-mode]').forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
-      if (mode === 'text') {
-        showToast('文字描述模式 · demo 占位（精简版聚焦"选项填空"）');
-      }
-    });
-  });
-
-  document.querySelectorAll('[data-ra-toggle]').forEach(cb => {
-    cb.addEventListener('change', () => {
-      const card = cb.closest('.ra-card');
-      if (!card) return;
-      if (cb.checked) { card.classList.add('active'); card.classList.remove('disabled'); }
-      else { card.classList.remove('active'); card.classList.add('disabled'); }
-    });
-  });
-
-  document.querySelectorAll('[data-ra-seg]').forEach(seg => {
-    const segName = seg.dataset.raSeg;
-    seg.querySelectorAll('.ra-seg-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (btn.classList.contains('disabled')) {
-          showToast('该选项已被映射规则锁定，不可选择');
-          return;
-        }
-        seg.querySelectorAll('.ra-seg-btn').forEach(x => x.classList.remove('active'));
-        btn.classList.add('active');
-
-        if (segName === 'flowY' || segName === 'budgetZ') {
-          const mainSegName = segName === 'flowY' ? 'flowMain' : 'budgetMain';
-          const mainSeg = document.querySelector(`[data-ra-seg="${mainSegName}"]`);
-          const lockRow = document.querySelector(`[data-ra-locked-row="${mainSegName}"]`);
-          if (!mainSeg) return;
-          const map = RULE_MAP[btn.dataset.act];
-          if (!map) return;
-
-          mainSeg.querySelectorAll('.ra-seg-btn').forEach(x => {
-            const allowed = map.enable.includes(x.dataset.act);
-            x.classList.toggle('disabled', !allowed);
-          });
-
-          let activeBtn = null;
-          if (map.lock) {
-            mainSeg.querySelectorAll('.ra-seg-btn').forEach(x => {
-              if (x.dataset.act === map.lock) activeBtn = x;
-            });
-          } else {
-            const cur = mainSeg.querySelector('.ra-seg-btn.active');
-            if (cur && map.enable.includes(cur.dataset.act)) {
-              activeBtn = cur;
-            } else {
-              activeBtn = mainSeg.querySelector('.ra-seg-btn:not(.disabled)');
-            }
-          }
-          mainSeg.querySelectorAll('.ra-seg-btn').forEach(x => x.classList.remove('active'));
-          if (activeBtn) activeBtn.classList.add('active');
-
-          if (lockRow) {
-            const hintEl = lockRow.querySelector('.ra-lock-hint');
-            if (hintEl) {
-              if (map.lock) {
-                const lockText = map.lock === 'yes' ? '可出' : '不可出';
-                hintEl.innerHTML = `🔒 <b>已锁定为"${lockText}"</b>（按映射表，仅此一种合法组合）`;
-                hintEl.style.display = '';
-              } else {
-                hintEl.innerHTML = `💡 <b>大盘可选</b>（${map.hint}）`;
-                hintEl.style.display = '';
-              }
-            }
-          }
-
-          const mapping = seg.closest('.ra-card')?.querySelector('.ra-mapping-text');
-          if (mapping) {
-            mapping.innerHTML = `映射规则：<b>${map.hint}</b>；映射逻辑：固定`;
-          }
-        }
-      });
-    });
-  });
-
-  document.getElementById('raCreateBtn')?.addEventListener('click', () => {
-    const nameInput = document.getElementById('raRuleName');
-    let ruleName = nameInput?.value.trim();
-    const activeCards = document.querySelectorAll('.ra-card.active');
-    if (!activeCards.length) {
-      showToast('请至少启用一张诉求卡（流量 / 预算）');
-      return;
-    }
-    if (!ruleName) {
-      const card = activeCards[0];
-      const tplVal = card.querySelector('.ra-input')?.value.trim() || '未命名模板';
-      const yVal = card.querySelector('.ra-input.slim')?.value.trim() || '全量';
-      const actBtn = card.querySelector('[data-ra-seg$="Y"] .ra-seg-btn.active, [data-ra-seg$="Z"] .ra-seg-btn.active');
-      const actMap = { only: '只出', ratio: '按比例出', prio: '高优出', no: '不可出' };
-      const actText = actMap[actBtn?.dataset.act] || '只出';
-      ruleName = `${tplVal}·${yVal}·${actText}`;
-    }
-
-    const list = document.getElementById('raRulesMini');
-    if (!list) return;
-    const idx = list.querySelectorAll('.ra-mini-row').length + 1;
-    const numText = ['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩'][idx - 1] || `${idx}`;
-
-    const row = document.createElement('div');
-    row.className = 'ra-mini-row ai-blink';
-    row.innerHTML = `
-      <span class="ra-mini-no">${numText}</span>
-      <span class="ra-mini-name">${ruleName}</span>
-      <span class="ra-mini-desc muted">由助手新建 · ${new Date().toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'})}</span>
-      <label class="switch-mini"><input type="checkbox" checked /><span></span></label>
-    `;
-    list.appendChild(row);
-
-    const cnt = list.querySelector('.ra-rules-mini-head .muted');
-    if (cnt) cnt.textContent = `${list.querySelectorAll('.ra-mini-row').length} 条`;
-
-    if (nameInput) nameInput.value = '';
-    showToast(`✓ 已新建规则：${ruleName}`);
-    setTimeout(() => row.classList.remove('ai-blink'), 1600);
-  });
-
-  document.getElementById('raMappingBtn')?.addEventListener('click', () => {
-    showToast('映射表：只出↔不可出 / 按比例出↔可出建议 / 高优出↔可出 / 不可出↔不可出');
-  });
 
   function showToast(msg) {
     let t = document.getElementById('claw-toast');
@@ -694,7 +502,7 @@
     t._timer = setTimeout(() => t.classList.remove('show'), 2200);
   }
 
-  // ============ ④/⑥ 模板测试 · 自动化测试 / 人工测试（可跳过） ============
+  // ============ ④ 模板测试 · 自动化测试 / 人工测试（可跳过） ============
   function bindAutoTestBtn(id) {
     const btn = document.getElementById(id);
     if (!btn) return;
@@ -711,37 +519,33 @@
     });
   }
   bindAutoTestBtn('btnRunAutoTest');
-  bindAutoTestBtn('btnRunAutoTest2');
 
   function bindUrgeQA(id, who) {
     const btn = document.getElementById(id);
     if (!btn) return;
     btn.addEventListener('click', () => {
-      showToast(`催办已发送 · 已通知 ${who}（企微 + 测试单评论区）`);
+      showToast(`已在协作群内 @ 相关人 · ${who}`);
     });
   }
   bindUrgeQA('btnUrgeQA',  '@test_lily');
-  bindUrgeQA('btnUrgeQA2', '@test_lily');
 
-  function bindOpenQA(id, ticket) {
-    const btn = document.getElementById(id);
-    if (!btn) return;
-    btn.addEventListener('click', () => showToast(`（demo）打开测试单 ${ticket}`));
-  }
-  bindOpenQA('btnOpenQATicket',  '#QA-2026-0603-007');
-  bindOpenQA('btnOpenQATicket2', '#QA-2026-0606-014');
-
-  function bindSkipQA(id, nextStep) {
-    const btn = document.getElementById(id);
-    if (!btn) return;
-    btn.addEventListener('click', () => {
-      btn.disabled = true;
-      btn.textContent = '✓ 已跳过人工测试';
-      showToast('已跳过人工测试 · 自动化测试已通过 → 可继续下一步');
+  // ============ ⑦ 模板实验 · 开启实验按钮 ============
+  const btnStartExp = document.getElementById('btnStartExp');
+  if (btnStartExp) {
+    btnStartExp.addEventListener('click', () => {
+      btnStartExp.disabled = true;
+      btnStartExp.textContent = '⏳ 实验创建中…';
+      showToast('正在 TAB 平台创建实验 · 绑定灰度规则…');
+      setTimeout(() => {
+        const startCard = document.getElementById('expStartCard');
+        const expContent = document.getElementById('expContent');
+        if (startCard) startCard.style.display = 'none';
+        if (expContent) expContent.style.display = '';
+        showToast('✓ 实验已开启 · EXP-2026-0529-01 · 10% 灰度');
+      }, 1200);
     });
   }
-  bindSkipQA('btnSkipQA',  '5');
-  bindSkipQA('btnSkipQA2', '7');
+
 
   // ============ 通用弹窗（tpl-dialog）============
   function showDialog(id) {
@@ -760,7 +564,7 @@
     el.addEventListener('click', () => hideDialog(el.dataset.dlgClose));
   });
 
-  // ============ ⑤ 草稿发布 · 提交上线按钮（弹窗 + IOA 回填） ============
+  // ============ ⑤ 草稿发布 · 提交上线按钮（弹窗 + MyOA 回填） ============
   const btnSubmitOnline = document.getElementById('btnSubmitOnline');
   if (btnSubmitOnline) {
     btnSubmitOnline.addEventListener('click', () => showDialog('dlgDraftOnline'));
@@ -771,7 +575,7 @@
       const remark = (document.getElementById('draftRemarkInput')?.value || '').trim();
       if (!remark) { showToast('请填写备注'); return; }
       hideDialog('dlgDraftOnline');
-      showToast('IOA 审批单已下发 · 测试 / 产品 / 技术 三段审批');
+      showToast('MyOA 审批单已下发 · 测试 / 产品 / 技术 三段审批');
       const ioa = document.getElementById('ioaResultDraft');
       if (ioa) ioa.style.display = 'block';
       const r = document.getElementById('ioaResultRemarkDraft');
@@ -779,19 +583,19 @@
       const badge = document.getElementById('onlineStatusBadge');
       if (badge) { badge.textContent = '审批中'; badge.className = 'badge wait'; }
       const tip = document.getElementById('onlineStatusTip');
-      if (tip) tip.textContent = 'IOA 审批已下发 · 完成后将解锁灰度环境';
+      if (tip) tip.textContent = 'MyOA 审批已下发 · 完成后将解锁灰度环境';
       if (btnSubmitOnline) {
         btnSubmitOnline.disabled = true;
         btnSubmitOnline.textContent = '✓ 已提交（审批中）';
       }
     });
   }
-  const btnUrgeDraftIOA = document.getElementById('btnUrgeDraftIOA');
-  if (btnUrgeDraftIOA) {
-    btnUrgeDraftIOA.addEventListener('click', () => showToast('催办已发送 · IOA 当前节点审批人已收到企微提醒'));
+  const btnUrgeDraftMyOA = document.getElementById('btnUrgeDraftMyOA');
+  if (btnUrgeDraftMyOA) {
+    btnUrgeDraftMyOA.addEventListener('click', () => showToast('已在协作群内 @ 相关人 · MyOA 当前节点审批人已收到提醒'));
   }
 
-  // ============ ⑨ 全量上线 · 提交按钮（弹窗 + IOA 回填） ============
+  // ============ ⑧ 全量上线 · 提交按钮（弹窗 + MyOA 回填） ============
   const btnSubmitFullOnline = document.getElementById('btnSubmitFullOnline');
   if (btnSubmitFullOnline) {
     btnSubmitFullOnline.addEventListener('click', () => showDialog('dlgFullOnline'));
@@ -802,7 +606,7 @@
       const remark = (document.getElementById('fullRemarkInput')?.value || '').trim();
       if (!remark) { showToast('请填写备注'); return; }
       hideDialog('dlgFullOnline');
-      showToast('IOA 全量上线审批单已下发');
+      showToast('MyOA 全量上线审批单已下发');
       const ioa = document.getElementById('ioaResultFull');
       if (ioa) ioa.style.display = 'block';
       const r = document.getElementById('ioaResultRemarkFull');
@@ -810,19 +614,19 @@
       const badge = document.getElementById('fullOnlineBadge');
       if (badge) { badge.textContent = '审批中'; badge.className = 'badge wait'; }
       const tip = document.getElementById('fullOnlineTip');
-      if (tip) tip.textContent = 'IOA 审批已下发 · 完成后正式投放线上 100% 流量';
+      if (tip) tip.textContent = 'MyOA 审批已下发 · 完成后正式投放线上 100% 流量';
       if (btnSubmitFullOnline) {
         btnSubmitFullOnline.disabled = true;
         btnSubmitFullOnline.textContent = '✓ 已提交（审批中）';
       }
     });
   }
-  const btnUrgeFullIOA = document.getElementById('btnUrgeFullIOA');
-  if (btnUrgeFullIOA) {
-    btnUrgeFullIOA.addEventListener('click', () => showToast('催办已发送 · IOA 当前节点审批人已收到企微提醒'));
+  const btnUrgeFullMyOA = document.getElementById('btnUrgeFullMyOA');
+  if (btnUrgeFullMyOA) {
+    btnUrgeFullMyOA.addEventListener('click', () => showToast('已在协作群内 @ 相关人 · MyOA 当前节点审批人已收到提醒'));
   }
 
-  // ============ ⑧ 模板实验 · 跳过按钮（弹窗 + 产研审批） ============
+  // ============ ⑦ 模板实验 · 跳过按钮（弹窗 + 产研审批） ============
   const btnSkipExp = document.getElementById('btnSkipExp');
   if (btnSkipExp) {
     btnSkipExp.addEventListener('click', () => showDialog('dlgSkipExp'));
@@ -841,15 +645,6 @@
     });
   }
 
-  // ============ Step 1 · 模板来源 Tab 切换 ============
-  document.querySelectorAll('#pipelineDrawer .src-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      const key = tab.dataset.srctab;
-      document.querySelectorAll('#pipelineDrawer .src-tab').forEach(t => t.classList.toggle('active', t === tab));
-      document.querySelectorAll('#pipelineDrawer .src-pane').forEach(p => p.classList.toggle('active', p.dataset.srcpane === key));
-    });
-  });
-
   // ============ Step 2 · 设计 Agent Tab 切换（D2C / C2D2C）============
   document.querySelectorAll('#pipelineDrawer .da-tab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -863,5 +658,40 @@
   document.querySelectorAll('#pipelineDrawer [data-jump-step]').forEach(b => {
     b.addEventListener('click', () => activateStep(b.dataset.jumpStep));
   });
+
+  // ============ Step 1 · 一键拉协作群 ============
+  const btnInviteIM = document.getElementById('btnInviteIM');
+  if (btnInviteIM) {
+    btnInviteIM.addEventListener('click', () => {
+      btnInviteIM.disabled = true;
+      btnInviteIM.textContent = '✓ 协作群已建';
+      const tip = document.getElementById('imGroupTip');
+      if (tip) tip.innerHTML = '群名：<b>【模板1003638】夏日冰镇风开屏 · 协作群</b> · 已邀请 产品 / 设计 / 研发 / 测试 / 运营 5 位';
+      showToast('已创建协作群「【模板1003638】夏日冰镇风开屏 · 协作群」');
+    });
+  }
+
+  // ============ Step 6 · adata Tab 切换（昨天 / 前 3 天 / 前 7 天）============
+  const adataTabs = document.getElementById('adataTabs');
+  if (adataTabs) {
+    const adataSamples = {
+      d1: { cost: '¥18.4w', ctr: '9.62%',  cvr: '20.18%', imp: '486w',   ecpm: '¥37.9' },
+      d3: { cost: '¥54.2w', ctr: '9.71%',  cvr: '20.06%', imp: '1,432w', ecpm: '¥37.8' },
+      d7: { cost: '¥126.8w',ctr: '9.62%',  cvr: '20.18%', imp: '3,402w', ecpm: '¥37.9' }
+    };
+    adataTabs.querySelectorAll('.subtab').forEach(t => {
+      t.addEventListener('click', () => {
+        adataTabs.querySelectorAll('.subtab').forEach(x => x.classList.toggle('active', x === t));
+        const key = t.dataset.adataTab;
+        const d = adataSamples[key] || adataSamples.d1;
+        const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+        set('adataCost', d.cost);
+        set('adataCtr',  d.ctr);
+        set('adataCvr',  d.cvr);
+        set('adataImp',  d.imp);
+        set('adataEcpm', d.ecpm);
+      });
+    });
+  }
 
 })();

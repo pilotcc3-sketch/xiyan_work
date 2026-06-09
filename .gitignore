@@ -1,4 +1,15 @@
+# macOS
 .DS_Store
+
+# Node
 node_modules/
 *.log
+
+# CodeBuddy
 .codebuddy/
+
+# 内部业务文档（不推送到公开仓）
+需求-*.md
+TAPD-*.md
+TAPD-*.html
+TAPD-*.txt
