@@ -299,11 +299,12 @@
         <div class="pf-node" id="l2Step3" data-step="3" data-track="L2" data-toast="草稿版本-测试中"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
         <span class="pf-conn pf-conn-l2" data-idx="l2-3"><em class="pf-time">17h55m</em></span>
         <div class="pf-node pf-bridge" id="l2Step4" data-step="4" data-track="bridge" data-toast="草稿版本-发布覆盖中" title="④ 草稿发布通过 → 物理覆盖 L1 主干，不留底、不可回滚">
-          <span class="pf-tag pf-tag-bridge">↗ 草稿版本发布后，将覆盖当前已发布版本</span>
           <span class="step-no pf-no-bridge">4</span>
           <span class="step-name pf-name-bridge">草稿发布⚡</span>
         </div>
         <span class="pf-conn pf-conn-bridge" data-idx="l2-4"></span>
+        <!-- L2 行下方覆盖提示：仅在 L2 有草稿（editing / published）时显示 -->
+        <span class="pf-l2-cover-hint">↗ 草稿版本发布后，将覆盖当前已发布版本</span>
       </div>
     </div>
 
@@ -561,10 +562,27 @@
         font-size: 10px; padding: 1px 7px; border-radius: 8px; white-space: nowrap;
       }
       .pf-tag-fork { color: #8a5a14; background: #fff7ec; border: 1px solid #f5c98a; }
-      .pf-tag-bridge {
+      .pf-tag-bridge { color: #fff; background: #e8821a; border: 1px solid #e8821a; }
+
+      /* L2 行下方覆盖提示条：仅在有草稿版本时（editing/published）显示
+         位置：L2 行下方居中，挂在 .pf-l2-row 上 */
+      .pf-l2-cover-hint {
+        position: absolute;
+        left: 50%; transform: translateX(-50%);
+        top: 100%; margin-top: 6px;
+        padding: 3px 10px;
+        font-size: 11px; line-height: 1.3;
         color: #fff; background: #e8821a; border: 1px solid #e8821a;
-        max-width: 220px; white-space: normal; line-height: 1.3; text-align: center;
-        top: auto; bottom: calc(100% + 4px);
+        border-radius: 10px;
+        white-space: nowrap;
+        z-index: 4;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .2s ease;
+      }
+      .pipeline-fork[data-l2-state="editing"] .pf-l2-cover-hint,
+      .pipeline-fork[data-l2-state="published"] .pf-l2-cover-hint {
+        opacity: 1;
       }
 
       /* 连接线 */
