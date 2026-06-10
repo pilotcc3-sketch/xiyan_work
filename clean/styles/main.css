@@ -415,12 +415,7 @@ input { font-family: inherit; }
 .wecom-btn.ghost { background: var(--color-bg); color: var(--color-text-2); }
 .wecom-foot { padding: var(--sp-3); background: var(--color-bg); color: var(--color-text-3); font-size: var(--fs-cap); text-align: center; }
 
-.step-nav { display: flex; gap: var(--sp-2); margin-top: var(--sp-3); justify-content: flex-end; }
-.step-nav-btn {
-  padding: 6px 14px; border-radius: var(--radius-pill);
-  border: 1px dashed var(--color-border); font-size: var(--fs-cap); color: var(--color-text-2);
-}
-.step-nav-btn:hover { border-color: var(--color-primary); color: var(--color-primary); border-style: solid; }
+/* .step-nav / .step-nav-btn 已下线（顶部跳转条移除） */
 
 /* ================ Sidebar ================ */
 .sidebar {

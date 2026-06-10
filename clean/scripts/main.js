@@ -503,9 +503,6 @@
   document.querySelectorAll('#pipelineDrawer .step').forEach(s => {
     s.addEventListener('click', () => activateStep(s.dataset.step));
   });
-  document.querySelectorAll('#pipelineDrawer .step-nav-btn').forEach(b => {
-    b.addEventListener('click', () => activateStep(b.dataset.jump));
-  });
 
   function inferStepFromRow(row) {
     if (!row) return '2';
@@ -785,10 +782,7 @@
     });
   });
 
-  // ============ 步骤内跳转（data-jump-step）============
-  document.querySelectorAll('#pipelineDrawer [data-jump-step]').forEach(b => {
-    b.addEventListener('click', () => activateStep(b.dataset.jumpStep));
-  });
+  // ============ 步骤内跳转 data-jump-step 已下线（环节流转改为达到条件自动推进 + 节点直接交互） ============
 
   // ============ Step 1 · 一键拉协作群 ============
   const btnInviteIM = document.getElementById('btnInviteIM');

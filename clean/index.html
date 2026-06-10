@@ -1204,27 +1204,15 @@
             activateNode(n.dataset.step);
           });
         });
-        // 兼容外部 jump 按钮（DOM ready 后再绑定，因为按钮分布在下方各 step-content 内）
-        function bindJumpBtns() {
-          document.querySelectorAll('#pipelineDrawer [data-jump-step], #pipelineDrawer .step-nav-btn').forEach(b => {
-            if (b._pfBound) return;
-            b._pfBound = true;
-            b.addEventListener('click', () => {
-              const target = b.dataset.jumpStep || b.dataset.jump;
-              if (target) activateNode(target);
-            });
-          });
-        }
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', () => {
-            bindJumpBtns();
-            const initial = document.querySelector('#pipelineDrawer .step-content.active');
-            if (initial) activateNode(initial.dataset.stepContent);
-          });
-        } else {
-          bindJumpBtns();
+        // jump 按钮已下线：环节流转改为达到条件自动推进 + 节点直接交互
+        function initActivePane() {
           const initial = document.querySelector('#pipelineDrawer .step-content.active');
           if (initial) activateNode(initial.dataset.stepContent);
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initActivePane);
+        } else {
+          initActivePane();
         }
       })();
 
@@ -1418,13 +1406,6 @@
         </div>
 
         <!-- D. 走查面板（已下线，统一收口到「成绩单」环节） -->
-
-        <div class="step-foot">
-          <button class="btn-ghost" data-jump-step="1">⟵ 返回 ① 模板创建</button>
-          <div class="step-foot-actions">
-            <button class="btn-primary" data-jump-step="3">前往 ③ 模板测试 ⟶</button>
-          </div>
-        </div>
       </div>
 
       <!-- Step 4 · 模板草稿发布（弹窗 备注+审批节点 → MyOA） -->
@@ -1467,10 +1448,7 @@
           </div>
         </div>
 
-        <div class="step-foot">
-          <button class="btn-ghost" data-jump-step="3">⟵ 返回 ③ 模板测试</button>
-          <button class="btn-primary" data-jump-step="5">前往 ⑤ 规则配置 ⟶</button>
-        </div>
+        <div class="step-foot" style="display:none"></div>
       </div>
 
       <!-- Step 5 · 规则配置（重构：跳转入口 + 当前模板规则一览） -->
@@ -1539,10 +1517,6 @@
           </table>
         </div>
 
-        <div class="step-foot">
-          <button class="btn-ghost" data-jump-step="4">⟵ 返回 ④ 草稿发布</button>
-          <button class="btn-primary" data-jump-step="6">下一步 · 进入 ⑥ 模板实验 ⟶</button>
-        </div>
       </div>
 
       <!-- Step 6 · 模板实验（adata 在线数据 / 跳过需弹窗 + 产研审批） -->
@@ -1587,12 +1561,8 @@
           </div>
         </div>
 
-        <div class="step-foot">
-          <button class="btn-ghost" data-jump-step="5">⟵ 返回 ⑤ 规则配置</button>
-          <div class="step-foot-actions">
-            <button class="btn-text danger sm" id="btnSkipExp">↷ 跳过本步（需产研审批）</button>
-            <button class="btn-primary" data-jump-step="7">前往 ⑦ 全量上线 ⟶</button>
-          </div>
+        <div class="step-foot" style="justify-content:flex-end">
+          <button class="btn-text danger sm" id="btnSkipExp">↷ 跳过本步（需产研审批）</button>
         </div>
       </div>
 
@@ -1635,10 +1605,6 @@
           </div>
         </div>
 
-        <div class="step-foot">
-          <button class="btn-ghost" data-jump-step="6">⟵ 返回 ⑥ 模板实验</button>
-          <button class="btn-primary" data-jump-step="8">前往 ⑧ 成绩单 ⟶</button>
-        </div>
       </div>
 
       <!-- Step 8 · 模板成绩单（动态填充） -->
@@ -1778,7 +1744,6 @@
         <div class="step-foot">
           <button class="btn-primary sm" id="btnInviteIM">📱 一键拉协作群</button>
           <span class="muted" id="imGroupTip">默认群名：【模板1003638】夏日冰镇风开屏 · 协作群</span>
-          <button class="btn-primary" data-jump-step="2">前往 ② 模板编辑 ⟶</button>
         </div>
       </div>
 
@@ -1805,22 +1770,9 @@
           </div>
         </div>
 
-        <div class="step-foot">
-          <button class="btn-ghost" data-jump-step="2">⟵ 返回 ② 模板编辑</button>
-          <button class="btn-primary" data-jump-step="4">前往 ④ 草稿发布 ⟶</button>
-        </div>
       </div>
     </div>
 
-    <div class="step-nav">
-      <button class="step-nav-btn" data-jump="2">跳到 ② 模板编辑</button>
-      <button class="step-nav-btn" data-jump="3">跳到 ③ 模板测试</button>
-      <button class="step-nav-btn" data-jump="4">跳到 ④ 草稿发布</button>
-      <button class="step-nav-btn" data-jump="5">跳到 ⑤ 规则配置</button>
-      <button class="step-nav-btn" data-jump="6">跳到 ⑥ 模板实验</button>
-      <button class="step-nav-btn" data-jump="7">跳到 ⑦ 全量上线</button>
-      <button class="step-nav-btn" data-jump="8">跳到 ⑧ 成绩单</button>
-    </div>
   </div>
 </div>
 
