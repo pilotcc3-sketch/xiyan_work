@@ -144,6 +144,93 @@
         → ⑤⑥⑦⑧ 共用终段
       </div>
     </div>
+
+    <!-- ===== 头部右侧：版本预览按钮（弹出 V1 已发布 / V2 草稿 双 tab popover） ===== -->
+    <div class="hd-vp-wrap" id="hdVpWrap">
+      <button class="hd-vp-btn" id="hdVpBtn" type="button" aria-haspopup="dialog" aria-expanded="false">
+        <span class="hd-vp-icon">🖼</span>
+        <span class="hd-vp-label">版本预览</span>
+        <span class="hd-vp-caret">▾</span>
+      </button>
+      <!-- popover：默认隐藏，点击按钮切换 -->
+      <div class="hd-vp-pop" id="hdVpPop" role="dialog" aria-label="版本预览" hidden>
+        <div class="hd-vp-pop-head">
+          <div class="hd-vp-tabs" role="tablist">
+            <button type="button" class="hd-vp-tab is-active" data-vp-tab="v1" role="tab" aria-selected="true">
+              <span class="hd-vp-tab-dot" style="background:#23a567"></span>
+              已发布样式 <b>V1</b>
+            </button>
+            <button type="button" class="hd-vp-tab" data-vp-tab="v2" role="tab" aria-selected="false">
+              <span class="hd-vp-tab-dot" style="background:#3370ff"></span>
+              草稿页样式 <b>V2</b>
+              <span class="hd-vp-tab-empty" id="hdVpV2Empty" hidden>· 暂无</span>
+            </button>
+          </div>
+          <button type="button" class="hd-vp-close" id="hdVpClose" aria-label="关闭">✕</button>
+        </div>
+
+        <!-- V1 面板：已发布版本（线上有效），渲染 UI 复用 ②模板编辑环节的"夏日冰镇风"画面 -->
+        <div class="hd-vp-panel is-active" data-vp-panel="v1">
+          <div class="hd-vp-meta">
+            <span class="hd-vp-meta-tag" style="color:#23a567;border-color:#b7e0c8;background:#eaf7f0">🚀 已发布 · 全量在跑</span>
+            <span class="hd-vp-meta-id">模板ID 1003638 · v1</span>
+            <span class="hd-vp-meta-time">发布于 6/3 16:42</span>
+          </div>
+          <div class="hd-vp-body">
+            <!-- 手机预览缩略（与 ②模板编辑 同款 placeholder 渲染，缩比） -->
+            <div class="hd-vp-phone">
+              <div class="hd-vp-screen">
+                <div class="ph-rect" style="top:6%;left:8%;width:84%;height:42%;background:linear-gradient(135deg,#a8edea,#fed6e3);border-radius:14px;"></div>
+                <div class="ph-text" style="top:52%;left:8%;font-size:18px;font-weight:600;color:#1a1a1a;">夏日冰镇风</div>
+                <div class="ph-text" style="top:60%;left:8%;font-size:11px;color:#666;">超值清凉 · 限时下单</div>
+                <div class="ph-btn" style="top:78%;left:8%;width:104px;height:32px;border-radius:16px;background:#3370FF;color:#fff;font-size:12px;">立即查看</div>
+              </div>
+            </div>
+            <div class="hd-vp-info">
+              <div class="hd-vp-info-row"><span class="hd-vp-info-k">版本</span><span class="hd-vp-info-v">v1（线上当前生效）</span></div>
+              <div class="hd-vp-info-row"><span class="hd-vp-info-k">基础机型</span><span class="hd-vp-info-v">iPhone 14 Pro · 1179×2556</span></div>
+              <div class="hd-vp-info-row"><span class="hd-vp-info-k">最近更新</span><span class="hd-vp-info-v">6/3 16:42 · @小樊</span></div>
+              <a class="hd-vp-link" href="https://tsa.woa.com/domo-admin/union-form-editor?id=1003638&ver=v1" target="_blank" rel="noopener">📄 模板详情页（v1） ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- V2 面板：草稿页版本（idle 时显示空态，editing/published 时显示渲染） -->
+        <div class="hd-vp-panel" data-vp-panel="v2">
+          <!-- 空态（idle 默认显示） -->
+          <div class="hd-vp-empty" id="hdVpV2EmptyBlock">
+            <div class="hd-vp-empty-icon">📝</div>
+            <div class="hd-vp-empty-title">暂无 V2 草稿</div>
+            <div class="hd-vp-empty-sub">点击 L2 行的【② 模板编辑】拉起 V2 新版本草稿</div>
+          </div>
+          <!-- 有草稿时（editing/published）显示，由 JS 切换 -->
+          <div class="hd-vp-meta" id="hdVpV2MetaBlock" hidden>
+            <span class="hd-vp-meta-tag" style="color:#3370ff;border-color:#b9d0ff;background:#eaf1ff">📝 草稿编辑中</span>
+            <span class="hd-vp-meta-id">模板ID 1003638 · v2</span>
+            <span class="hd-vp-meta-time">最近编辑：刚刚 · @小樊</span>
+          </div>
+          <div class="hd-vp-body" id="hdVpV2BodyBlock" hidden>
+            <div class="hd-vp-phone">
+              <div class="hd-vp-screen">
+                <!-- v2 草稿稍作差异化：换主色 + 文案微调，体现"在编版本" -->
+                <div class="ph-rect" style="top:6%;left:8%;width:84%;height:42%;background:linear-gradient(135deg,#fde9b9,#fbc2eb);border-radius:14px;"></div>
+                <div class="ph-text" style="top:52%;left:8%;font-size:18px;font-weight:600;color:#1a1a1a;">夏日冰镇风 · 新</div>
+                <div class="ph-text" style="top:60%;left:8%;font-size:11px;color:#666;">冰爽升级 · 立享福利</div>
+                <div class="ph-btn" style="top:78%;left:8%;width:104px;height:32px;border-radius:16px;background:#e8821a;color:#fff;font-size:12px;">立即领取</div>
+              </div>
+              <div class="hd-vp-phone-tag">DRAFT</div>
+            </div>
+            <div class="hd-vp-info">
+              <div class="hd-vp-info-row"><span class="hd-vp-info-k">版本</span><span class="hd-vp-info-v">v2（草稿，未发布）</span></div>
+              <div class="hd-vp-info-row"><span class="hd-vp-info-k">基础机型</span><span class="hd-vp-info-v">iPhone 14 Pro · 1179×2556</span></div>
+              <div class="hd-vp-info-row"><span class="hd-vp-info-k">基于</span><span class="hd-vp-info-v">v1 fork（6/3 16:42）</span></div>
+              <a class="hd-vp-link" href="https://tsa.woa.com/domo-admin/union-form-editor?id=1003638&ver=v2&draft=1" target="_blank" rel="noopener">📄 模板详情页（v2 草稿） ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="side-drawer-close" data-close="pipeline">✕</div>
   </div>
   <div class="side-drawer-body">
@@ -598,6 +685,225 @@
         border: 6px solid transparent;
         border-top-color: #f5b81c;
       }
+
+      /* ============================================================
+         头部右侧：版本预览按钮 + popover（V1 已发布 / V2 草稿 双 tab）
+         ============================================================ */
+      .hd-vp-wrap {
+        position: relative;
+        margin-left: auto;
+        margin-right: 16px;
+        align-self: center;
+      }
+      .hd-vp-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        font-size: 13px;
+        line-height: 1;
+        color: #1d2129;
+        background: #fff;
+        border: 1px solid #d6dbe4;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all .15s ease;
+        white-space: nowrap;
+      }
+      .hd-vp-btn:hover {
+        border-color: #3370ff;
+        color: #3370ff;
+        box-shadow: 0 2px 8px rgba(51, 112, 255, 0.12);
+      }
+      .hd-vp-btn .hd-vp-icon { font-size: 14px; }
+      .hd-vp-btn .hd-vp-caret { font-size: 10px; color: #8a93a6; transition: transform .15s; }
+      .hd-vp-btn[aria-expanded="true"] {
+        border-color: #3370ff;
+        color: #3370ff;
+        background: #f0f5ff;
+      }
+      .hd-vp-btn[aria-expanded="true"] .hd-vp-caret { transform: rotate(180deg); }
+
+      .hd-vp-pop {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        width: 520px;
+        max-width: calc(100vw - 80px);
+        background: #fff;
+        border: 1px solid #e0e4ec;
+        border-radius: 10px;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
+        z-index: 50;
+        animation: hdVpPopIn .18s ease-out;
+      }
+      .hd-vp-pop[hidden] { display: none; }
+      @keyframes hdVpPopIn {
+        from { opacity: 0; transform: translateY(-4px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      .hd-vp-pop-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 8px 0 12px;
+        border-bottom: 1px solid #ebedf0;
+      }
+      .hd-vp-tabs { display: flex; gap: 4px; }
+      .hd-vp-tab {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 12px 10px;
+        font-size: 13px;
+        color: #4e5969;
+        background: transparent;
+        border: 0;
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+        transition: color .15s, border-color .15s;
+        margin-bottom: -1px;
+      }
+      .hd-vp-tab:hover { color: #1d2129; }
+      .hd-vp-tab.is-active {
+        color: #1d2129;
+        font-weight: 600;
+        border-bottom-color: #3370ff;
+      }
+      .hd-vp-tab b { color: inherit; font-weight: 700; }
+      .hd-vp-tab-dot {
+        display: inline-block;
+        width: 6px; height: 6px;
+        border-radius: 50%;
+      }
+      .hd-vp-tab-empty { font-size: 11px; color: #a8aebb; font-weight: 400; }
+      .hd-vp-close {
+        background: transparent;
+        border: 0;
+        color: #8a93a6;
+        font-size: 14px;
+        padding: 4px 8px;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+      .hd-vp-close:hover { background: rgba(0,0,0,0.05); color: #1d2129; }
+
+      .hd-vp-panel { display: none; padding: 14px 16px 16px; }
+      .hd-vp-panel.is-active { display: block; }
+
+      .hd-vp-meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 12px;
+        color: #4e5969;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .hd-vp-meta-tag {
+        font-size: 11px;
+        padding: 2px 8px;
+        border: 1px solid;
+        border-radius: 10px;
+        font-weight: 500;
+      }
+      .hd-vp-meta-id { color: #1d2129; font-weight: 500; }
+      .hd-vp-meta-time { color: #8a93a6; }
+
+      .hd-vp-body {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 16px;
+        align-items: start;
+      }
+      .hd-vp-phone {
+        position: relative;
+        width: 160px;
+        height: 320px;
+        background: #1d2129;
+        border-radius: 22px;
+        padding: 8px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+      }
+      .hd-vp-screen {
+        position: relative;
+        width: 100%; height: 100%;
+        background: #fff;
+        border-radius: 14px;
+        overflow: hidden;
+      }
+      .hd-vp-screen .ph-rect,
+      .hd-vp-screen .ph-text,
+      .hd-vp-screen .ph-btn {
+        position: absolute;
+      }
+      .hd-vp-screen .ph-text { white-space: nowrap; }
+      .hd-vp-screen .ph-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+      }
+      .hd-vp-phone-tag {
+        position: absolute;
+        top: 10px; right: 10px;
+        padding: 2px 6px;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: #fff;
+        background: #e8821a;
+        border-radius: 3px;
+        z-index: 2;
+      }
+
+      .hd-vp-info {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-top: 4px;
+      }
+      .hd-vp-info-row {
+        display: flex;
+        font-size: 12px;
+        gap: 10px;
+      }
+      .hd-vp-info-k {
+        flex: 0 0 56px;
+        color: #8a93a6;
+      }
+      .hd-vp-info-v { color: #1d2129; flex: 1; }
+      .hd-vp-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 6px;
+        padding: 6px 10px;
+        font-size: 12px;
+        color: #3370ff;
+        background: #f0f5ff;
+        border: 1px solid #b9d0ff;
+        border-radius: 4px;
+        text-decoration: none;
+        align-self: flex-start;
+        transition: all .15s;
+      }
+      .hd-vp-link:hover {
+        background: #3370ff;
+        color: #fff;
+        border-color: #3370ff;
+      }
+
+      /* V2 空态 */
+      .hd-vp-empty {
+        text-align: center;
+        padding: 40px 20px 32px;
+        color: #8a93a6;
+      }
+      .hd-vp-empty-icon { font-size: 32px; margin-bottom: 8px; }
+      .hd-vp-empty-title { font-size: 14px; font-weight: 600; color: #4e5969; margin-bottom: 4px; }
+      .hd-vp-empty-sub { font-size: 12px; }
     </style>
 
     <!-- L2 支线状态切换 -->
@@ -818,6 +1124,90 @@
           const initial = document.querySelector('#pipelineDrawer .step-content.active');
           if (initial) activateNode(initial.dataset.stepContent);
         }
+      })();
+
+      // ============================================================
+      // 头部「版本预览」按钮：弹出 V1 / V2 双 tab popover
+      // ============================================================
+      (function () {
+        var btn   = document.getElementById('hdVpBtn');
+        var pop   = document.getElementById('hdVpPop');
+        var close = document.getElementById('hdVpClose');
+        var wrap  = document.getElementById('hdVpWrap');
+        if (!btn || !pop) return;
+
+        var fork = document.querySelector('.pipeline-fork');
+        var v2EmptyTag   = document.getElementById('hdVpV2Empty');        // tab 上的"暂无"小灰字
+        var v2EmptyBlock = document.getElementById('hdVpV2EmptyBlock');   // 空态大块
+        var v2MetaBlock  = document.getElementById('hdVpV2MetaBlock');    // 有草稿时的 meta 行
+        var v2BodyBlock  = document.getElementById('hdVpV2BodyBlock');    // 有草稿时的渲染区
+
+        function syncV2State() {
+          if (!fork) return;
+          var hasDraft = fork.getAttribute('data-l2-state') === 'editing'
+                      || fork.getAttribute('data-l2-state') === 'published';
+          if (v2EmptyTag)   v2EmptyTag.hidden   = hasDraft;
+          if (v2EmptyBlock) v2EmptyBlock.hidden = hasDraft;
+          if (v2MetaBlock)  v2MetaBlock.hidden  = !hasDraft;
+          if (v2BodyBlock)  v2BodyBlock.hidden  = !hasDraft;
+        }
+
+        function openPop() {
+          syncV2State();
+          pop.hidden = false;
+          btn.setAttribute('aria-expanded', 'true');
+          // 延后一帧再绑定外部关闭，避免本次点击直接被命中
+          setTimeout(function () {
+            document.addEventListener('mousedown', onOutside);
+          }, 0);
+        }
+        function closePop() {
+          pop.hidden = true;
+          btn.setAttribute('aria-expanded', 'false');
+          document.removeEventListener('mousedown', onOutside);
+        }
+        function togglePop() {
+          if (pop.hidden) openPop(); else closePop();
+        }
+        function onOutside(e) {
+          if (!wrap.contains(e.target)) closePop();
+        }
+
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          togglePop();
+        });
+        if (close) close.addEventListener('click', closePop);
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !pop.hidden) closePop();
+        });
+
+        // tab 切换
+        var tabs   = pop.querySelectorAll('.hd-vp-tab');
+        var panels = pop.querySelectorAll('.hd-vp-panel');
+        tabs.forEach(function (tab) {
+          tab.addEventListener('click', function () {
+            var key = tab.getAttribute('data-vp-tab');
+            tabs.forEach(function (t) {
+              var active = t === tab;
+              t.classList.toggle('is-active', active);
+              t.setAttribute('aria-selected', active ? 'true' : 'false');
+            });
+            panels.forEach(function (p) {
+              p.classList.toggle('is-active', p.getAttribute('data-vp-panel') === key);
+            });
+          });
+        });
+
+        // 监听流水线状态变化，自动同步 V2 面板可见性
+        if (fork && window.MutationObserver) {
+          new MutationObserver(syncV2State).observe(fork, {
+            attributes: true,
+            attributeFilter: ['data-l2-state', 'data-l1-archived']
+          });
+        }
+        // 初始化一次
+        syncV2State();
       })();
     </script>
 
