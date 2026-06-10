@@ -344,8 +344,16 @@
     renderStepGapTimes();
 
     // ===== 新版 Pipeline Fork（.pf-node）状态同步 =====
-    // 规则：< current → done(绿实底已走过) / = current → current(蓝光晕停留) / > current → todo(灰)
-    // L2 行的状态另外由 data-l2-state 控制（idle 时整行置灰），这里只刷 L1 + 共用段
+    // 三轨道 + 双状态机联动：
+    //   ① 共用起点              永远 done
+    //   L1 行 ②③④（v1）          data-l1-archived=false → 按 current/done/todo 渲染
+    //                            data-l1-archived=true  → 整行灰，节点不参与正向标记
+    //   L2 行 ②③④（v2）          data-l2-state=editing  → 按 current/done/todo 渲染
+    //                            data-l2-state=idle/published → 整行灰
+    //   ⑤⑥⑦⑧ 共用尾段           按 current/done/todo 渲染（L1 / L2 都共用）
+    const stepperEl = document.querySelector('#pipelineDrawer .pipeline-fork');
+    const l1Archived = stepperEl ? stepperEl.getAttribute('data-l1-archived') === 'true' : false;
+    const l2State = stepperEl ? (stepperEl.getAttribute('data-l2-state') || 'idle') : 'idle';
     const pfNodes = document.querySelectorAll('#pipelineDrawer .pipeline-fork .pf-node[data-step]');
     pfNodes.forEach(node => {
       const n = parseInt(node.dataset.step, 10);
@@ -353,15 +361,22 @@
       // 清旧
       node.classList.remove('pf-current', 'pf-todo');
       if (numEl) numEl.classList.remove('done', 'current');
-      // L2 行节点：当 data-l2-state=idle 时整行已置灰，不参与正向 done/current 标记
-      const isL2 = node.dataset.track === 'L2' || node.dataset.track === 'bridge';
-      const stepper = document.querySelector('#pipelineDrawer .pipeline-fork');
-      const l2State = stepper ? stepper.getAttribute('data-l2-state') : 'idle';
-      if (isL2 && l2State === 'idle') {
-        // L2 闲置：节点保持默认灰底（不加 done 也不加 current）
+
+      const track = node.dataset.track; // 'L1' | 'L2' | 'bridge' | undefined(共用)
+      const isL1Mid = track === 'L1' && n >= 2 && n <= 4;
+      const isL2Mid = (track === 'L2' || track === 'bridge') && n >= 2 && n <= 4;
+
+      // L1 已归档：L1 中段 ②③④ 整行灰，不参与 done/current
+      if (isL1Mid && l1Archived) {
         node.classList.add('pf-todo');
         return;
       }
+      // L2 不在 editing 态：L2 中段 ②③④ 灰
+      if (isL2Mid && l2State !== 'editing') {
+        node.classList.add('pf-todo');
+        return;
+      }
+      // 其余按 current 比较渲染
       if (n < current) {
         if (numEl) numEl.classList.add('done');
       } else if (n === current) {
@@ -371,16 +386,16 @@
         node.classList.add('pf-todo');
       }
     });
-    // 连线状态：.pf-conn 紧邻一个或多个 .pf-node，用"右侧节点 step"判断
-    // 简化策略：每根 .pf-conn 看它后面紧挨的 .pf-node 的 step，如果 step > current → 灰虚线
+    // 连线状态：用"右侧节点是否高亮（done/current）"判定，否则灰虚线
     document.querySelectorAll('#pipelineDrawer .pipeline-fork .pf-conn').forEach(conn => {
       let right = conn.nextElementSibling;
-      // 跳过非节点元素
       while (right && !right.classList.contains('pf-node')) right = right.nextElementSibling;
       conn.classList.remove('pf-conn-todo');
       if (right && right.dataset.step) {
-        const rn = parseInt(right.dataset.step, 10);
-        if (rn > current) conn.classList.add('pf-conn-todo');
+        // 灰：右侧节点是 pf-todo（含归档行 / L2 idle / 未来环节）
+        if (right.classList.contains('pf-todo')) {
+          conn.classList.add('pf-conn-todo');
+        }
       }
     });
   }

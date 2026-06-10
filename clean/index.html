@@ -160,7 +160,17 @@
       · 判断标准：是否存在"未合并的 L2 草稿"，有就 editing，没有就 idle
       默认进入抽屉 = A 稳态 = idle
     -->
-    <div class="pipeline-fork" data-l2-state="idle">
+    <!--
+      流水线状态模型（v3，三态联动）：
+      · data-l1-archived  : "false"(L1 在跑) / "true"(L1 ④ 已草稿发布 → ②③④ 置灰归档为 v1)
+      · data-l2-state     : idle(L2 灰待启动) / editing(L2 在跑 v2) / published(L2 ④ 通过瞬时覆盖动画)
+      · 联动规则：
+        初始        L1=running          L2=idle      → L1 ②③④ 高亮、L2 ②③④ 灰
+        L1 ④发布   L1=archived(true)   L2=idle      → 上下两行都灰，引导新建 L2 草稿
+        L2 编辑    L1=archived(true)   L2=editing   → L1 仍灰，L2 ②③④ 高亮跑流程
+        L2 ④发布   L1=archived(true)   L2=published → 1.2s 覆盖动画 → 回 idle，等下一次拉草稿
+    -->
+    <div class="pipeline-fork" data-l2-state="idle" data-l1-archived="false">
 
       <!-- ① 共用起点 -->
       <div class="pf-node pf-start" data-step="1">
@@ -169,13 +179,14 @@
         <span class="step-name">模板创建</span>
       </div>
 
-      <!-- 中段：上下两路 ②③④ -->
+      <!-- 中段：上下两路 ②③④（v1 / v2 两个版本） -->
       <div class="pf-mid">
 
-        <!-- 上路：主干历史（绿色） -->
-        <!-- 节点状态由 JS activateStep() 动态控制：< current → done(蓝实底) / = current → current(蓝光晕) / > current → todo(灰底) -->
-        <div class="pf-row pf-row-l1">
-          <span class="pf-row-tag pf-row-tag-l1">🚀 主干历史 · 已发布走过的路</span>
+        <!-- 上路：L1 = v1 当前线上版本 -->
+        <!-- 节点状态由 JS activateStep() 动态控制：< current → done(绿实底已走过) / = current → current(蓝光晕停留) / > current → todo(灰底) -->
+        <!-- L1 ④ 草稿发布完成后 → data-l1-archived=true → 整行置灰归档 -->
+        <div class="pf-row pf-row-l1" id="l1RowEl">
+          <span class="pf-row-tag pf-row-tag-l1" id="l1BranchTag">🚀 L1 主线 · v1 进行中</span>
           <div class="pf-row-track">
             <span class="pf-conn pf-conn-l1"><em class="pf-time">1h30m</em></span>
             <div class="pf-node" data-step="2" data-track="L1"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
@@ -187,9 +198,9 @@
           </div>
         </div>
 
-        <!-- 下路：L2 支线（蓝色 → 末端橙色覆盖） -->
+        <!-- 下路：L2 = v2 草稿支线（编辑中 → 蓝；④ 发布瞬间 → 末端橙色覆盖） -->
         <div class="pf-row pf-row-l2" id="l2RowEl">
-          <span class="pf-row-tag pf-row-tag-l2" id="l2BranchTag">📝 L2 支线 · 暂无草稿</span>
+          <span class="pf-row-tag pf-row-tag-l2" id="l2BranchTag">📝 L2 支线 · v2 暂无草稿</span>
           <div class="pf-row-track">
             <span class="pf-conn pf-conn-l2"><em class="pf-time">1h30m</em></span>
             <div class="pf-node" id="l2Step2" data-step="2" data-track="L2"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
@@ -218,11 +229,11 @@
       </div>
     </div>
 
-    <!-- 流水线下方：L2 支线状态说明 -->
+    <!-- 流水线下方：L1 / L2 双线状态说明 -->
     <div id="l2StatusBadge" style="margin-top:14px;padding:10px 14px;font-size:12px;background:#f5f7fa;border:1px solid #e0e4ec;border-radius:6px;display:flex;align-items:center;gap:10px">
-      <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#c4cad6;flex:0 0 auto"></span>
-      <span id="l2StatusText" style="color:#8a93a6;font-weight:500">💤 L2 支线 · 当前无人编辑 v2（支线空闲，可点「新建草稿」拉起）</span>
-      <span style="margin-left:auto;font-size:11px;color:#8a93a6">L1 上行永远亮 · L2 在没人编辑或新版上线后自动置灰</span>
+      <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#23a567;flex:0 0 auto"></span>
+      <span id="l2StatusText" style="color:#23a567;font-weight:500">🚀 L1 主线 · v1 流转中（②模板编辑 → ③测试 → ④草稿发布）</span>
+      <span style="margin-left:auto;font-size:11px;color:#8a93a6">L1 ④ 发布完 → ②③④ 归档置灰 · L2 拉草稿启动 v2 → 覆盖 L1 后 L2 也置灰</span>
     </div>
 
     <style>
@@ -346,10 +357,26 @@
       .pf-tail .pf-conn { min-width: 36px; max-width: 56px; }
 
       /* ===========================================================
-         L2 状态切换 · 核心规则
-         - L1 上行永远亮（绿），永不置灰，无任何 data-l2-state 选择器作用于 .pf-row-l1
-         - L2 下行随 data-l2-state 在 idle / editing / published 间切换
+         L1 / L2 双线状态切换 · 核心规则
+         - 初始：L1 在跑（绿/蓝高亮），L2 idle 灰
+         - L1 ④ 草稿发布后：data-l1-archived="true" → L1 ②③④ 整行置灰归档
+         - L2 editing：L2 ②③④ 高亮跑流程
+         - L2 ④ 发布：published 瞬时态触发覆盖动画 → 回 idle
          =========================================================== */
+
+      /* L1 已归档（草稿发布完成） · L1 主线整行置灰 */
+      .pipeline-fork[data-l1-archived="true"] .pf-row-l1 {
+        opacity: 0.5;
+        filter: grayscale(0.8);
+      }
+      .pipeline-fork[data-l1-archived="true"] .pf-row-l1 .pf-node { cursor: not-allowed; }
+      .pipeline-fork[data-l1-archived="true"] .pf-row-l1 .pf-node:hover { transform: none; }
+      .pipeline-fork[data-l1-archived="true"] .pf-row-l1 .pf-node:hover::after {
+        content: "v1 已归档，新一轮请走 L2";
+        position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+        margin-top: 6px; padding: 3px 8px; font-size: 11px; color: #fff;
+        background: #4a4f5c; border-radius: 4px; white-space: nowrap; z-index: 10;
+      }
 
       /* idle / published：L2 支线整行置灰（节点圆圈 / 文字 / 连线 / row 标签） */
       .pipeline-fork[data-l2-state="idle"] .pf-row-l2,
@@ -394,20 +421,20 @@
         // ----- 状态视觉应用 -----
         function apply() {
           const state = stepper.getAttribute('data-l2-state') || 'idle';
+          const l1Archived = stepper.getAttribute('data-l1-archived') === 'true';
           if (state === 'editing') {
-            // B 状态：L2 行变亮、顺序流转，L2 ② 当前激活
+            // L2 v2 草稿在编辑
             dot.style.background = '#3370ff';
             dot.style.animation = 'l2Pulse 1.6s infinite';
             text.textContent = '📝 L2 支线 · @小樊 正在编辑 v2 草稿（②模板编辑 进行中）';
             text.style.color = '#3370ff';
             badge.style.background = '#f5f9ff';
             badge.style.borderColor = '#d8e3ff';
-            if (tag) tag.textContent = '📝 L2 支线 · 当前在编辑的那一份';
-            // L2 ② 节点高亮为当前激活
+            if (tag) tag.textContent = '📝 L2 支线 · v2 编辑中';
             const l2s2 = document.getElementById('l2Step2');
             if (l2s2) l2s2.classList.add('pf-active');
           } else if (state === 'published') {
-            // C 瞬时态：覆盖动画播放中（~1.2s），文案表达"刚发布、马上灰回去"
+            // L2 ④ 覆盖瞬时态（~1.2s）
             dot.style.background = '#e8821a';
             dot.style.animation = 'none';
             text.textContent = '⚡ L2 ④ 审批通过 · 内容正在覆盖 L1 主干（v1 → v2）';
@@ -415,26 +442,34 @@
             badge.style.background = '#fff7ec';
             badge.style.borderColor = '#f5c98a';
             if (tag) tag.textContent = '⚡ L2 → L1 覆盖中';
-            // 1.5s 后自动回 idle（瞬时态不是稳态）
             setTimeout(() => {
               if (stepper.getAttribute('data-l2-state') === 'published') {
                 stepper.setAttribute('data-l2-state', 'idle');
                 apply();
               }
             }, 1500);
-          } else {
-            // A 状态（idle，默认稳态）：L2 ②③④ 置灰、无草稿
+          } else if (l1Archived) {
+            // L1 已归档但 L2 还没拉起（中间态：上下两行都灰，引导新建）
             dot.style.background = '#c4cad6';
             dot.style.animation = 'none';
-            text.textContent = '💤 L2 支线 · 当前无人编辑 v2（支线空闲，可点「新建草稿」拉起）';
+            text.textContent = '🗂 L1 v1 已归档 · L2 v2 暂无草稿（点 L2 行 ② 拉起新草稿）';
             text.style.color = '#8a93a6';
             badge.style.background = '#f5f7fa';
             badge.style.borderColor = '#e0e4ec';
-            if (tag) tag.textContent = '📝 L2 支线 · 暂无草稿';
-            // 清除 L2 行所有 pf-active
+            if (tag) tag.textContent = '📝 L2 支线 · v2 暂无草稿';
+            document.querySelectorAll('#l2RowEl .pf-node.pf-active').forEach(n => n.classList.remove('pf-active'));
+          } else {
+            // 默认初始：L1 在跑，L2 待启动
+            dot.style.background = '#23a567';
+            dot.style.animation = 'l2Pulse 1.6s infinite';
+            text.textContent = '🚀 L1 主线 · v1 流转中（②模板编辑 → ③测试 → ④草稿发布）';
+            text.style.color = '#23a567';
+            badge.style.background = '#f0f9f4';
+            badge.style.borderColor = '#b3dec3';
+            if (tag) tag.textContent = '📝 L2 支线 · v2 暂无草稿';
             document.querySelectorAll('#l2RowEl .pf-node.pf-active').forEach(n => n.classList.remove('pf-active'));
           }
-          // L2 状态变了 → 重刷 pf-node 的 done/current/todo（L2 行行内特殊处理）
+          // 状态变了 → 重刷 pf-node 的 done/current/todo
           if (typeof window.__activateStep === 'function') {
             const activeContent = document.querySelector('#pipelineDrawer .step-content.active');
             if (activeContent && activeContent.dataset.stepContent) {
@@ -445,10 +480,23 @@
         apply();
 
         // ----- 公开 API：状态切换 -----
-        // forkL2()  : A → B（点【模板编辑】拉起新草稿）
-        // mergeL2() : B → A（L2 ④ 审批通过 → published 瞬时态 → 1.5s 后 idle）
-        // toggleL2(): 控制台演示用，三态循环
+        // publishL1(): L1 ④ 草稿发布完成 → L1 ②③④ 整行置灰归档（v1 沉淀，等下一轮 L2）
+        // forkL2()   : 拉起 L2 v2 草稿（idle → editing）；通常在 publishL1 后再调
+        // mergeL2()  : L2 ④ 审批通过 → published 瞬时态 → 1.5s 后 idle（v2 覆盖 L1，归档为新 v1）
+        // toggleL2() : 控制台演示用，三态循环
+        window.publishL1 = function () {
+          stepper.setAttribute('data-l1-archived', 'true');
+          // 同步更新 L1 行 row-tag 文案
+          const l1Tag = document.getElementById('l1BranchTag');
+          if (l1Tag) l1Tag.textContent = '🗂 L1 主线 · v1 已归档';
+          apply();
+          return 'l1-archived';
+        };
         window.forkL2 = function () {
+          // 拉起 L2 时，若 L1 还没归档，自动同步归档（业务上 L1 必须先发布完才会拉新 v2）
+          if (stepper.getAttribute('data-l1-archived') !== 'true') {
+            window.publishL1();
+          }
           stepper.setAttribute('data-l2-state', 'editing');
           apply();
           return 'editing';
@@ -485,13 +533,28 @@
         }
         nodes.forEach(n => {
           n.addEventListener('click', (e) => {
-            // idle 态下点击 L2 行节点 → 不切面板，提示拉起草稿
             const state = stepper.getAttribute('data-l2-state') || 'idle';
+            const l1Archived = stepper.getAttribute('data-l1-archived') === 'true';
+            const isL1 = n.dataset.track === 'L1';
             const isL2 = n.dataset.track === 'L2' || n.dataset.track === 'bridge';
-            if (state === 'idle' && isL2) {
-              e.preventDefault();
-              e.stopPropagation();
-              const ok = confirm('当前 L2 支线暂无草稿，是否基于线上版本拉起一份新草稿（v2）？');
+            const stepNum = parseInt(n.dataset.step, 10);
+
+            // L1 已归档：L1 ②③④ 不可点（已沉淀历史）
+            if (isL1 && l1Archived && stepNum >= 2 && stepNum <= 4) {
+              e.preventDefault(); e.stopPropagation();
+              alert('L1 v1 已发布归档，②③④ 已沉淀。新一轮请走 L2 支线（点 L2 行的 ② 模板编辑）。');
+              return;
+            }
+            // L1 未归档：L2 行不能点（v1 还在跑，不允许并行 v2）
+            if (isL2 && !l1Archived) {
+              e.preventDefault(); e.stopPropagation();
+              alert('当前 L1 v1 还在流转中（②③④），需先完成 L1 ④ 草稿发布后，再启动 L2 v2 草稿。');
+              return;
+            }
+            // L1 已归档 + L2 idle 状态下点 L2 → 提示拉起草稿
+            if (isL2 && l1Archived && state === 'idle') {
+              e.preventDefault(); e.stopPropagation();
+              const ok = confirm('L1 v1 已归档，是否基于 v1 拉起 L2 v2 草稿？');
               if (ok) {
                 window.forkL2();
                 activateNode('2');
@@ -1161,11 +1224,33 @@
       const ioaRemark  = $('ioaResultRemarkDraft'); // 备注回填
       const tip        = $('onlineStatusTip');      // 提交按钮旁的灰字提示
       const onlineBadge= $('onlineStatusBadge');    // 模板上线状态 badge
+      const stepperEl  = document.querySelector('#pipelineDrawer .pipeline-fork');
+
+      // 当前流转线：L1 主线在跑（v1） / L2 支线在跑（v2）
+      function currentLine() {
+        if (!stepperEl) return 'L1';
+        const l1Archived = stepperEl.getAttribute('data-l1-archived') === 'true';
+        const l2State    = stepperEl.getAttribute('data-l2-state') || 'idle';
+        if (!l1Archived) return 'L1';        // 默认 L1 在跑
+        if (l2State === 'editing') return 'L2';
+        return 'L1-archived';                 // L1 已归档但 L2 还没拉起
+      }
 
       // 1) 提交上线 → 显示 MyOA 审批单卡片 + 把上线状态切到"审批中"
       if (btnSubmit) {
         btnSubmit.addEventListener('click', function () {
-          const remark = prompt('请填写本次提交上线的备注（演示用，可留空）：', '6/10 提交：开屏夏日冰镇风 v2 草稿，已自测通过');
+          const line = currentLine();
+          // L1 已归档但 L2 还没拉起 → 引导先去 ② 编辑拉草稿
+          if (line === 'L1-archived') {
+            const ok = confirm('当前 v1 已归档、L2 v2 还没人拉起编辑。是否现在拉起 v2 草稿（forkL2）？');
+            if (ok && typeof window.forkL2 === 'function') {
+              window.forkL2();
+              alert('已拉起 L2 v2 草稿，请先去【② 模板编辑】填内容、③ 测试，再回 ④ 提交上线');
+            }
+            return;
+          }
+          const versionLabel = line === 'L2' ? 'v2 草稿' : 'v1 首发';
+          const remark = prompt(`请填写本次提交上线的备注（${versionLabel}，演示用，可留空）：`, `6/10 提交：开屏夏日冰镇风 ${versionLabel}，已自测通过`);
           if (remark === null) return; // 用户取消
           if (ioaRemark) ioaRemark.textContent = remark || '—';
           if (ioaCard) ioaCard.style.display = '';
@@ -1177,44 +1262,55 @@
             onlineBadge.textContent = '审批中';
             onlineBadge.className = 'badge wait';
           }
-          if (tip) tip.textContent = 'MyOA 审批单已下发，等待测试 / 产品 / 技术 三段审批';
-          // 顺手让 L2 进入 editing 态（如果还在 idle）
-          if (typeof window.forkL2 === 'function') {
-            const stepper = document.querySelector('#pipelineDrawer .pipeline-fork');
-            if (stepper && stepper.getAttribute('data-l2-state') === 'idle') {
-              window.forkL2();
-            }
+          if (tip) tip.textContent = `MyOA 审批单已下发（${line === 'L2' ? 'L2 v2 → 覆盖 L1' : 'L1 v1 首次发布'}），等待测试 / 产品 / 技术 三段审批`;
+          // 重置审批通过按钮（重新可点）
+          if (btnApprove) {
+            btnApprove.disabled = false;
+            btnApprove.style.opacity = '';
+            btnApprove.style.cursor = '';
+            btnApprove.textContent = line === 'L2' ? '⚡ 模拟审批通过（L2 覆盖 L1）' : '⚡ 模拟审批通过（L1 草稿发布完成）';
           }
         });
       }
 
-      // 2) 模拟审批通过 → L2 ④ 触发覆盖动画 → 1.5s 后 L2 行重新置灰（mergeL2 内置）
+      // 2) 模拟审批通过：分两种场景
+      //    L1 在跑 → publishL1()：L1 ②③④ 整行置灰，等待 L2 拉起 v2
+      //    L2 在跑 → mergeL2()：L2 ④ 覆盖 L1 动画 → 1.5s 后 L2 灰
       if (btnApprove) {
         btnApprove.addEventListener('click', function () {
           if (!ioaCard || ioaCard.style.display === 'none') {
             alert('请先点【🚀 提交上线】下发 MyOA 审批单');
             return;
           }
+          const line = currentLine();
           // 审批单状态 → 已通过
           if (ioaStatus) {
             ioaStatus.textContent = '已通过';
             ioaStatus.className = 'badge ok';
           }
-          // 模板上线状态 → 已上线
-          if (onlineBadge) {
-            onlineBadge.textContent = '已上线 v2';
-            onlineBadge.className = 'badge ok';
+
+          if (line === 'L2') {
+            // L2 → L1 覆盖
+            if (onlineBadge) {
+              onlineBadge.textContent = '已上线 v2';
+              onlineBadge.className = 'badge ok';
+            }
+            if (tip) tip.textContent = '✅ 审批通过 · L2 ④ 已覆盖 L1 主干（v1 → v2），支线归档置灰';
+            if (typeof window.mergeL2 === 'function') window.mergeL2();
+            btnApprove.textContent = '✅ 已通过 · L2 已覆盖 L1';
+          } else {
+            // L1 首发完成
+            if (onlineBadge) {
+              onlineBadge.textContent = '已上线 v1';
+              onlineBadge.className = 'badge ok';
+            }
+            if (tip) tip.textContent = '✅ 审批通过 · L1 v1 首发完成 → ②③④ 已归档置灰，可点【② 模板编辑】拉起 L2 v2 草稿';
+            if (typeof window.publishL1 === 'function') window.publishL1();
+            btnApprove.textContent = '✅ L1 已发布 · ②③④ 归档';
           }
-          if (tip) tip.textContent = '✅ 审批通过 · L2 ④ 已覆盖 L1 主干（v1 → v2），支线归档置灰';
-          // 触发 L2 → L1 覆盖动画 + 自动回 idle
-          if (typeof window.mergeL2 === 'function') {
-            window.mergeL2();
-          }
-          // 按钮自身禁用，避免重复点
           btnApprove.disabled = true;
           btnApprove.style.opacity = '0.5';
           btnApprove.style.cursor = 'not-allowed';
-          btnApprove.textContent = '✅ 已通过 · 已覆盖 L1';
         });
       }
     });
