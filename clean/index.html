@@ -268,10 +268,10 @@
           <span class="step-name">模板创建</span>
         </div>
         <span class="pf-conn pf-conn-l1" data-idx="1"></span>
-        <!-- ②③④：L1 主干（已发布版本当前生效） -->
-        <div class="pf-node" data-step="2" data-track="L1" data-toast="已发布版本-编辑中"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
+        <!-- ②③④：L1 主干（已发布版本当前生效）。data-toast 已下线：主行 ①②③④ 不再显示常驻 toast 长条 -->
+        <div class="pf-node" data-step="2" data-track="L1"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
         <span class="pf-conn pf-conn-l1" data-idx="2"><em class="pf-time">17h55m</em></span>
-        <div class="pf-node" data-step="3" data-track="L1" data-toast="已发布版本-测试中"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
+        <div class="pf-node" data-step="3" data-track="L1"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
         <span class="pf-conn pf-conn-l1" data-idx="3"><em class="pf-time">17h55m</em></span>
         <div class="pf-node" data-step="4" data-track="L1"><span class="step-no">4</span><span class="step-name">草稿发布</span></div>
         <span class="pf-conn pf-conn-l1" data-idx="4"></span>
@@ -501,18 +501,7 @@
         background: #fff2e0;
         border: 1px solid #f5c98a;
       }
-      /* 主行 ①②③④ 一律不显示 toast：
-         - ① 共用起点：永久 done，标注无意义
-         - ②③④（data-track="L1"）：首次草稿发布前没有"已发布版本"概念；归档后已置灰
-         仅共用尾段 ⑤⑥⑦⑧（无 data-track 标记）保留主行 toast */
-      .pf-main-row .pf-node[data-track="L1"][data-toast]::after,
-      .pf-main-row .pf-node.pf-start[data-toast]::after,
-      .pf-main-row .pf-node[data-step="1"][data-toast]::after,
-      .pf-main-row .pf-node[data-step="2"][data-toast]::after,
-      .pf-main-row .pf-node[data-step="3"][data-toast]::after,
-      .pf-main-row .pf-node[data-step="4"][data-toast]::after {
-        display: none !important;
-      }
+      /* 主行 ①②③④ 不带 data-toast 属性 → 天然不渲染 toast；仅 ⑤⑥⑦⑧ 共用尾段保留 */
       /* L2 idle：L2 行节点不显示 toast（待启动状态没意义） */
       .pipeline-fork[data-l2-state="idle"] .pf-l2-row .pf-node[data-toast]::after {
         display: none;
