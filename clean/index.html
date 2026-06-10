@@ -791,6 +791,8 @@
 
       .hd-vp-panel { display: none; padding: 14px 16px 16px; }
       .hd-vp-panel.is-active { display: block; }
+      /* 强制：带 hidden 属性的元素一律隐藏（覆盖 display:flex/grid） */
+      .hd-vp-pop [hidden] { display: none !important; }
 
       .hd-vp-meta {
         display: flex;
