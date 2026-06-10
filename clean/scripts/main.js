@@ -321,37 +321,84 @@
     set('wecomFoot', `点击查看 · ${data.readers}`);
   }
 
-  function activateStep(no) {
-    const current = parseInt(no, 10);
-    const steps = document.querySelectorAll('#pipelineDrawer .step');
-    steps.forEach(s => {
-      const n = parseInt(s.dataset.step, 10);
-      s.classList.remove('done', 'active');
-      if (n < current) s.classList.add('done');
-      else if (n === current) s.classList.add('active');
-    });
+  // ============ 双指针流水线状态机 ============
+  // 主指针 mainCursor：① / L1②③④ / ⑤⑥⑦⑧ 的真实推进位置（V1 → V2 都共享）
+  //   - L1 ④ 完成（publishL1）→ mainCursor 推到 ⑤
+  //   - 在 ⑤⑥⑦⑧ 任意位置可以并行拉起 L2，主指针不被拉回
+  // L2 指针 l2Cursor：仅 L2 ②③④ 内部推进位置
+  //   - forkL2 → 2；推进 → 3 → 4；mergeL2（覆盖完）→ 0（回 idle）
+  //   - L2 推进期间，mainCursor 不变（⑤⑥⑦⑧ 当前进度保留 V1 走到的位置）
+  let mainCursor = 1;
+  let l2Cursor = 0;
+  // 全局暴露查询接口（供其他模块或调试用）
+  window.__getPipelineCursors = () => ({ mainCursor, l2Cursor });
+  // 仅按当前指针重渲染（不改任何指针），供 apply()/状态切换 调用
+  window.__refreshPipeline = () => activateStep(String(mainCursor), { __refresh: true });
+
+  function activateStep(no, opts) {
+    const requested = parseInt(no, 10);
+    const track = opts && opts.track ? opts.track : null;
+    const isRefresh = !!(opts && opts.__refresh);
+    const isReset = !!(opts && opts.reset);
+    // 入口分流：
+    //   __refresh === true → 不改任何指针，仅按当前 mainCursor / l2Cursor 重绘
+    //   reset === true     → 强制把 mainCursor 设为 requested（用于打开抽屉切换不同模板）
+    //   track === 'L2'     → 只更新 l2Cursor，不动 mainCursor
+    //   track === 'main' / null（默认）→ 推进 mainCursor（单调递增，不回退）
+    if (isRefresh) {
+      // skip：不改指针
+    } else if (isReset) {
+      mainCursor = Math.max(1, requested);
+      l2Cursor = 0;
+    } else if (track === 'L2') {
+      // L2 节点：clamp 到 [2,4]
+      l2Cursor = Math.max(2, Math.min(4, requested));
+    } else {
+      // 主线节点：单调推进（避免回退导致 ⑤⑥⑦⑧ 进度被拉回）
+      // 但允许显式回到 ① 复位（initial = 1）
+      if (requested === 1) {
+        mainCursor = 1;
+        l2Cursor = 0;
+      } else {
+        mainCursor = Math.max(mainCursor, requested);
+      }
+    }
+    // 右侧 step-content 面板切换：
+    //   refresh 模式不动面板；其余以 requested 为准（用户点哪显示哪）
+    const current = requested;
+    if (!isRefresh) {
+      const steps = document.querySelectorAll('#pipelineDrawer .step');
+      steps.forEach(s => {
+        const n = parseInt(s.dataset.step, 10);
+        s.classList.remove('done', 'active');
+        if (n < current) s.classList.add('done');
+        else if (n === current) s.classList.add('active');
+      });
+    }
     // 步骤间的连接线（.step-gap）·当左侧 step 为 done 时，连线置为 primary 色
-    document.querySelectorAll('#pipelineDrawer .step-gap').forEach(gap => {
-      const prev = gap.previousElementSibling;
-      const next = gap.nextElementSibling;
-      const prevDone = prev && prev.classList.contains('done') && !prev.classList.contains('active');
-      const bothDone = prevDone && next && next.classList.contains('done');
-      gap.classList.toggle('done', !!bothDone);
-    });
-    document.querySelectorAll('#pipelineDrawer .step-content').forEach(c => {
-      c.classList.toggle('active', c.dataset.stepContent === no);
-    });
+    if (!isRefresh) {
+      document.querySelectorAll('#pipelineDrawer .step-gap').forEach(gap => {
+        const prev = gap.previousElementSibling;
+        const next = gap.nextElementSibling;
+        const prevDone = prev && prev.classList.contains('done') && !prev.classList.contains('active');
+        const bothDone = prevDone && next && next.classList.contains('done');
+        gap.classList.toggle('done', !!bothDone);
+      });
+      document.querySelectorAll('#pipelineDrawer .step-content').forEach(c => {
+        c.classList.toggle('active', c.dataset.stepContent === no);
+      });
+    }
     renderStepGapTimes();
 
     // ===== 新版 Pipeline Fork（.pf-node）状态同步 =====
-    // 三轨道 + 双状态机联动：
-    //   ① 共用起点              永远 done
-    //   L1 行 ②③④（v1）          data-l1-archived=false → 按 current/done/todo 渲染
-    //                            data-l1-archived=true  → 整行灰，节点不参与正向标记
-    //   L2 行 ②③④（v2）          data-l2-state=editing  → 按 current/done/todo 渲染
-    //                            data-l2-state=idle/published → 整行灰
-    //   ⑤⑥⑦⑧ 共用尾段           按 current 一个一个推进点亮（done/current/todo），
-    //                            不因 L1 归档而整段强制 done
+    // 双指针渲染规则：
+    //   ① 共用起点              永远 done（mainCursor 必 ≥ 1）
+    //   L1 行 ②③④（v1）          l1Archived=true → 整行灰；
+    //                            否则按 mainCursor 渲染（mainCursor∈[2,4] 时活跃）
+    //   L2 行 ②③④（v2）          l2State='editing' → 按 l2Cursor 渲染（独立指针）；
+    //                            其他态（idle/published）→ 整行灰
+    //   ⑤⑥⑦⑧ 共用尾段           按 mainCursor 渲染（done/current/todo）
+    //                            L2 推进时不影响（保留 V1 走到的位置）
     const stepperEl = document.querySelector('#pipelineDrawer .pipeline-fork');
     const l1Archived = stepperEl ? stepperEl.getAttribute('data-l1-archived') === 'true' : false;
     const l2State = stepperEl ? (stepperEl.getAttribute('data-l2-state') || 'idle') : 'idle';
@@ -363,24 +410,36 @@
       node.classList.remove('pf-current', 'pf-todo');
       if (numEl) numEl.classList.remove('done', 'current');
 
-      const track = node.dataset.track; // 'L1' | 'L2' | 'bridge' | undefined(共用)
-      const isL1Mid = track === 'L1' && n >= 2 && n <= 4;
-      const isL2Mid = (track === 'L2' || track === 'bridge') && n >= 2 && n <= 4;
+      const nodeTrack = node.dataset.track; // 'L1' | 'L2' | 'bridge' | undefined(共用)
+      const isL1Mid = nodeTrack === 'L1' && n >= 2 && n <= 4;
+      const isL2Mid = (nodeTrack === 'L2' || nodeTrack === 'bridge') && n >= 2 && n <= 4;
 
-      // L1 已归档：L1 中段 ②③④ 整行灰，不参与 done/current
+      // L1 已归档：L1 中段 ②③④ 整行灰
       if (isL1Mid && l1Archived) {
         node.classList.add('pf-todo');
         return;
       }
-      // L2 不在 editing 态：L2 中段 ②③④ 灰
-      if (isL2Mid && l2State !== 'editing') {
-        node.classList.add('pf-todo');
+      // L2 ②③④：仅 editing 态按 l2Cursor 渲染，否则灰
+      if (isL2Mid) {
+        if (l2State !== 'editing') {
+          node.classList.add('pf-todo');
+          return;
+        }
+        // editing 态：按 l2Cursor 走 done/current/todo
+        if (n < l2Cursor) {
+          if (numEl) numEl.classList.add('done');
+        } else if (n === l2Cursor) {
+          node.classList.add('pf-current');
+          if (numEl) numEl.classList.add('current');
+        } else {
+          node.classList.add('pf-todo');
+        }
         return;
       }
-      // 其余（含 ⑤⑥⑦⑧ 共用尾段）按 current 比较渲染：一个一个推进点亮
-      if (n < current) {
+      // ① 共用起点 + ⑤⑥⑦⑧ 尾段：按 mainCursor 渲染
+      if (n < mainCursor) {
         if (numEl) numEl.classList.add('done');
-      } else if (n === current) {
+      } else if (n === mainCursor) {
         node.classList.add('pf-current');
         if (numEl) numEl.classList.add('current');
       } else {
@@ -468,7 +527,7 @@
       document.getElementById('pipelineDrawerSub').textContent =
         `模板ID：${tplId}${stageText ? ' · 当前阶段：' + stageText : ''} · 创建 → 编辑 → 测试 → 草稿发布 → 规则配置 → 实验 → 全量上线 → 成绩单`;
       renderReport(tplId, stageText);
-      activateStep(stepNo);
+      activateStep(stepNo, { reset: true });
       showDrawer(pipelineDrawer);
     });
   });
@@ -484,7 +543,7 @@
       document.getElementById('pipelineDrawerSub').textContent =
         `模板ID：${tplId} · 当前阶段：${stageText} · 已上线后自动出 v1 报告`;
       renderReport(tplId, stageText);
-      activateStep('8');
+      activateStep('8', { reset: true });
       showDrawer(pipelineDrawer);
     });
   });

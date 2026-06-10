@@ -506,8 +506,10 @@
             if (tag) tag.textContent = '⏳ L2 支线 · 等 L1 ④ 完成后启动';
             document.querySelectorAll('#l2RowEl .pf-node.pf-active').forEach(n => n.classList.remove('pf-active'));
           }
-          // 状态变了 → 重刷 pf-node 的 done/current/todo
-          if (typeof window.__activateStep === 'function') {
+          // 状态变了 → 重刷 pf-node 的 done/current/todo（仅重渲染，不推进任何指针）
+          if (typeof window.__refreshPipeline === 'function') {
+            window.__refreshPipeline();
+          } else if (typeof window.__activateStep === 'function') {
             const activeContent = document.querySelector('#pipelineDrawer .step-content.active');
             if (activeContent && activeContent.dataset.stepContent) {
               window.__activateStep(activeContent.dataset.stepContent);
@@ -517,16 +519,22 @@
         apply();
 
         // ----- 公开 API：状态切换 -----
-        // publishL1(): L1 ④ 草稿发布完成 → L1 ②③④ 整行置灰归档（v1 沉淀，等下一轮 L2）
-        // forkL2()   : 拉起 L2 v2 草稿（idle → editing）；通常在 publishL1 后再调
-        // mergeL2()  : L2 ④ 审批通过 → published 瞬时态 → 1.5s 后 idle（v2 覆盖 L1，归档为新 v1）
+        // publishL1(): L1 ④ 草稿发布完成 → L1 ②③④ 整行置灰归档；主指针推进到 ⑤
+        // forkL2()   : 拉起 L2 v2 草稿（idle → editing），l2Cursor 重置到 ②；
+        //              主指针 mainCursor 不动（保留 ⑤⑥⑦⑧ 当前进度）
+        // mergeL2()  : L2 ④ 审批通过 → published 瞬时态 → 1.5s 后 idle（l2Cursor 清零）
         // toggleL2() : 控制台演示用，三态循环
         window.publishL1 = function () {
           stepper.setAttribute('data-l1-archived', 'true');
           // 同步更新 L1 行 row-tag 文案：✅ 标识表达"已跑通归档"（区别于纯灰未启动）
           const l1Tag = document.getElementById('l1BranchTag');
           if (l1Tag) l1Tag.textContent = '✅ L1 主线 · v1 已发布归档（②③④ 跑通）';
-          apply();
+          // 主指针推到 ⑤：L1 ④ 完成 → 进入共用尾段第一步（规则配置）
+          if (typeof window.__activateStep === 'function') {
+            window.__activateStep('5');
+          } else {
+            apply();
+          }
           return 'l1-archived';
         };
         window.forkL2 = function () {
@@ -535,11 +543,17 @@
             window.publishL1();
           }
           stepper.setAttribute('data-l2-state', 'editing');
-          apply();
+          // L2 指针重置到 ②（推进 L2 不动主指针，⑤⑥⑦⑧ 进度保留）
+          if (typeof window.__activateStep === 'function') {
+            window.__activateStep('2', { track: 'L2' });
+          } else {
+            apply();
+          }
           return 'editing';
         };
         window.mergeL2 = function () {
           stepper.setAttribute('data-l2-state', 'published');
+          // L2 指针清零；主指针保持当前位置（⑤⑥⑦⑧ 进度照旧）
           apply();
           return 'published → idle (1.5s)';
         };
@@ -556,10 +570,10 @@
         // 注意：本 <script> 在 .step-panel 之前执行，DOM 此刻还没渲染下方 step-content，
         // 所以查询必须在事件触发时实时执行（不能在初始化时缓存 NodeList）
         const nodes = stepper.querySelectorAll('.pf-node[data-step]');
-        function activateNode(no) {
+        function activateNode(no, opts) {
           // 优先调用 main.js 暴露的完整版 activateStep（含 done/current/todo + 连线灰虚线）
           if (typeof window.__activateStep === 'function') {
-            window.__activateStep(no);
+            window.__activateStep(no, opts);
             return;
           }
           // 兜底：仅切右侧面板和 pf-current 标记
@@ -594,10 +608,16 @@
               const ok = confirm('L1 v1 已归档，是否基于 v1 拉起 L2 v2 草稿？');
               if (ok) {
                 window.forkL2();
-                activateNode('2');
+                // forkL2 内已经把 l2Cursor 推到 2，这里不重复触发
               }
               return;
             }
+            // 推进 L2 指针（不动 mainCursor，保留 ⑤⑥⑦⑧ 进度）
+            if (isL2 && state === 'editing') {
+              activateNode(n.dataset.step, { track: 'L2' });
+              return;
+            }
+            // 主线节点（① / L1 / 共用尾段⑤⑥⑦⑧）：推进 mainCursor
             activateNode(n.dataset.step);
           });
         });
