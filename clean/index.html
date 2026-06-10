@@ -500,8 +500,11 @@
         background: #fff2e0;
         border: 1px solid #f5c98a;
       }
-      /* L1 已归档：主行 ②③④ 不再显示 toast（避免和 L2 行同时刷一堆） */
-      .pipeline-fork[data-l1-archived="true"] .pf-main-row .pf-node[data-track="L1"][data-toast].pf-current::after {
+      /* 主行 ②③④（data-track="L1"）始终不显示 toast：
+         - 首次草稿发布前：还没有"已发布版本"的概念，标"已发布版本-XX中"会误导
+         - L1 归档后：节点已置灰，没必要再打 toast
+         仅共用尾段 ⑤⑥⑦⑧（无 data-track 标记）保留主行 toast */
+      .pf-main-row .pf-node[data-track="L1"][data-toast].pf-current::after {
         display: none;
       }
       /* L2 idle：L2 行节点不显示 toast（待启动状态没意义） */
