@@ -366,25 +366,40 @@
         };
 
         // ===== 节点点击交互：切换右侧 step-content =====
+        // 注意：本 <script> 在 .step-panel 之前执行，DOM 此刻还没渲染下方 step-content，
+        // 所以查询必须在事件触发时实时执行（不能在初始化时缓存 NodeList）
         const nodes = stepper.querySelectorAll('.pf-node[data-step]');
-        const contents = document.querySelectorAll('#pipelineDrawer .step-content');
         function activateNode(no) {
           nodes.forEach(n => n.classList.toggle('pf-current', n.dataset.step === no));
-          contents.forEach(c => c.classList.toggle('active', c.dataset.stepContent === no));
+          document.querySelectorAll('#pipelineDrawer .step-content').forEach(c => {
+            c.classList.toggle('active', c.dataset.stepContent === no);
+          });
         }
         nodes.forEach(n => {
           n.addEventListener('click', () => activateNode(n.dataset.step));
         });
-        // 兼容外部 jump 按钮（[data-jump-step] / .step-nav-btn）也能高亮当前节点
-        document.querySelectorAll('#pipelineDrawer [data-jump-step], #pipelineDrawer .step-nav-btn').forEach(b => {
-          b.addEventListener('click', () => {
-            const target = b.dataset.jumpStep || b.dataset.jump;
-            if (target) activateNode(target);
+        // 兼容外部 jump 按钮（DOM ready 后再绑定，因为按钮分布在下方各 step-content 内）
+        function bindJumpBtns() {
+          document.querySelectorAll('#pipelineDrawer [data-jump-step], #pipelineDrawer .step-nav-btn').forEach(b => {
+            if (b._pfBound) return;
+            b._pfBound = true;
+            b.addEventListener('click', () => {
+              const target = b.dataset.jumpStep || b.dataset.jump;
+              if (target) activateNode(target);
+            });
           });
-        });
-        // 初始：默认激活步骤 2（与 .step-content.active 对齐）
-        const initial = document.querySelector('#pipelineDrawer .step-content.active');
-        if (initial) activateNode(initial.dataset.stepContent);
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', () => {
+            bindJumpBtns();
+            const initial = document.querySelector('#pipelineDrawer .step-content.active');
+            if (initial) activateNode(initial.dataset.stepContent);
+          });
+        } else {
+          bindJumpBtns();
+          const initial = document.querySelector('#pipelineDrawer .step-content.active');
+          if (initial) activateNode(initial.dataset.stepContent);
+        }
       })();
     </script>
 
