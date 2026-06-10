@@ -421,7 +421,8 @@
         background: #d8dde6; border-radius: 2px;
         align-self: center;
       }
-      .pf-main-row .pf-conn { max-width: 80px; }
+      /* 注：主行/L2 行的 .pf-conn 已用 absolute + calc(100%/8 * X) 精确定位 →
+         不能用 max-width 限制，否则 grid 等分撑满的连线会被截短，导致两端接不到节点 */
       .pf-conn-l1 { background: #23a567; }
       .pf-conn-l2 { background: #b9d0ff; }
       .pf-conn-bridge { background: #e8821a; }
