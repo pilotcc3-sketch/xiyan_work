@@ -217,15 +217,15 @@
         </div>
       </div>
 
-      <!-- ⑤⑥⑦⑧ 共用终段 -->
+      <!-- ⑤⑥⑦⑧ 共用终段（不挂 L1/L2 track，语义=两条线汇合后共用） -->
       <div class="pf-tail">
-        <div class="pf-node" data-step="5" data-track="L1"><span class="step-no">5</span><span class="step-name">规则配置</span></div>
-        <span class="pf-conn pf-conn-l1"><em class="pf-time">1d2h</em></span>
-        <div class="pf-node" data-step="6" data-track="L1"><span class="step-no">6</span><span class="step-name">模板实验</span></div>
-        <span class="pf-conn pf-conn-l1"><em class="pf-time">1d8h</em></span>
-        <div class="pf-node" data-step="7" data-track="L1"><span class="step-no">7</span><span class="step-name">全量上线</span></div>
-        <span class="pf-conn pf-conn-l1"><em class="pf-time">4h45m</em></span>
-        <div class="pf-node" data-step="8" data-track="L1"><span class="step-no">8</span><span class="step-name">成绩单</span></div>
+        <div class="pf-node" data-step="5"><span class="step-no">5</span><span class="step-name">规则配置</span></div>
+        <span class="pf-conn"><em class="pf-time">1d2h</em></span>
+        <div class="pf-node" data-step="6"><span class="step-no">6</span><span class="step-name">模板实验</span></div>
+        <span class="pf-conn"><em class="pf-time">1d8h</em></span>
+        <div class="pf-node" data-step="7"><span class="step-no">7</span><span class="step-name">全量上线</span></div>
+        <span class="pf-conn"><em class="pf-time">4h45m</em></span>
+        <div class="pf-node" data-step="8"><span class="step-no">8</span><span class="step-name">成绩单</span></div>
       </div>
     </div>
 
@@ -345,9 +345,25 @@
         background: #fff; padding: 0 4px; border-radius: 3px; white-space: nowrap;
       }
 
-      /* 桥接节点（草稿发布⚡ 覆盖主干） */
-      .pf-bridge .pf-no-bridge { background: #e8821a !important; border-color: #e8821a !important; color: #fff !important; }
-      .pf-bridge .pf-name-bridge { color: #c0681a; font-weight: 600; }
+      /* 桥接节点（草稿发布⚡ 覆盖主干）
+         仅当：① L2 ④ 是 current（pf-current 由 JS 加，表示走到了 ④）
+              ② L2 published 瞬时态（覆盖动画播放中）
+         才显示橙色"覆盖主干"高亮。其余情况按普通 todo / idle 灰底走。 */
+      .pf-bridge.pf-current .pf-no-bridge,
+      .pipeline-fork[data-l2-state="published"] .pf-bridge .pf-no-bridge {
+        background: #e8821a !important; border-color: #e8821a !important; color: #fff !important;
+      }
+      .pf-bridge.pf-current .pf-name-bridge,
+      .pipeline-fork[data-l2-state="published"] .pf-bridge .pf-name-bridge {
+        color: #c0681a; font-weight: 600;
+      }
+      /* 非 current 时 ④ 桥接的"↗ 覆盖主干"小标签也淡一点（避免抢戏） */
+      .pf-bridge:not(.pf-current) .pf-tag-bridge {
+        opacity: 0.45;
+      }
+      .pipeline-fork[data-l2-state="editing"] .pf-bridge:not(.pf-current) .pf-tag-bridge {
+        opacity: 0.55;
+      }
 
       /* ⑤⑥⑦⑧ 共用终段 */
       .pf-tail {
@@ -364,15 +380,21 @@
          - L2 ④ 发布：published 瞬时态触发覆盖动画 → 回 idle
          =========================================================== */
 
-      /* L1 已归档（草稿发布完成） · L1 主线整行置灰 */
+      /* L1 已归档（草稿发布完成） · L1 主线 ②③④ 整行置灰（"✅ 已跑通"语义） */
       .pipeline-fork[data-l1-archived="true"] .pf-row-l1 {
-        opacity: 0.5;
-        filter: grayscale(0.8);
+        opacity: 0.55;
+        filter: grayscale(0.7);
+      }
+      /* L1 归档时，row-tag 文案变成"已跑通归档"配色（绿调，区别于纯灰未启动） */
+      .pipeline-fork[data-l1-archived="true"] .pf-row-l1 .pf-row-tag-l1 {
+        color: #5a8a6e;
+        border-color: #c5d8cc;
+        background: #f3f9f5;
       }
       .pipeline-fork[data-l1-archived="true"] .pf-row-l1 .pf-node { cursor: not-allowed; }
       .pipeline-fork[data-l1-archived="true"] .pf-row-l1 .pf-node:hover { transform: none; }
       .pipeline-fork[data-l1-archived="true"] .pf-row-l1 .pf-node:hover::after {
-        content: "v1 已归档，新一轮请走 L2";
+        content: "✅ v1 已发布归档（已跑通）· 新一轮请走 L2";
         position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
         margin-top: 6px; padding: 3px 8px; font-size: 11px; color: #fff;
         background: #4a4f5c; border-radius: 4px; white-space: nowrap; z-index: 10;
@@ -384,15 +406,30 @@
         opacity: 0.5;
         filter: grayscale(0.8);
       }
-      /* idle 态 · L2 节点不可点击 + hover 提示"暂无草稿，点击新建" */
+      /* L2 idle 态 · 节点不可点；hover 提示分两种语义 */
       .pipeline-fork[data-l2-state="idle"] .pf-row-l2 .pf-node {
         cursor: not-allowed;
       }
       .pipeline-fork[data-l2-state="idle"] .pf-row-l2 .pf-node:hover {
         transform: none;
       }
-      .pipeline-fork[data-l2-state="idle"] .pf-row-l2 .pf-node:hover::after {
-        content: "暂无草稿，点击新建";
+      /* 语义 A：L1 还在跑（v1 未归档）→ "等 L1 ④ 完成后启动"（流程未开始） */
+      .pipeline-fork[data-l2-state="idle"][data-l1-archived="false"] .pf-row-l2 .pf-node:hover::after {
+        content: "⏳ 等 L1 ④ 完成草稿发布后再启动 v2";
+        position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+        margin-top: 6px; padding: 3px 8px; font-size: 11px; color: #fff;
+        background: #4a4f5c; border-radius: 4px; white-space: nowrap; z-index: 10;
+      }
+      /* 语义 B：L1 已归档 + L2 idle → "暂无草稿，点击新建"（待启动） */
+      .pipeline-fork[data-l2-state="idle"][data-l1-archived="true"] .pf-row-l2 .pf-node:hover::after {
+        content: "💤 暂无 v2 草稿，点击新建拉起";
+        position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+        margin-top: 6px; padding: 3px 8px; font-size: 11px; color: #fff;
+        background: #4a4f5c; border-radius: 4px; white-space: nowrap; z-index: 10;
+      }
+      /* 语义 C：L2 published 瞬时态 → "v2 已覆盖归档"（已跑通的灰） */
+      .pipeline-fork[data-l2-state="published"] .pf-row-l2 .pf-node:hover::after {
+        content: "✅ v2 已覆盖 L1（已跑通）";
         position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
         margin-top: 6px; padding: 3px 8px; font-size: 11px; color: #fff;
         background: #4a4f5c; border-radius: 4px; white-space: nowrap; z-index: 10;
@@ -441,7 +478,7 @@
             text.style.color = '#e8821a';
             badge.style.background = '#fff7ec';
             badge.style.borderColor = '#f5c98a';
-            if (tag) tag.textContent = '⚡ L2 → L1 覆盖中';
+            if (tag) tag.textContent = '✅ L2 支线 · v2 已覆盖（已跑通归档）';
             setTimeout(() => {
               if (stepper.getAttribute('data-l2-state') === 'published') {
                 stepper.setAttribute('data-l2-state', 'idle');
@@ -449,24 +486,24 @@
               }
             }, 1500);
           } else if (l1Archived) {
-            // L1 已归档但 L2 还没拉起（中间态：上下两行都灰，引导新建）
+            // L1 已归档但 L2 还没拉起（待启动：等待人来拉草稿）
             dot.style.background = '#c4cad6';
             dot.style.animation = 'none';
-            text.textContent = '🗂 L1 v1 已归档 · L2 v2 暂无草稿（点 L2 行 ② 拉起新草稿）';
+            text.textContent = '💤 L1 v1 已归档 · L2 v2 暂无草稿（点 L2 行 ② 拉起新草稿）';
             text.style.color = '#8a93a6';
             badge.style.background = '#f5f7fa';
             badge.style.borderColor = '#e0e4ec';
-            if (tag) tag.textContent = '📝 L2 支线 · v2 暂无草稿';
+            if (tag) tag.textContent = '💤 L2 支线 · v2 待启动（点 ② 新建草稿）';
             document.querySelectorAll('#l2RowEl .pf-node.pf-active').forEach(n => n.classList.remove('pf-active'));
           } else {
-            // 默认初始：L1 在跑，L2 待启动
+            // 默认初始：L1 在跑，L2 还没轮到（流程未开始）
             dot.style.background = '#23a567';
             dot.style.animation = 'l2Pulse 1.6s infinite';
             text.textContent = '🚀 L1 主线 · v1 流转中（②模板编辑 → ③测试 → ④草稿发布）';
             text.style.color = '#23a567';
             badge.style.background = '#f0f9f4';
             badge.style.borderColor = '#b3dec3';
-            if (tag) tag.textContent = '📝 L2 支线 · v2 暂无草稿';
+            if (tag) tag.textContent = '⏳ L2 支线 · 等 L1 ④ 完成后启动';
             document.querySelectorAll('#l2RowEl .pf-node.pf-active').forEach(n => n.classList.remove('pf-active'));
           }
           // 状态变了 → 重刷 pf-node 的 done/current/todo
@@ -486,9 +523,9 @@
         // toggleL2() : 控制台演示用，三态循环
         window.publishL1 = function () {
           stepper.setAttribute('data-l1-archived', 'true');
-          // 同步更新 L1 行 row-tag 文案
+          // 同步更新 L1 行 row-tag 文案：✅ 标识表达"已跑通归档"（区别于纯灰未启动）
           const l1Tag = document.getElementById('l1BranchTag');
-          if (l1Tag) l1Tag.textContent = '🗂 L1 主线 · v1 已归档';
+          if (l1Tag) l1Tag.textContent = '✅ L1 主线 · v1 已发布归档（②③④ 跑通）';
           apply();
           return 'l1-archived';
         };
