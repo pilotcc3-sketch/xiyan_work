@@ -138,49 +138,97 @@
     <div>
       <div class="side-drawer-title" id="pipelineDrawerTitle">模板生产流水线</div>
       <div class="side-drawer-sub" id="pipelineDrawerSub">
-        <span style="color:#23a567">🚀 L1 主干（在线）：① → ⑤ → ⑥ → ⑦ → ⑧</span>
-        &nbsp;/&nbsp;
-        <span style="color:#3370ff">📝 L2 支线（草稿）：① → ② → ③ → <span style="color:#e8821a">④⚡ 合并回主干</span></span>
+        <span style="color:#23a567">🚀 L1 主干（在线）：① → ② → ③ → ④ → ⑤ → ⑥ → ⑦ → ⑧</span>
+        &nbsp;·&nbsp;
+        <span style="color:#3370ff">📝 L2 支线（草稿）：① → ② → ③ → <span style="color:#e8821a">④⚡ 覆盖主干</span></span>
       </div>
     </div>
     <div class="side-drawer-close" data-close="pipeline">✕</div>
   </div>
   <div class="side-drawer-body">
 
-    <!-- Stepper · 两行完整流水线 · 上=L1 主干（在线）/ 下=L2 支线（草稿） -->
-    <div class="stepper" data-track-mode="branch" style="display:flex;flex-direction:column;gap:14px;padding:18px 20px">
+    <!-- Stepper · 第一行=L1 主干完整 8 步 / 第二行=L2 支线（仅 ①②③④，发布瞬间覆盖回主干） -->
+    <!-- data-l2-state="active" = 当前有草稿在编辑（亮）；="empty" = 无草稿（整条置灰） -->
+    <div class="stepper" data-track-mode="branch" data-l2-state="active" style="display:flex;flex-direction:column;gap:18px;padding:18px 20px">
 
-      <!-- 上行：🚀 L1 主干 · 在线版本：① → ⑤ → ⑥ → ⑦ → ⑧ -->
-      <div style="display:flex;align-items:stretch;gap:4px;padding:14px 14px 10px;background:linear-gradient(90deg,#e7f4ec 0%,#f4faf6 100%);border:1px solid #b3dec3;border-radius:8px;position:relative">
+      <!-- 第一行：🚀 L1 主干 · 永远完整 8 步（模板的全生命周期） -->
+      <div style="display:flex;align-items:stretch;gap:4px;padding:14px 12px 10px;background:linear-gradient(90deg,#e7f4ec 0%,#f4faf6 100%);border:1px solid #b3dec3;border-radius:8px;position:relative">
         <div style="position:absolute;top:-9px;left:14px;font-size:11px;font-weight:600;color:#23a567;background:#fff;padding:0 8px;border:1px solid #b3dec3;border-radius:8px">🚀 L1 主干 · 在线版本（永远跑线上）</div>
         <div class="step done" data-step="1" data-track="L1" data-done-at="2026-06-05T11:30" style="flex:1"><span class="step-no">1</span><span class="step-name">模板创建</span></div>
-        <div class="step-gap" style="flex:0 0 50px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
+        <div class="step-gap" style="flex:0 0 40px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
+        <div class="step done" data-step="2" data-track="L1" data-done-at="2026-06-05T14:50" style="flex:1"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
+        <div class="step-gap" style="flex:0 0 40px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
+        <div class="step done" data-step="3" data-track="L1" data-done-at="2026-06-05T16:20" style="flex:1"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
+        <div class="step-gap" style="flex:0 0 40px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
+        <div class="step done" data-step="4" data-track="L1" data-done-at="2026-06-06T10:15" style="flex:1"><span class="step-no">4</span><span class="step-name">草稿发布</span></div>
+        <div class="step-gap" style="flex:0 0 40px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
         <div class="step done" data-step="5" data-track="L1" data-done-at="2026-06-06T11:40" style="flex:1"><span class="step-no">5</span><span class="step-name">规则配置</span></div>
-        <div class="step-gap" style="flex:0 0 50px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
+        <div class="step-gap" style="flex:0 0 40px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
         <div class="step done" data-step="6" data-track="L1" data-done-at="2026-06-08T09:30" style="flex:1"><span class="step-no">6</span><span class="step-name">模板实验</span></div>
-        <div class="step-gap" style="flex:0 0 50px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
+        <div class="step-gap" style="flex:0 0 40px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
         <div class="step done" data-step="7" data-track="L1" data-done-at="2026-06-09T18:00" style="flex:1"><span class="step-no">7</span><span class="step-name">全量上线</span></div>
-        <div class="step-gap" style="flex:0 0 50px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
+        <div class="step-gap" style="flex:0 0 40px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
         <div class="step done" data-step="8" data-track="L1" data-done-at="2026-06-09T22:45" style="flex:1"><span class="step-no">8</span><span class="step-name">成绩单</span></div>
       </div>
 
-      <!-- 下行：📝 L2 支线 · 草稿版本：① → ② → ③ → ④⚡ -->
-      <div style="display:flex;align-items:stretch;gap:4px;padding:14px 14px 10px;background:linear-gradient(90deg,#eaf1ff 0%,#f5f9ff 100%);border:1px solid #b9d0ff;border-radius:8px;position:relative">
-        <div style="position:absolute;top:-9px;left:14px;font-size:11px;font-weight:600;color:#3370ff;background:#fff;padding:0 8px;border:1px solid #b9d0ff;border-radius:8px">📝 L2 支线 · 草稿版本（全局唯一）</div>
+      <!-- 第二行：📝 L2 支线 · 仅 ①→②→③→④（④ 通过即覆盖第一行） -->
+      <!-- 通过 JS 读父容器 data-l2-state 决定亮色 / 置灰 -->
+      <div id="l2BranchRow" style="display:flex;align-items:stretch;gap:4px;padding:14px 12px 10px;background:linear-gradient(90deg,#eaf1ff 0%,#f5f9ff 100%);border:1px solid #b9d0ff;border-radius:8px;position:relative;transition:opacity .2s">
+        <div id="l2BranchLabel" style="position:absolute;top:-9px;left:14px;font-size:11px;font-weight:600;color:#3370ff;background:#fff;padding:0 8px;border:1px solid #b9d0ff;border-radius:8px">📝 L2 支线 · 草稿版本（@小樊 正在编辑 v1）</div>
         <div class="step done" data-step="1" data-track="L2" data-done-at="2026-06-05T11:30" style="flex:1"><span class="step-no">1</span><span class="step-name">模板创建</span></div>
-        <div class="step-gap" style="flex:0 0 50px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
+        <div class="step-gap" style="flex:0 0 40px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
         <div class="step done active" data-step="2" data-track="L2" data-done-at="2026-06-05T14:50" style="flex:1"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
-        <div class="step-gap" style="flex:0 0 50px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
+        <div class="step-gap" style="flex:0 0 40px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
         <div class="step done" data-step="3" data-track="L2" data-done-at="2026-06-05T16:20" style="flex:1"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
-        <div class="step-gap" style="flex:0 0 50px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
-        <div class="step done" data-step="4" data-track="bridge" data-done-at="2026-06-06T10:15" style="flex:1.2;position:relative" title="④ 草稿发布通过 → 物理覆盖 L1，不留底、不可回滚">
+        <div class="step-gap" style="flex:0 0 40px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
+        <div class="step done" data-step="4" data-track="bridge" data-done-at="2026-06-06T10:15" style="flex:1.2;position:relative" title="④ 草稿发布通过 → 物理覆盖 L1 主干，不留底、不可回滚">
           <span class="step-no" style="background:#e8821a;color:#fff;border-color:#e8821a">4</span>
           <span class="step-name" style="color:#c0681a;font-weight:600">草稿发布⚡</span>
-          <span style="position:absolute;right:-2px;top:-6px;font-size:10px;color:#fff;background:#e8821a;padding:1px 6px;border-radius:8px;white-space:nowrap" title="④ 通过后 L2 物理覆盖 L1">↗ 合并回主干</span>
+          <span style="position:absolute;right:-2px;top:-6px;font-size:10px;color:#fff;background:#e8821a;padding:1px 6px;border-radius:8px;white-space:nowrap" title="④ 通过后 L2 覆盖 L1">↗ 覆盖主干</span>
+        </div>
+        <!-- 空态遮罩（无草稿时显示） -->
+        <div id="l2EmptyMask" style="display:none;position:absolute;inset:0;background:rgba(245,247,250,0.85);border-radius:8px;align-items:center;justify-content:center;font-size:13px;color:#6b7588;font-weight:500;backdrop-filter:saturate(0.6)">
+          💤 当前无草稿在编辑 · 支线空闲（点击「新建草稿」可拉起 L2）
         </div>
       </div>
 
     </div>
+
+    <!-- L2 支线状态切换：根据父容器 data-l2-state 控制置灰/高亮 -->
+    <script>
+      (function () {
+        const stepper = document.querySelector('#pipelineDrawer .stepper[data-track-mode="branch"]');
+        if (!stepper) return;
+        const row = document.getElementById('l2BranchRow');
+        const mask = document.getElementById('l2EmptyMask');
+        const label = document.getElementById('l2BranchLabel');
+        function apply() {
+          const state = stepper.getAttribute('data-l2-state') || 'active';
+          if (state === 'empty') {
+            row.style.opacity = '0.45';
+            row.style.filter = 'grayscale(0.6)';
+            mask.style.display = 'flex';
+            label.textContent = '📝 L2 支线 · 当前空闲（无草稿）';
+            label.style.color = '#8a93a6';
+            label.style.borderColor = '#d0d6e0';
+          } else {
+            row.style.opacity = '';
+            row.style.filter = '';
+            mask.style.display = 'none';
+            label.textContent = '📝 L2 支线 · 草稿版本（@小樊 正在编辑 v1）';
+            label.style.color = '#3370ff';
+            label.style.borderColor = '#b9d0ff';
+          }
+        }
+        apply();
+        // 暴露给控制台手测：window.toggleL2() 切换支线状态演示
+        window.toggleL2 = function () {
+          const cur = stepper.getAttribute('data-l2-state') || 'active';
+          stepper.setAttribute('data-l2-state', cur === 'active' ? 'empty' : 'active');
+          apply();
+        };
+      })();
+    </script>
 
     <!-- Step Panel -->
     <div class="step-panel">
