@@ -342,6 +342,47 @@
       c.classList.toggle('active', c.dataset.stepContent === no);
     });
     renderStepGapTimes();
+
+    // ===== 新版 Pipeline Fork（.pf-node）状态同步 =====
+    // 规则：< current → done(绿实底已走过) / = current → current(蓝光晕停留) / > current → todo(灰)
+    // L2 行的状态另外由 data-l2-state 控制（idle 时整行置灰），这里只刷 L1 + 共用段
+    const pfNodes = document.querySelectorAll('#pipelineDrawer .pipeline-fork .pf-node[data-step]');
+    pfNodes.forEach(node => {
+      const n = parseInt(node.dataset.step, 10);
+      const numEl = node.querySelector('.step-no');
+      // 清旧
+      node.classList.remove('pf-current', 'pf-todo');
+      if (numEl) numEl.classList.remove('done', 'current');
+      // L2 行节点：当 data-l2-state=idle 时整行已置灰，不参与正向 done/current 标记
+      const isL2 = node.dataset.track === 'L2' || node.dataset.track === 'bridge';
+      const stepper = document.querySelector('#pipelineDrawer .pipeline-fork');
+      const l2State = stepper ? stepper.getAttribute('data-l2-state') : 'idle';
+      if (isL2 && l2State === 'idle') {
+        // L2 闲置：节点保持默认灰底（不加 done 也不加 current）
+        node.classList.add('pf-todo');
+        return;
+      }
+      if (n < current) {
+        if (numEl) numEl.classList.add('done');
+      } else if (n === current) {
+        node.classList.add('pf-current');
+        if (numEl) numEl.classList.add('current');
+      } else {
+        node.classList.add('pf-todo');
+      }
+    });
+    // 连线状态：.pf-conn 紧邻一个或多个 .pf-node，用"右侧节点 step"判断
+    // 简化策略：每根 .pf-conn 看它后面紧挨的 .pf-node 的 step，如果 step > current → 灰虚线
+    document.querySelectorAll('#pipelineDrawer .pipeline-fork .pf-conn').forEach(conn => {
+      let right = conn.nextElementSibling;
+      // 跳过非节点元素
+      while (right && !right.classList.contains('pf-node')) right = right.nextElementSibling;
+      conn.classList.remove('pf-conn-todo');
+      if (right && right.dataset.step) {
+        const rn = parseInt(right.dataset.step, 10);
+        if (rn > current) conn.classList.add('pf-conn-todo');
+      }
+    });
   }
 
   // 把两步 done-at 时间戳之差渲染成「实际耗时」（不是预估时间）
@@ -693,5 +734,8 @@
       });
     });
   }
+
+  // 暴露给 index.html 内联脚本使用（用于 pf-node 点击 / forkL2 后同步刷新流水线视觉）
+  window.__activateStep = activateStep;
 
 })();
