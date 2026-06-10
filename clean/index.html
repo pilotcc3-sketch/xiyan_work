@@ -273,7 +273,7 @@
         <span class="pf-conn pf-conn-l1" data-idx="2"><em class="pf-time">17h55m</em></span>
         <div class="pf-node" data-step="3" data-track="L1" data-toast="已发布版本-测试中"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
         <span class="pf-conn pf-conn-l1" data-idx="3"><em class="pf-time">17h55m</em></span>
-        <div class="pf-node" data-step="4" data-track="L1" data-toast="已发布版本-发布中"><span class="step-no">4</span><span class="step-name">草稿发布</span></div>
+        <div class="pf-node" data-step="4" data-track="L1"><span class="step-no">4</span><span class="step-name">草稿发布</span></div>
         <span class="pf-conn pf-conn-l1" data-idx="4"></span>
         <!-- ⑤⑥⑦⑧ 共用尾段（两条线汇合后） -->
         <div class="pf-node" data-step="5" data-toast="已发布版本-规则配置中"><span class="step-no">5</span><span class="step-name">规则配置</span></div>
@@ -309,8 +309,7 @@
     </div>
 
     <!-- 流水线下方：L1 / L2 双线状态说明 -->
-    <div id="l2StatusBadge" style="margin-top:14px;padding:10px 14px;font-size:12px;background:#f5f7fa;border:1px solid #e0e4ec;border-radius:6px;display:flex;align-items:center;gap:10px">
-      <span id="l2StatusDot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#23a567;flex:0 0 auto"></span>
+    <div id="l2StatusBadge" style="margin-top:14px;padding:10px 14px;font-size:12px;background:#f5f7fa;border:1px solid #e0e4ec;border-radius:6px">
       <div id="l2StatusLines" style="display:flex;flex-direction:column;gap:2px;line-height:1.4">
         <span id="l2StatusText" style="color:#23a567;font-weight:500">已发布版本 · 流转中</span>
         <span id="l2DraftStatusText" style="color:#3370ff;font-weight:500;display:none">草稿版本 · 流转中</span>
@@ -987,7 +986,6 @@
         const stepper = document.querySelector('#pipelineDrawer .pipeline-fork');
         if (!stepper) return;
         const badge = document.getElementById('l2StatusBadge');
-        const dot = document.getElementById('l2StatusDot');
         const text = document.getElementById('l2StatusText');
         const draftText = document.getElementById('l2DraftStatusText');
 
@@ -1037,19 +1035,17 @@
         function apply() {
           const state = stepper.getAttribute('data-l2-state') || 'idle';
           const l1Archived = stepper.getAttribute('data-l1-archived') === 'true';
-          // 文案颜色 / badge 配色 / dot 动画 — 文案内容统一交给 refreshStatusText
+          // badge 配色 + 文字色（dot 已下线，纯靠文字色 + 文案承载语义）
           if (state === 'editing') {
-            dot.style.background = '#3370ff';
-            dot.style.animation = 'l2Pulse 1.6s infinite';
-            text.style.color = '#23a567';        // 上行（已发布版本）保持绿
+            text.style.color = '#23a567';        // 上行已发布版本：绿
+            draftText.style.color = '#3370ff';   // 下行草稿版本：蓝
             badge.style.background = '#f5f9ff';
             badge.style.borderColor = '#d8e3ff';
             const l2s2 = document.getElementById('l2Step2');
             if (l2s2) l2s2.classList.add('pf-active');
           } else if (state === 'published') {
-            dot.style.background = '#e8821a';
-            dot.style.animation = 'none';
-            text.style.color = '#e8821a';        // 上行同步走橙：表"主干被覆盖中"
+            text.style.color = '#e8821a';        // 上下两行同步走橙：主干被覆盖中
+            draftText.style.color = '#e8821a';
             badge.style.background = '#fff7ec';
             badge.style.borderColor = '#f5c98a';
             setTimeout(() => {
@@ -1057,17 +1053,13 @@
                 stepper.setAttribute('data-l2-state', 'idle');
                 apply();
               }
-            }, 1500);
+            }, 3000);
           } else if (l1Archived) {
-            dot.style.background = '#c4cad6';
-            dot.style.animation = 'none';
             text.style.color = '#8a93a6';
             badge.style.background = '#f5f7fa';
             badge.style.borderColor = '#e0e4ec';
             document.querySelectorAll('#l2RowEl .pf-node.pf-active').forEach(n => n.classList.remove('pf-active'));
           } else {
-            dot.style.background = '#23a567';
-            dot.style.animation = 'l2Pulse 1.6s infinite';
             text.style.color = '#23a567';
             badge.style.background = '#f0f9f4';
             badge.style.borderColor = '#b3dec3';
