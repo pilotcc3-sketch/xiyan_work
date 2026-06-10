@@ -285,13 +285,13 @@
     </div>
 
     <div class="bridge-warn">
-      <b>四条硬规则：</b>
+      <b>三条硬规则：</b>
       <ol style="padding-left:20px;margin-top:6px">
         <li>把当前草稿 DSL <b>快照打包</b>，物理覆盖已发布副本</li>
         <li>旧"线上版 · 6/5" <b>不留底、不可回滚</b></li>
-        <li>如果旧线上版当时正在 ⑥ 实验中 → <b>强制中止旧实验</b>（数据停止累积）</li>
         <li>新"线上版 · 6/10"进入 ⑤ 未生效 → <b>必须重新配规则、重新跑实验</b></li>
       </ol>
+      <p style="margin-top:8px;color:var(--muted);font-size:12px">📌 业务约束：实际场景中，研发会等旧线上版走完一轮（实验结束 / 全量稳定）再发布新草稿，不会出现"旧版实验中途被覆盖"的情况。</p>
     </div>
   </div>
 
@@ -334,7 +334,7 @@
           <span class="tl-arrow">→</span>
           <span class="tl-pill pub-exp">线上版 6/5 · ⑥实验中</span>
           <span class="tl-arrow">→</span>
-          <span class="tl-pill dead">线上版 6/5 强制中止</span>
+          <span class="tl-pill" style="background:var(--green-bg);border-color:var(--green);color:var(--green)">线上版 6/5 · ⑦全量</span>
           <span class="tl-arrow">→</span>
           <span class="tl-pill pub-pending">线上版 6/10 · ⑤未生效</span>
         </div>
@@ -342,7 +342,7 @@
     </div>
 
     <div class="bridge-warn" style="margin-top:14px">
-      <b>关键观察：</b>当 6/10 草稿发布时，旧"线上版 6/5"还在 ⑥ 实验中 → 实验被强制中止 → 新"线上版 6/10"重新从 ⑤ 开始。<b>实验数据需要重新跑</b>。
+      <b>关键观察：</b>研发会等"线上版 6/5"走完一轮（⑦ 全量稳定后），再回草稿页打磨 v2 草稿、发布覆盖。6/10 覆盖瞬间，旧 6/5 直接死掉，新 6/10 从 ⑤ 重新开始走 ⑤⑥⑦。<b>两条线在时间上仍然并行（草稿可以一直改），但"覆盖动作"只发生在线上版稳定之后。</b>
     </div>
   </div>
 
@@ -631,7 +631,7 @@
             <div style="color:var(--red);font-weight:600;margin-bottom:4px">⚠ 审批通过即触发以下不可逆操作</div>
             <div style="color:#5a3535">
               · 当前草稿将<b>物理覆盖</b>线上版 5/28，旧线上版<b>不留底、不可回滚</b><br>
-              · 若线上版当前为「实验中」，<b>旧实验将被强制中止</b>，新版本须重走 ⑤⑥⑦
+              · 新版本进入「⑤ 未生效」初始态，须<b>重新配规则、重新跑实验</b>
             </div>
           </div>
 
