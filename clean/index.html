@@ -312,63 +312,49 @@
         margin: 0;
         flex: none;
       }
-      /* L2 行的 conn：仅 ②→③、③→④ 两段（l2-1、l2-4 已由 fork 斜线直连 ① 与 ⑤，隐藏避免视觉冗余） */
-      .pf-l2-row > .pf-conn[data-idx="l2-1"],
-      .pf-l2-row > .pf-conn[data-idx="l2-4"] { display: none; }
+      /* L2 行的 conn：4 段（fork-in→②、②→③、③→④、④→fork-out） */
+      .pf-l2-row > .pf-conn[data-idx="l2-1"] { left: calc(100%/8 * 1.5); right: calc(100%/8 * 5.5); }
       .pf-l2-row > .pf-conn[data-idx="l2-2"] { left: calc(100%/8 * 2.5); right: calc(100%/8 * 4.5); }
       .pf-l2-row > .pf-conn[data-idx="l2-3"] { left: calc(100%/8 * 3.5); right: calc(100%/8 * 3.5); }
-      /* fork-in：从主行 ① 节点中心 直接斜线连到 L2 ② 节点中心
-         实现：absolute 容器横跨 col 1→col 2 中点，内部用内嵌 SVG 画对角线 */
-      .pf-fork-in,
+      /* 桥尾连线 ④ → fork-out 入口 */
+      .pf-l2-row > .pf-conn[data-idx="l2-4"] { left: calc(100%/8 * 4); right: calc(100%/8 * 3.5); }
+      /* fork-in：从 col 1 中点（=主行①位置）斜向下到 col 2 中点（L2②位置） */
+      .pf-fork-in {
+        position: absolute;
+        top: -34px; /* 跨过两行的 gap，连到主行底部 */
+        left: calc(100%/8 * 0.5);
+        width: calc(100%/8 * 1);
+        height: 36px;
+        border-left: 2px dashed #b9d0ff;
+        border-bottom: 2px dashed #b9d0ff;
+        border-bottom-left-radius: 14px;
+        z-index: 0;
+      }
+      /* fork-out：从 col 4 中点（L2④位置）斜向上到 col 5 中点（主行⑤位置） */
       .pf-fork-out {
         position: absolute;
-        top: -34px; /* 起点贴到主行节点垂直中线 */
+        top: -34px;
+        left: calc(100%/8 * 3.5);
         width: calc(100%/8 * 1);
-        height: 50px; /* 终点延到 L2 节点垂直中线（gap 36 + L2 padding-top 16 ≈ 50） */
+        height: 36px;
+        border-right: 2px dashed #b9d0ff;
+        border-bottom: 2px dashed #b9d0ff;
+        border-bottom-right-radius: 14px;
         z-index: 0;
-        overflow: visible;
-        pointer-events: none;
       }
-      .pf-fork-in  { left: calc(100%/8 * 0.5); }   /* col 1 中点 → col 2 中点 */
-      .pf-fork-out { left: calc(100%/8 * 3.5); }   /* col 4 中点 → col 5 中点 */
-
-      /* 用 ::before 当作斜线本体：绝对宽度高度撑满父容器，linear-gradient 画对角 1 像素带 */
-      .pf-fork-in::before,
-      .pf-fork-out::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background-image: linear-gradient(
-          var(--fork-angle, to bottom right),
-          transparent calc(50% - 1px),
-          #b9d0ff calc(50% - 1px),
-          #b9d0ff calc(50% + 1px),
-          transparent calc(50% + 1px)
-        );
-      }
-      .pf-fork-in::before  { --fork-angle: to bottom right; } /* 左上 → 右下 */
-      .pf-fork-out::before { --fork-angle: to top right; }    /* 左下 → 右上 */
-
-      /* L2 editing → fork 斜线变蓝实线 */
-      .pipeline-fork[data-l2-state="editing"] .pf-fork-in::before,
-      .pipeline-fork[data-l2-state="editing"] .pf-fork-out::before {
-        background-image: linear-gradient(
-          var(--fork-angle, to bottom right),
-          transparent calc(50% - 1.25px),
-          #3370ff calc(50% - 1.25px),
-          #3370ff calc(50% + 1.25px),
-          transparent calc(50% + 1.25px)
-        );
+      /* L2 editing → fork 弧线变蓝实线 */
+      .pipeline-fork[data-l2-state="editing"] .pf-fork-in,
+      .pipeline-fork[data-l2-state="editing"] .pf-fork-out {
+        border-left-style: solid;
+        border-right-style: solid;
+        border-bottom-style: solid;
+        border-color: #3370ff;
       }
       /* L2 published → fork-out 变橙（覆盖主干） */
-      .pipeline-fork[data-l2-state="published"] .pf-fork-out::before {
-        background-image: linear-gradient(
-          to top right,
-          transparent calc(50% - 1.25px),
-          #e8821a calc(50% - 1.25px),
-          #e8821a calc(50% + 1.25px),
-          transparent calc(50% + 1.25px)
-        );
+      .pipeline-fork[data-l2-state="published"] .pf-fork-out {
+        border-right-style: solid;
+        border-bottom-style: solid;
+        border-color: #e8821a;
       }
 
       /* L2 row tag */
