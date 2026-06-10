@@ -311,7 +311,7 @@
     <!-- 流水线下方：L1 / L2 双线状态说明 -->
     <div id="l2StatusBadge" style="margin-top:14px;padding:10px 14px;font-size:12px;background:#f5f7fa;border:1px solid #e0e4ec;border-radius:6px;display:flex;align-items:center;gap:10px">
       <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#23a567;flex:0 0 auto"></span>
-      <span id="l2StatusText" style="color:#23a567;font-weight:500">🚀 已发布版本 · 流转中（②模板编辑 → ③测试 → ④草稿发布）</span>
+      <span id="l2StatusText" style="color:#23a567;font-weight:500">🚀 已发布版本 · 流转中</span>
       <span style="margin-left:auto;font-size:11px;color:#8a93a6">L1 ④ 发布完 → ②③④ 归档置灰 · L2 拉起新草稿 → 覆盖主干后 L2 也置灰</span>
     </div>
 
@@ -996,7 +996,7 @@
             // L2 v2 草稿在编辑
             dot.style.background = '#3370ff';
             dot.style.animation = 'l2Pulse 1.6s infinite';
-            text.textContent = '📝 草稿版本 · @小樊 正在编辑（②模板编辑 进行中）';
+            text.textContent = '📝 草稿版本 · @小樊 正在编辑';
             text.style.color = '#3370ff';
             badge.style.background = '#f5f9ff';
             badge.style.borderColor = '#d8e3ff';
@@ -1029,7 +1029,7 @@
             // 默认初始：L1 在跑，L2 还没轮到（流程未开始）
             dot.style.background = '#23a567';
             dot.style.animation = 'l2Pulse 1.6s infinite';
-            text.textContent = '🚀 已发布版本 · 流转中（②模板编辑 → ③测试 → ④草稿发布）';
+            text.textContent = '🚀 已发布版本 · 流转中';
             text.style.color = '#23a567';
             badge.style.background = '#f0f9f4';
             badge.style.borderColor = '#b3dec3';
