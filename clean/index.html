@@ -312,12 +312,14 @@
         margin: 0;
         flex: none;
       }
-      /* L2 行的 conn：4 段（fork-in→②、②→③、③→④、④→fork-out） */
-      .pf-l2-row > .pf-conn[data-idx="l2-1"] { left: calc(100%/8 * 1.5); right: calc(100%/8 * 5.5); }
-      .pf-l2-row > .pf-conn[data-idx="l2-2"] { left: calc(100%/8 * 2.5); right: calc(100%/8 * 4.5); }
-      .pf-l2-row > .pf-conn[data-idx="l2-3"] { left: calc(100%/8 * 3.5); right: calc(100%/8 * 3.5); }
-      /* 桥尾连线 ④ → fork-out 入口 */
-      .pf-l2-row > .pf-conn[data-idx="l2-4"] { left: calc(100%/8 * 4); right: calc(100%/8 * 3.5); }
+      /* L2 行的 conn：仅保留 ②→③、③→④ 两段
+         l2-1（fork-in 入口前的水平段）和 l2-4（④ 后的桥尾水平段）已由 fork 折线直接接到节点圆心，隐藏避免戳出冗余线 */
+      .pf-l2-row > .pf-conn[data-idx="l2-1"],
+      .pf-l2-row > .pf-conn[data-idx="l2-4"] { display: none; }
+      /* ②→③：col 2 中点(=100%/8*1.5) → col 3 中点(=100%/8*2.5)；right=100%-2.5格=5.5格补 */
+      .pf-l2-row > .pf-conn[data-idx="l2-2"] { left: calc(100%/8 * 1.5); right: calc(100%/8 * 5.5); }
+      /* ③→④：col 3 中点 → col 4 中点 */
+      .pf-l2-row > .pf-conn[data-idx="l2-3"] { left: calc(100%/8 * 2.5); right: calc(100%/8 * 4.5); }
       /* fork-in / fork-out 父级是 .pf-l2-row（top:0 = L2 行顶端）
          主行 ① 节点中心 ≈ L2 行 top - (gap 36 + 主行节点半径 22) = -58px
          L2 ② 节点中心 ≈ L2 行 top + (padding-top 16 + 节点半径 22) = +38px
