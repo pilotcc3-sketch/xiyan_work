@@ -146,29 +146,40 @@
   <div class="side-drawer-head">
     <div>
       <div class="side-drawer-title" id="pipelineDrawerTitle">模板生产流水线</div>
-      <div class="side-drawer-sub" id="pipelineDrawerSub">模板创建 · 模板编辑 · 模板测试 · 草稿发布 · 规则配置 · 模板实验 · 全量上线 · 成绩单</div>
+      <div class="side-drawer-sub" id="pipelineDrawerSub">
+        <span style="color:#3370ff">📝 L2 支线：① 创建 · ② 编辑 · ③ 测试</span>
+        <span style="color:#e8821a;font-weight:600">→ ④ 草稿发布⚡ 物理覆盖 →</span>
+        <span style="color:#23a567">🚀 L1 主干：⑤ 规则 · ⑥ 实验 · ⑦ 全量 · ⑧ 成绩单</span>
+      </div>
     </div>
     <div class="side-drawer-close" data-close="pipeline">✕</div>
   </div>
   <div class="side-drawer-body">
 
-    <!-- Stepper · 8 步 · 步骤间标注用时 -->
-    <div class="stepper">
-      <div class="step done" data-step="1" data-done-at="2026-06-05T11:30"><span class="step-no">1</span><span class="step-name">模板创建</span></div>
+    <!-- 轨道指示带 · L2 支线 → ④ 过桥 → L1 主干 -->
+    <div style="display:flex;align-items:stretch;height:26px;border-radius:6px;overflow:hidden;margin-bottom:8px;font-size:11px;font-weight:600;letter-spacing:0.3px">
+      <div style="flex:3;background:linear-gradient(90deg,#eaf1ff 0%,#d6e4ff 100%);color:#3370ff;display:flex;align-items:center;justify-content:center;border:1px solid #b9d0ff;border-right:none;border-radius:6px 0 0 6px" title="L2 支线 = 草稿页版本，全局唯一">📝 L2 支线（草稿页 · 全局唯一）</div>
+      <div style="flex:1;background:#fff3e0;color:#c0681a;display:flex;align-items:center;justify-content:center;border-top:1px solid #f5c98a;border-bottom:1px solid #f5c98a" title="④ 草稿发布 = 物理覆盖、不留底、不可回滚">⚡ ④ 物理覆盖</div>
+      <div style="flex:4;background:linear-gradient(90deg,#e7f4ec 0%,#d4ecdb 100%);color:#23a567;display:flex;align-items:center;justify-content:center;border:1px solid #b3dec3;border-left:none;border-radius:0 6px 6px 0" title="L1 主干 = 模板管理版本，永远跑线上">🚀 L1 主干（模板管理 · 永远跑线上）</div>
+    </div>
+
+    <!-- Stepper · 8 步 · 步骤间标注用时 · 角标标注主干/支线归属 -->
+    <div class="stepper" data-track-mode="branch">
+      <div class="step done" data-step="1" data-track="L2" data-done-at="2026-06-05T11:30"><span class="step-no">1</span><span class="step-name">模板创建</span><span style="font-size:10px;color:#3370ff;background:#eaf1ff;border:1px solid #b9d0ff;padding:0 5px;border-radius:8px">L2 fork</span></div>
       <div class="step-gap"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
-      <div class="step done active" data-step="2" data-done-at="2026-06-05T14:50"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
+      <div class="step done active" data-step="2" data-track="L2" data-done-at="2026-06-05T14:50"><span class="step-no">2</span><span class="step-name">模板编辑</span><span style="font-size:10px;color:#3370ff;background:#eaf1ff;border:1px solid #b9d0ff;padding:0 5px;border-radius:8px">L2 支线</span></div>
       <div class="step-gap"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
-      <div class="step done" data-step="3" data-done-at="2026-06-05T16:20"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
+      <div class="step done" data-step="3" data-track="L2" data-done-at="2026-06-05T16:20"><span class="step-no">3</span><span class="step-name">模板测试</span><span style="font-size:10px;color:#3370ff;background:#eaf1ff;border:1px solid #b9d0ff;padding:0 5px;border-radius:8px">L2 支线</span></div>
       <div class="step-gap"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
-      <div class="step done" data-step="4" data-done-at="2026-06-06T10:15"><span class="step-no">4</span><span class="step-name">草稿发布</span></div>
+      <div class="step done" data-step="4" data-track="bridge" data-done-at="2026-06-06T10:15"><span class="step-no">4</span><span class="step-name">草稿发布</span><span style="font-size:10px;color:#c0681a;background:#fff3e0;border:1px solid #f5c98a;padding:0 5px;border-radius:8px" title="L2 → L1 物理覆盖、不留底、不可回滚">⚡ 过桥</span></div>
       <div class="step-gap"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
-      <div class="step done" data-step="5" data-done-at="2026-06-06T11:40"><span class="step-no">5</span><span class="step-name">规则配置</span></div>
+      <div class="step done" data-step="5" data-track="L1" data-done-at="2026-06-06T11:40"><span class="step-no">5</span><span class="step-name">规则配置</span><span style="font-size:10px;color:#23a567;background:#e7f4ec;border:1px solid #b3dec3;padding:0 5px;border-radius:8px">L1 主干</span></div>
       <div class="step-gap"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
-      <div class="step done" data-step="6" data-done-at="2026-06-08T09:30"><span class="step-no">6</span><span class="step-name">模板实验</span></div>
+      <div class="step done" data-step="6" data-track="L1" data-done-at="2026-06-08T09:30"><span class="step-no">6</span><span class="step-name">模板实验</span><span style="font-size:10px;color:#23a567;background:#e7f4ec;border:1px solid #b3dec3;padding:0 5px;border-radius:8px">L1 主干</span></div>
       <div class="step-gap"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
-      <div class="step done" data-step="7" data-done-at="2026-06-09T18:00"><span class="step-no">7</span><span class="step-name">全量上线</span></div>
+      <div class="step done" data-step="7" data-track="L1" data-done-at="2026-06-09T18:00"><span class="step-no">7</span><span class="step-name">全量上线</span><span style="font-size:10px;color:#23a567;background:#e7f4ec;border:1px solid #b3dec3;padding:0 5px;border-radius:8px">L1 主干</span></div>
       <div class="step-gap"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
-      <div class="step done" data-step="8" data-done-at="2026-06-09T22:45"><span class="step-no">8</span><span class="step-name">成绩单</span></div>
+      <div class="step done" data-step="8" data-track="L1" data-done-at="2026-06-09T22:45"><span class="step-no">8</span><span class="step-name">成绩单</span><span style="font-size:10px;color:#23a567;background:#e7f4ec;border:1px solid #b3dec3;padding:0 5px;border-radius:8px">L1 主干</span></div>
     </div>
 
     <!-- Step Panel -->
