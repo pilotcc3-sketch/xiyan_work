@@ -198,9 +198,15 @@
         <div class="pf-node" data-step="8"><span class="step-no">8</span><span class="step-name">成绩单</span></div>
       </div>
 
-      <!-- ===== L2 支线行：v2 草稿支线，水平方向对齐到主行 ②③④ 列 ===== -->
+      <!-- ===== L2 支线行：v2 草稿支线，水平方向对齐到主行 ②③④ 列 =====
+           左侧 fork-in 折线：从主行 ① 节点底部 → 弯下 → 接到 L2 ② 节点左侧
+           右侧 fork-out 折线：从 L2 ④ 节点右侧 → 弯上 → 接到主行 ⑤ 节点底部 -->
       <div class="pf-l2-row" id="l2RowEl">
         <span class="pf-row-tag pf-row-tag-l2" id="l2BranchTag">📝 L2 支线 · v2 暂无草稿</span>
+        <!-- fork-in：① → L2② 折线 -->
+        <span class="pf-fork-in" aria-hidden="true"></span>
+        <!-- fork-out：L2④ → ⑤ 折线 -->
+        <span class="pf-fork-out" aria-hidden="true"></span>
         <span class="pf-conn pf-conn-l2" data-idx="l2-1"></span>
         <div class="pf-node" id="l2Step2" data-step="2" data-track="L2"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
         <span class="pf-conn pf-conn-l2" data-idx="l2-2"><em class="pf-time">17h55m</em></span>
@@ -314,8 +320,53 @@
       .pf-l2-row > .pf-conn[data-idx="l2-2"] { left: calc(100%/8 * 1.5); right: calc(100%/8 * 5.5); }
       /* ③→④：col 3 中点 → col 4 中点 */
       .pf-l2-row > .pf-conn[data-idx="l2-3"] { left: calc(100%/8 * 2.5); right: calc(100%/8 * 4.5); }
-      /* fork-in / fork-out 弧线已废弃：稳态下两条灰虚线视觉噪声大，editing 时 L2 行已有自身蓝实线连线表明流转，无需再用弧线连回主行 */
-      /* L2 editing → 整行高亮（节点恢复亮度由整行 opacity 控制；以前的 fork 弧线高亮已移除） */
+      /* ============================================================
+         fork-in / fork-out 折弯连接线
+         几何：L2 行 padding-top 16px + 节点半径 22px → L2 节点圆心距 L2 行顶 +38px
+              主行节点圆心距 L2 行顶 ≈ -58px（主行底 → gap → L2 行顶）
+         fork-in：从主行 ① 中心(top:-58)垂直下来 → 在 L2 ② 中心(top:+38)拐弯 → 横向接到 L2 ②
+         fork-out：从 L2 ④ 中心(top:+38)横向出 → 拐弯垂直上去 → 接到主行 ⑤ 中心(top:-58)
+         样式：稳态浅灰细实线（克制），editing 时变蓝，published 时 fork-out 变橙
+         ============================================================ */
+      .pf-fork-in,
+      .pf-fork-out {
+        position: absolute;
+        top: -58px;
+        height: 96px;     /* -58 ~ +38 = 96px */
+        width: calc(100%/8 * 1);  /* 一格宽：从主行节点中心横移半格 + L2 节点中心横移半格 */
+        z-index: 0;
+        pointer-events: none;
+        border-color: #d6dbe4;     /* 稳态浅灰 */
+        border-style: solid;
+        border-width: 0;
+      }
+      /* fork-in：左竖（接主行①）+ 下横（接 L2②） + 左下圆角 */
+      .pf-fork-in {
+        left: calc(100%/8 * 0.5);   /* 主行① 圆心在第 1 列中点 = 100%/8*0.5 */
+        border-left-width: 1.5px;
+        border-bottom-width: 1.5px;
+        border-bottom-left-radius: 14px;
+      }
+      /* fork-out：右竖（接主行⑤）+ 下横（接 L2④） + 右下圆角 */
+      .pf-fork-out {
+        left: calc(100%/8 * 3.5);   /* L2④ 圆心 = 第 4 列中点 = 100%/8*3.5；主行⑤ = 100%/8*4.5；横跨一格 */
+        border-right-width: 1.5px;
+        border-bottom-width: 1.5px;
+        border-bottom-right-radius: 14px;
+      }
+      /* L2 editing → 折线点亮成蓝色 */
+      .pipeline-fork[data-l2-state="editing"] .pf-fork-in,
+      .pipeline-fork[data-l2-state="editing"] .pf-fork-out {
+        border-color: #3370ff;
+      }
+      /* L2 published → fork-out 变橙（覆盖主干语义） */
+      .pipeline-fork[data-l2-state="published"] .pf-fork-out {
+        border-color: #e8821a;
+      }
+      /* L1 已归档 + L2 idle（即将拉起 V2）→ fork-in 提前点亮成金黄，呼应 ② 节点的提示气泡 */
+      .pipeline-fork[data-l1-archived="true"][data-l2-state="idle"] .pf-fork-in {
+        border-color: #f5b81c;
+      }
 
       /* L2 row tag */
       .pf-row-tag {
