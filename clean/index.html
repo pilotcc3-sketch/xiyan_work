@@ -298,7 +298,7 @@
         <span class="pf-conn pf-conn-l2" data-idx="l2-2"><em class="pf-time">17h55m</em></span>
         <div class="pf-node" id="l2Step3" data-step="3" data-track="L2" data-toast="草稿版本-测试中"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
         <span class="pf-conn pf-conn-l2" data-idx="l2-3"><em class="pf-time">17h55m</em></span>
-        <div class="pf-node pf-bridge" id="l2Step4" data-step="4" data-track="bridge" data-toast="草稿版本-发布覆盖中" title="④ 草稿发布通过 → 物理覆盖 L1 主干，不留底、不可回滚">
+        <div class="pf-node pf-bridge" id="l2Step4" data-step="4" data-track="bridge" data-toast="草稿版本-待发布" title="④ 草稿发布通过 → 物理覆盖 L1 主干，不留底、不可回滚">
           <span class="step-no pf-no-bridge">4</span>
           <span class="step-name pf-name-bridge">草稿发布⚡</span>
         </div>
@@ -460,7 +460,7 @@
          显示 data-toast 文案，告诉用户该版本当前在哪个环节
          - 主行节点（L1 ②③④ 或 共用尾段 ⑤⑥⑦⑧）：绿色，「已发布版本-XXX中」
          - L2 行节点：蓝色，「草稿版本-XXX中」
-         - bridge 节点（L2 ④ 覆盖瞬间）：橙色，「草稿版本-发布覆盖中」
+         - bridge 节点（L2 ④ 覆盖瞬间）：橙色，「草稿版本-待发布」
          不影响节点高度（absolute 定位浮在节点下方）
          ============================================================ */
       .pf-node[data-toast].pf-current::after,
