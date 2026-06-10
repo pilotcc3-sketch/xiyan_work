@@ -138,30 +138,23 @@
     <div>
       <div class="side-drawer-title" id="pipelineDrawerTitle">模板生产流水线</div>
       <div class="side-drawer-sub" id="pipelineDrawerSub">
-        ① 模板创建 fork →
-        <span style="color:#23a567">🚀 主干 L1（在线 · ⑤⑥⑦⑧）</span> /
-        <span style="color:#3370ff">📝 支线 L2（草稿 · ②③④）</span>
-        <span style="color:#e8821a">· ④ 通过即合并回主干</span>
+        <span style="color:#23a567">🚀 L1 主干（在线）：① → ⑤ → ⑥ → ⑦ → ⑧</span>
+        &nbsp;/&nbsp;
+        <span style="color:#3370ff">📝 L2 支线（草稿）：① → ② → ③ → <span style="color:#e8821a">④⚡ 合并回主干</span></span>
       </div>
     </div>
     <div class="side-drawer-close" data-close="pipeline">✕</div>
   </div>
   <div class="side-drawer-body">
 
-    <!-- Stepper · ① 分叉 · 上行=L1主干（在线版本）/ 下行=L2支线（草稿版本） -->
-    <div class="stepper" data-track-mode="branch" style="display:grid;grid-template-columns:140px 1fr;grid-template-rows:auto auto;column-gap:8px;row-gap:10px;align-items:center;padding:18px 20px">
+    <!-- Stepper · 两行完整流水线 · 上=L1 主干（在线）/ 下=L2 支线（草稿） -->
+    <div class="stepper" data-track-mode="branch" style="display:flex;flex-direction:column;gap:14px;padding:18px 20px">
 
-      <!-- ① 模板创建：跨两行的分叉起点 -->
-      <div class="step done" data-step="1" data-track="fork" data-done-at="2026-06-05T11:30" style="grid-column:1;grid-row:1 / span 2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px 6px;background:linear-gradient(180deg,#e7f4ec 0%,#eaf1ff 100%);border:1px dashed #9bb8d6;border-radius:10px;cursor:pointer;position:relative">
-        <span class="step-no">1</span>
-        <span class="step-name" style="font-weight:600">模板创建</span>
-        <span style="font-size:10px;color:#8a5a14;background:#fff7ec;border:1px solid #f5c98a;padding:1px 6px;border-radius:8px" title="从 L1 主干 fork 出 L2 支线，分叉点">🔀 分叉点</span>
-        <span style="position:absolute;right:-6px;top:50%;transform:translateY(-50%);font-size:14px;color:#6b7588;line-height:1">⤵<br>⤴</span>
-      </div>
-
-      <!-- 上行：🚀 L1 主干（在线版本，已发布的那一份）⑤⑥⑦⑧ -->
-      <div style="grid-column:2;grid-row:1;display:flex;align-items:stretch;gap:4px;padding:10px 12px;background:linear-gradient(90deg,#e7f4ec 0%,#f4faf6 100%);border:1px solid #b3dec3;border-radius:8px;position:relative">
-        <div style="position:absolute;top:-9px;left:14px;font-size:11px;font-weight:600;color:#23a567;background:#fff;padding:0 8px;border:1px solid #b3dec3;border-radius:8px">🚀 L1 主干 · 在线版本</div>
+      <!-- 上行：🚀 L1 主干 · 在线版本：① → ⑤ → ⑥ → ⑦ → ⑧ -->
+      <div style="display:flex;align-items:stretch;gap:4px;padding:14px 14px 10px;background:linear-gradient(90deg,#e7f4ec 0%,#f4faf6 100%);border:1px solid #b3dec3;border-radius:8px;position:relative">
+        <div style="position:absolute;top:-9px;left:14px;font-size:11px;font-weight:600;color:#23a567;background:#fff;padding:0 8px;border:1px solid #b3dec3;border-radius:8px">🚀 L1 主干 · 在线版本（永远跑线上）</div>
+        <div class="step done" data-step="1" data-track="L1" data-done-at="2026-06-05T11:30" style="flex:1"><span class="step-no">1</span><span class="step-name">模板创建</span></div>
+        <div class="step-gap" style="flex:0 0 50px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
         <div class="step done" data-step="5" data-track="L1" data-done-at="2026-06-06T11:40" style="flex:1"><span class="step-no">5</span><span class="step-name">规则配置</span></div>
         <div class="step-gap" style="flex:0 0 50px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
         <div class="step done" data-step="6" data-track="L1" data-done-at="2026-06-08T09:30" style="flex:1"><span class="step-no">6</span><span class="step-name">模板实验</span></div>
@@ -171,9 +164,11 @@
         <div class="step done" data-step="8" data-track="L1" data-done-at="2026-06-09T22:45" style="flex:1"><span class="step-no">8</span><span class="step-name">成绩单</span></div>
       </div>
 
-      <!-- 下行：📝 L2 支线（草稿版本，正在改的那一份）②③④ -->
-      <div style="grid-column:2;grid-row:2;display:flex;align-items:stretch;gap:4px;padding:10px 12px;background:linear-gradient(90deg,#eaf1ff 0%,#f5f9ff 100%);border:1px solid #b9d0ff;border-radius:8px;position:relative">
+      <!-- 下行：📝 L2 支线 · 草稿版本：① → ② → ③ → ④⚡ -->
+      <div style="display:flex;align-items:stretch;gap:4px;padding:14px 14px 10px;background:linear-gradient(90deg,#eaf1ff 0%,#f5f9ff 100%);border:1px solid #b9d0ff;border-radius:8px;position:relative">
         <div style="position:absolute;top:-9px;left:14px;font-size:11px;font-weight:600;color:#3370ff;background:#fff;padding:0 8px;border:1px solid #b9d0ff;border-radius:8px">📝 L2 支线 · 草稿版本（全局唯一）</div>
+        <div class="step done" data-step="1" data-track="L2" data-done-at="2026-06-05T11:30" style="flex:1"><span class="step-no">1</span><span class="step-name">模板创建</span></div>
+        <div class="step-gap" style="flex:0 0 50px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
         <div class="step done active" data-step="2" data-track="L2" data-done-at="2026-06-05T14:50" style="flex:1"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
         <div class="step-gap" style="flex:0 0 50px"><span class="step-gap-line"></span><span class="step-gap-time"></span></div>
         <div class="step done" data-step="3" data-track="L2" data-done-at="2026-06-05T16:20" style="flex:1"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
