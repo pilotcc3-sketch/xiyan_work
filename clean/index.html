@@ -306,6 +306,13 @@
         </div>
         <span class="pf-conn pf-conn-bridge" data-idx="l2-4"></span>
       </div>
+
+      <!-- L2 行下方常驻提示条：仅在「L1 归档待拉起 / V2 编辑中 / V2 覆盖中」三种关键态显示
+           简写版，紧贴 L2 让用户一眼看到当前 L2 在干嘛 -->
+      <div class="pf-l2-pin" id="l2PinTip" hidden>
+        <span class="pf-l2-pin-dot" aria-hidden="true"></span>
+        <span class="pf-l2-pin-text" id="l2PinText">L2 状态</span>
+      </div>
     </div>
 
     <!-- 流水线下方：L1 / L2 双线状态说明 -->
@@ -454,6 +461,58 @@
       .pipeline-fork[data-l1-archived="true"][data-l2-state="idle"] .pf-fork-in {
         border-color: #f5b81c;
       }
+
+      /* ============================================================
+         L2 行下方常驻提示条 .pf-l2-pin
+         仅在「L1 归档待拉起 V2 / V2 编辑中 / V2 覆盖中」三种关键态显示
+         紧贴 L2 行下方，使用三种状态色对应：金黄 / 蓝 / 橙
+         ============================================================ */
+      .pf-l2-pin {
+        margin-top: 14px;
+        padding: 8px 12px;
+        font-size: 12px;
+        line-height: 1.4;
+        border: 1px solid;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        animation: l2PinIn .25s ease-out;
+      }
+      .pf-l2-pin[hidden] { display: none; }
+      .pf-l2-pin-dot {
+        display: inline-block;
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        flex: 0 0 auto;
+      }
+      @keyframes l2PinIn {
+        from { opacity: 0; transform: translateY(-2px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      /* 三态主题色 */
+      .pf-l2-pin[data-tone="warn"] {
+        color: #b06b00;
+        background: #fff8e6;
+        border-color: #f5d889;
+      }
+      .pf-l2-pin[data-tone="warn"] .pf-l2-pin-dot { background: #f5b81c; }
+      .pf-l2-pin[data-tone="info"] {
+        color: #1a55cc;
+        background: #f0f5ff;
+        border-color: #b9d0ff;
+      }
+      .pf-l2-pin[data-tone="info"] .pf-l2-pin-dot {
+        background: #3370ff;
+        animation: l2Pulse 1.6s infinite;
+      }
+      .pf-l2-pin[data-tone="hot"] {
+        color: #b25e0a;
+        background: #fff2e0;
+        border-color: #f5c98a;
+      }
+      .pf-l2-pin[data-tone="hot"] .pf-l2-pin-dot { background: #e8821a; }
 
       /* L2 row tag */
       .pf-row-tag {
@@ -917,6 +976,28 @@
         const dot = badge.querySelector('span:first-child');
         const text = document.getElementById('l2StatusText');
         const tag = document.getElementById('l2BranchTag');
+        const pin = document.getElementById('l2PinTip');
+        const pinText = document.getElementById('l2PinText');
+
+        // ----- L2 行下方常驻提示条 -----
+        function applyPin(state, l1Archived) {
+          if (!pin || !pinText) return;
+          if (state === 'editing') {
+            pin.hidden = false;
+            pin.setAttribute('data-tone', 'info');
+            pinText.textContent = '📝 V2 草稿编辑中 · @小樊';
+          } else if (state === 'published') {
+            pin.hidden = false;
+            pin.setAttribute('data-tone', 'hot');
+            pinText.textContent = '⚡ V2 覆盖主干 v1 → v2';
+          } else if (l1Archived) {
+            pin.hidden = false;
+            pin.setAttribute('data-tone', 'warn');
+            pinText.textContent = '💤 L1 已归档 · 待拉起 V2 草稿（点 L2ⓘ ② 新建）';
+          } else {
+            pin.hidden = true;
+          }
+        }
 
         // ----- 状态视觉应用 -----
         function apply() {
@@ -969,6 +1050,8 @@
             if (tag) tag.textContent = '⏳ L2 支线 · 等 L1 ④ 完成后启动';
             document.querySelectorAll('#l2RowEl .pf-node.pf-active').forEach(n => n.classList.remove('pf-active'));
           }
+          // 同步 L2 行下方常驻提示条
+          applyPin(state, l1Archived);
           // 状态变了 → 重刷 pf-node 的 done/current/todo（仅重渲染，不推进任何指针）
           if (typeof window.__refreshPipeline === 'function') {
             window.__refreshPipeline();
