@@ -617,6 +617,8 @@
     clearTimeout(t._timer);
     t._timer = setTimeout(() => t.classList.remove('show'), 2200);
   }
+  // 暴露给 index.html 内的内联脚本（流水线节点交互）调用
+  window.showToast = showToast;
 
   // ============ ④ 模板测试 · 自动化测试 / 人工测试（可跳过） ============
   function bindAutoTestBtn(id) {

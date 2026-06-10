@@ -517,6 +517,81 @@
       .pipeline-fork[data-l2-state="published"] .pf-bridge .pf-no-bridge {
         animation: l2OverridePulse 1.2s ease-out 1;
       }
+
+      /* ============================================================
+         L1 已归档 + L2 idle：在 L2 ② 节点上做"黄色光圈呼吸"提示
+         —— 引导用户点击此处拉起 V2 新版本草稿。
+         注意：默认 idle 状态整个 L2 行被压暗（opacity:.5 + grayscale），
+         需用更高优先级把 ② 节点单独"擦亮"并加发光。
+         ============================================================ */
+      @keyframes l2NextPulse {
+        0%   { box-shadow: 0 0 0 0    rgba(245, 184, 28, 0.65),
+                           0 0 0 0    rgba(245, 184, 28, 0.35); }
+        60%  { box-shadow: 0 0 0 8px  rgba(245, 184, 28, 0.18),
+                           0 0 0 16px rgba(245, 184, 28, 0.05); }
+        100% { box-shadow: 0 0 0 0    rgba(245, 184, 28, 0),
+                           0 0 0 0    rgba(245, 184, 28, 0); }
+      }
+      @keyframes l2NextHintFloat {
+        0%, 100% { transform: translateX(-50%) translateY(0); }
+        50%      { transform: translateX(-50%) translateY(-3px); }
+      }
+      /* 把 ② 节点从整行置灰里"捞"出来：恢复亮度 + 加发光 + 改 cursor */
+      .pipeline-fork[data-l1-archived="true"][data-l2-state="idle"] .pf-l2-row > #l2Step2 {
+        opacity: 1 !important;
+        filter: none !important;
+        cursor: pointer !important;
+        background: #fffbe8;
+        border-color: #f5b81c;
+        animation: l2NextPulse 1.6s ease-in-out infinite;
+        position: relative;
+        z-index: 3;
+      }
+      .pipeline-fork[data-l1-archived="true"][data-l2-state="idle"] .pf-l2-row > #l2Step2 .step-no,
+      .pipeline-fork[data-l1-archived="true"][data-l2-state="idle"] .pf-l2-row > #l2Step2 .step-name {
+        color: #8a5a14;
+        font-weight: 700;
+      }
+      /* 节点上方的小气泡提示："点这里创建 V2 新版本 ↓" */
+      .pipeline-fork[data-l1-archived="true"][data-l2-state="idle"] .pf-l2-row > #l2Step2::before {
+        content: "✨ 点这里创建 V2 新版本";
+        position: absolute;
+        bottom: calc(100% + 10px);
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 4px 10px;
+        font-size: 11px;
+        font-weight: 600;
+        color: #8a5a14;
+        background: #fff7d1;
+        border: 1px solid #f5b81c;
+        border-radius: 12px;
+        white-space: nowrap;
+        box-shadow: 0 2px 6px rgba(245, 184, 28, 0.35);
+        animation: l2NextHintFloat 1.6s ease-in-out infinite;
+        z-index: 4;
+        pointer-events: none;
+      }
+      /* 气泡下方小三角 */
+      .pipeline-fork[data-l1-archived="true"][data-l2-state="idle"] .pf-l2-row > #l2Step2::after {
+        content: "";
+        position: absolute;
+        bottom: calc(100% + 4px);
+        left: 50%;
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-top-color: #f5b81c;
+        z-index: 4;
+        pointer-events: none;
+      }
+      /* 该状态下覆盖原来的 hover tooltip（避免和气泡重叠）*/
+      .pipeline-fork[data-l2-state="idle"][data-l1-archived="true"] .pf-l2-row > #l2Step2:hover::after {
+        content: "";
+        position: absolute;
+        background: transparent;
+        border: 6px solid transparent;
+        border-top-color: #f5b81c;
+      }
     </style>
 
     <!-- L2 支线状态切换 -->
@@ -687,9 +762,18 @@
               alert('当前 L1 v1 还在流转中（②③④），需先完成 L1 ④ 草稿发布后，再启动 L2 v2 草稿。');
               return;
             }
-            // L1 已归档 + L2 idle 状态下点 L2 → 提示拉起草稿
+            // L1 已归档 + L2 idle 状态下点 L2 → 直接拉起 v2 草稿 + toast 提示
             if (isL2 && l1Archived && state === 'idle') {
               e.preventDefault(); e.stopPropagation();
+              // 仅当点击的是 ②（其他 ③④ 节点保持原 confirm 兜底）
+              if (n.id === 'l2Step2') {
+                const toast = (typeof window.showToast === 'function')
+                  ? window.showToast
+                  : (msg) => alert(msg);
+                toast('✨ V1 已发布归档 · 已为你拉起 V2 新版本草稿');
+                window.forkL2();
+                return;
+              }
               const ok = confirm('L1 v1 已归档，是否基于 v1 拉起 L2 v2 草稿？');
               if (ok) {
                 window.forkL2();
