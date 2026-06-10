@@ -308,7 +308,13 @@
       </div>
     </div>
 
-    <!-- #l2StatusBadge 已下线：流水线下方不再显示「已发布版本-XX中 / 草稿版本-XX中」横幅长条 -->
+    <!-- 流水线下方：仅保留「草稿版本-XX中」蓝色横幅（绑定 L2 行 ②③④）；
+         上行「已发布版本-XX中」绿色横幅已下线（主行 ①②③④ 不再常驻显示） -->
+    <div id="l2StatusBadge" style="margin-top:14px;padding:10px 14px;font-size:12px;background:#f5f9ff;border:1px solid #d8e3ff;border-radius:6px;display:none">
+      <div id="l2StatusLines" style="display:flex;flex-direction:column;gap:2px;line-height:1.4">
+        <span id="l2DraftStatusText" style="color:#3370ff;font-weight:500">草稿版本 · 流转中</span>
+      </div>
+    </div>
 
     <style>
       @keyframes l2Pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
@@ -1016,8 +1022,10 @@
                 draftText.textContent = (l2Current && nodeStateLabel(l2Current)) || '草稿版本 · 流转中';
               }
               draftText.style.display = '';
+              if (badge) badge.style.display = '';
             } else {
               draftText.style.display = 'none';
+              if (badge) badge.style.display = 'none';
             }
           }
         }
