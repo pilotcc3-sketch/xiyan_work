@@ -308,13 +308,7 @@
       </div>
     </div>
 
-    <!-- 流水线下方：L1 / L2 双线状态说明 -->
-    <div id="l2StatusBadge" style="margin-top:14px;padding:10px 14px;font-size:12px;background:#f5f7fa;border:1px solid #e0e4ec;border-radius:6px">
-      <div id="l2StatusLines" style="display:flex;flex-direction:column;gap:2px;line-height:1.4">
-        <span id="l2StatusText" style="color:#23a567;font-weight:500">已发布版本 · 流转中</span>
-        <span id="l2DraftStatusText" style="color:#3370ff;font-weight:500;display:none">草稿版本 · 流转中</span>
-      </div>
-    </div>
+    <!-- #l2StatusBadge 已下线：流水线下方不再显示「已发布版本-XX中 / 草稿版本-XX中」横幅长条 -->
 
     <style>
       @keyframes l2Pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
@@ -979,6 +973,7 @@
       (function () {
         const stepper = document.querySelector('#pipelineDrawer .pipeline-fork');
         if (!stepper) return;
+        // #l2StatusBadge 已下线，相关 DOM 不再存在；下面所有引用做 null-safe 处理
         const badge = document.getElementById('l2StatusBadge');
         const text = document.getElementById('l2StatusText');
         const draftText = document.getElementById('l2DraftStatusText');
@@ -995,33 +990,35 @@
           const prefix = isL2 ? '草稿版本' : '已发布版本';
           return `${prefix}-${name}中`;
         }
-        // 刷新两行文案（在 __refreshPipeline 之后调用，确保 pf-current 已就位）
+        // badge 已下线 → 文案刷新降级为 no-op；保留函数签名以兼容外部调用
         function refreshStatusText() {
+          if (!text && !draftText) return;
           const state = stepper.getAttribute('data-l2-state') || 'idle';
           const l1Archived = stepper.getAttribute('data-l1-archived') === 'true';
           const mainCurrent = stepper.querySelector('.pf-main-row .pf-node.pf-current');
-          // 上行：已发布版本
-          if (state === 'published') {
-            // 覆盖瞬时态：上行同步显示"被覆盖中"，与下行形成"草稿审批通过 → 主干被覆盖"语义闭环
-            text.textContent = '已发布版本 · 被覆盖中';
-          } else if (l1Archived && state !== 'editing') {
-            text.textContent = '已发布版本 · 已归档';
-          } else if (mainCurrent) {
-            text.textContent = nodeStateLabel(mainCurrent) || '已发布版本 · 流转中';
-          } else {
-            text.textContent = '已发布版本 · 流转中';
-          }
-          // 下行：草稿版本（仅 editing / published 显示）
-          if (state === 'editing' || state === 'published') {
+          if (text) {
             if (state === 'published') {
-              draftText.textContent = '草稿版本 · ④审批通过，覆盖主干中';
+              text.textContent = '已发布版本 · 被覆盖中';
+            } else if (l1Archived && state !== 'editing') {
+              text.textContent = '已发布版本 · 已归档';
+            } else if (mainCurrent) {
+              text.textContent = nodeStateLabel(mainCurrent) || '已发布版本 · 流转中';
             } else {
-              const l2Current = stepper.querySelector('.pf-l2-row .pf-node.pf-current');
-              draftText.textContent = (l2Current && nodeStateLabel(l2Current)) || '草稿版本 · 流转中';
+              text.textContent = '已发布版本 · 流转中';
             }
-            draftText.style.display = '';
-          } else {
-            draftText.style.display = 'none';
+          }
+          if (draftText) {
+            if (state === 'editing' || state === 'published') {
+              if (state === 'published') {
+                draftText.textContent = '草稿版本 · ④审批通过，覆盖主干中';
+              } else {
+                const l2Current = stepper.querySelector('.pf-l2-row .pf-node.pf-current');
+                draftText.textContent = (l2Current && nodeStateLabel(l2Current)) || '草稿版本 · 流转中';
+              }
+              draftText.style.display = '';
+            } else {
+              draftText.style.display = 'none';
+            }
           }
         }
 
@@ -1029,19 +1026,17 @@
         function apply() {
           const state = stepper.getAttribute('data-l2-state') || 'idle';
           const l1Archived = stepper.getAttribute('data-l1-archived') === 'true';
-          // badge 配色 + 文字色（dot 已下线，纯靠文字色 + 文案承载语义）
+          // badge 配色 + 文字色：badge DOM 已下线 → 仅在节点存在时设置
           if (state === 'editing') {
-            text.style.color = '#23a567';        // 上行已发布版本：绿
-            draftText.style.color = '#3370ff';   // 下行草稿版本：蓝
-            badge.style.background = '#f5f9ff';
-            badge.style.borderColor = '#d8e3ff';
+            if (text) text.style.color = '#23a567';
+            if (draftText) draftText.style.color = '#3370ff';
+            if (badge) { badge.style.background = '#f5f9ff'; badge.style.borderColor = '#d8e3ff'; }
             const l2s2 = document.getElementById('l2Step2');
             if (l2s2) l2s2.classList.add('pf-active');
           } else if (state === 'published') {
-            text.style.color = '#e8821a';        // 上下两行同步走橙：主干被覆盖中
-            draftText.style.color = '#e8821a';
-            badge.style.background = '#fff7ec';
-            badge.style.borderColor = '#f5c98a';
+            if (text) text.style.color = '#e8821a';
+            if (draftText) draftText.style.color = '#e8821a';
+            if (badge) { badge.style.background = '#fff7ec'; badge.style.borderColor = '#f5c98a'; }
             setTimeout(() => {
               if (stepper.getAttribute('data-l2-state') === 'published') {
                 stepper.setAttribute('data-l2-state', 'idle');
@@ -1049,14 +1044,12 @@
               }
             }, 3000);
           } else if (l1Archived) {
-            text.style.color = '#8a93a6';
-            badge.style.background = '#f5f7fa';
-            badge.style.borderColor = '#e0e4ec';
+            if (text) text.style.color = '#8a93a6';
+            if (badge) { badge.style.background = '#f5f7fa'; badge.style.borderColor = '#e0e4ec'; }
             document.querySelectorAll('#l2RowEl .pf-node.pf-active').forEach(n => n.classList.remove('pf-active'));
           } else {
-            text.style.color = '#23a567';
-            badge.style.background = '#f0f9f4';
-            badge.style.borderColor = '#b3dec3';
+            if (text) text.style.color = '#23a567';
+            if (badge) { badge.style.background = '#f0f9f4'; badge.style.borderColor = '#b3dec3'; }
             document.querySelectorAll('#l2RowEl .pf-node.pf-active').forEach(n => n.classList.remove('pf-active'));
           }
           // 状态变了 → 重刷 pf-node 的 done/current/todo（仅重渲染，不推进任何指针）
