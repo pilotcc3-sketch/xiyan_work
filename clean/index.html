@@ -554,37 +554,6 @@
       .pf-node.pf-todo .step-no { background: #f5f7fa; color: #b0b6c4; border-color: #e0e4ec; }
       .pf-node.pf-active .step-no { box-shadow: 0 0 0 4px rgba(51,112,255,.18); }
 
-      /* ============================================================
-         浏览态（pf-viewing）：用户点击查看，但业务上没推进
-         视觉差异：
-           · current  = 实底 + 脉动（业务推进态）
-           · viewing  = 描边 + 静止（仅视觉焦点）
-           · 两者形状/质感不同，避免被误读为"已推进到这一步"
-         ============================================================ */
-      .pf-node.pf-viewing .step-no {
-        background: #fff;
-        color: #3370ff;
-        border-color: #3370ff;
-        border-width: 2px;
-        box-shadow: 0 0 0 3px rgba(51,112,255,.14);
-        animation: none;
-      }
-      .pf-node.pf-viewing .step-name { color: #3370ff; font-weight: 500; }
-      /* viewing 叠加在 todo 上时（看一个还没到的步骤）：保留浅灰底，但加蓝描边表明"正在查看" */
-      .pf-node.pf-viewing.pf-todo .step-no {
-        background: #fff;
-        color: #3370ff;
-        border-color: #3370ff;
-      }
-      .pf-node.pf-viewing.pf-todo .step-name { color: #3370ff; }
-      /* viewing 叠加在 done（绿色已走过）上时：保留绿底，再外加一圈蓝描边作为"正在查看"焦点环 */
-      .pf-node.pf-viewing .step-no.done {
-        background: #23a567;
-        color: #fff;
-        border-color: #23a567;
-        box-shadow: 0 0 0 3px rgba(51,112,255,.35);
-      }
-
       /* ① 共用起点（缩成普通节点尺寸，去掉之前的虚线方框） */
       .pf-start { padding: 4px 6px; }
       .pf-start .step-no { background: #23a567; color: #fff; border-color: #23a567; }
@@ -1228,19 +1197,17 @@
             }
             // 推进 L2 指针（不动 mainCursor，保留 ⑤⑥⑦⑧ 进度）
             if (isL2 && state === 'editing') {
-              // 节点点击 = 浏览（不再推进 L2 cursor，业务推进交给 trigger）
-              activateNode(n.dataset.step, { track: 'view' });
+              activateNode(n.dataset.step, { track: 'L2' });
               return;
             }
-            // 主线节点（① / L1 / 共用尾段⑤⑥⑦⑧）：节点点击 = 浏览
-            // 真正的 mainCursor 推进交给业务 trigger（如 publishL1 / 自动流转）
-            activateNode(n.dataset.step, { track: 'view' });
+            // 主线节点（① / L1 / 共用尾段⑤⑥⑦⑧）：推进 mainCursor
+            activateNode(n.dataset.step);
           });
         });
         // jump 按钮已下线：环节流转改为达到条件自动推进 + 节点直接交互
         function initActivePane() {
           const initial = document.querySelector('#pipelineDrawer .step-content.active');
-          if (initial) activateNode(initial.dataset.stepContent, { track: 'view' });
+          if (initial) activateNode(initial.dataset.stepContent);
         }
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', initActivePane);
