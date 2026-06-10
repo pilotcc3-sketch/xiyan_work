@@ -456,32 +456,34 @@
 
   <!-- ============== Demo 改造方案 ============== -->
   <h2>⑧ Demo 该怎么改（可视化对比）</h2>
-  <p class="lead" style="margin-bottom:14px">当前 demo 把 7 步画成串行直线，掩盖了"双副本并行 + 物理覆盖"的真相。下面 5 个改造点，按"骨架→表格→交互→抽屉→警示"由外到内列出。</p>
+  <p class="lead" style="margin-bottom:14px">当前 demo 把 8 步流水线画成串行直线，掩盖了"双副本并行 + 物理覆盖"的真相。下面 5 个改造点，按"骨架→表格→交互→抽屉→警示"由外到内列出。</p>
 
   <!-- 改造点 1：骨架图分域 -->
   <div class="card">
-    <h3 style="margin-bottom:12px">改造点 ① 顶部 7 步骨架图：从「直线串行」改为「双泳道 + 过桥」</h3>
+    <h3 style="margin-bottom:12px">改造点 ① 顶部 8 步流水线骨架图：从「直线串行」改为「双泳道 + 过桥」</h3>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px">
       <!-- 改前 -->
       <div style="background:#fafbfd;border:1px dashed var(--border);border-radius:8px;padding:14px">
         <div style="font-size:12px;color:var(--red);font-weight:600;margin-bottom:10px">✗ 现状：直线串行（误导）</div>
         <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:11px">
-          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">①创建</span>
+          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">①模板创建</span>
           <span style="color:var(--soft)">→</span>
-          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">②编辑</span>
+          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">②模板编辑</span>
           <span style="color:var(--soft)">→</span>
-          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">③测试</span>
+          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">③模板测试</span>
           <span style="color:var(--soft)">→</span>
-          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">④发布</span>
+          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">④草稿发布</span>
           <span style="color:var(--soft)">→</span>
-          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">⑤规则</span>
+          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">⑤规则配置</span>
           <span style="color:var(--soft)">→</span>
-          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">⑥实验</span>
+          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">⑥模板实验</span>
           <span style="color:var(--soft)">→</span>
-          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">⑦全量</span>
+          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">⑦全量上线</span>
+          <span style="color:var(--soft)">→</span>
+          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">⑧成绩单</span>
         </div>
-        <div style="margin-top:10px;font-size:12px;color:var(--muted);line-height:1.7">问题：看起来像一次性走完，实际上 ①②③④ 和 ⑤⑥⑦ 是两个并行域，且 ④ 后会循环回 ②。</div>
+        <div style="margin-top:10px;font-size:12px;color:var(--muted);line-height:1.7">问题：看起来像一次性走完，实际上 ①②③④ 和 ⑤⑥⑦⑧ 是两个并行域，且 ④ 后会循环回 ②。</div>
       </div>
 
       <!-- 改后 -->
@@ -491,11 +493,11 @@
         <div style="border:1.5px solid var(--blue);border-radius:6px;padding:8px;background:var(--blue-bg)">
           <div style="font-size:11px;color:var(--blue);font-weight:600;margin-bottom:6px">📝 草稿副本域（模板草稿页）</div>
           <div style="display:flex;align-items:center;gap:3px;flex-wrap:wrap;font-size:11px">
-            <span style="background:#fff;border:1px solid var(--blue);padding:5px 8px;border-radius:5px">①创建</span>
+            <span style="background:#fff;border:1px solid var(--blue);padding:5px 8px;border-radius:5px">①模板创建</span>
             <span style="color:var(--blue)">→</span>
-            <span style="background:#fff;border:1px solid var(--blue);padding:5px 8px;border-radius:5px">②编辑</span>
+            <span style="background:#fff;border:1px solid var(--blue);padding:5px 8px;border-radius:5px">②模板编辑</span>
             <span style="color:var(--blue)">→</span>
-            <span style="background:#fff;border:1px solid var(--blue);padding:5px 8px;border-radius:5px">③测试</span>
+            <span style="background:#fff;border:1px solid var(--blue);padding:5px 8px;border-radius:5px">③模板测试</span>
             <span style="color:var(--blue)">→</span>
             <span style="background:#fff;border:1px solid var(--blue);padding:5px 8px;border-radius:5px">④草稿发布</span>
           </div>
@@ -508,11 +510,13 @@
         <div style="border:1.5px solid var(--green);border-radius:6px;padding:8px;background:var(--green-bg)">
           <div style="font-size:11px;color:var(--green);font-weight:600;margin-bottom:6px">🚀 已发布副本域（已发布模板管理页）</div>
           <div style="display:flex;align-items:center;gap:3px;flex-wrap:wrap;font-size:11px">
-            <span style="background:#fff;border:1px solid var(--green);padding:5px 8px;border-radius:5px">⑤未生效</span>
+            <span style="background:#fff;border:1px solid var(--green);padding:5px 8px;border-radius:5px">⑤规则配置</span>
             <span style="color:var(--green)">→</span>
-            <span style="background:#fff;border:1px solid var(--green);padding:5px 8px;border-radius:5px">⑥实验中</span>
+            <span style="background:#fff;border:1px solid var(--green);padding:5px 8px;border-radius:5px">⑥模板实验</span>
             <span style="color:var(--green)">→</span>
-            <span style="background:#fff;border:1px solid var(--green);padding:5px 8px;border-radius:5px">⑦全量</span>
+            <span style="background:#fff;border:1px solid var(--green);padding:5px 8px;border-radius:5px">⑦全量上线</span>
+            <span style="color:var(--green)">→</span>
+            <span style="background:#fff;border:1px solid var(--green);padding:5px 8px;border-radius:5px">⑧成绩单</span>
             <span style="color:var(--soft);margin-left:4px">↺</span>
             <span style="font-size:10px;color:var(--muted)">回②改下一版</span>
           </div>
@@ -643,21 +647,23 @@
 
   <!-- 改造点 5：流水线抽屉 -->
   <div class="card">
-    <h3 style="margin-bottom:12px">改造点 ⑤ 流水线抽屉：从「单线 7 步」改为「双副本视图」</h3>
+    <h3 style="margin-bottom:12px">改造点 ⑤ 流水线抽屉：从「单线 8 步」改为「双副本视图」</h3>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
       <!-- 改前 -->
       <div style="background:#fafbfd;border:1px dashed var(--border);border-radius:8px;padding:14px">
-        <div style="font-size:12px;color:var(--red);font-weight:600;margin-bottom:10px">✗ 现状：只画一条 7 步线</div>
+        <div style="font-size:12px;color:var(--red);font-weight:600;margin-bottom:10px">✗ 现状：只画一条 8 步线</div>
         <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:14px">
           <div style="font-size:12px;color:var(--muted);margin-bottom:8px">templateId 1003723 · 流水线</div>
           <div style="display:flex;flex-direction:column;gap:6px;font-size:11px">
-            <div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px">✓</span> ① 创建</div>
-            <div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px">✓</span> ② 编辑</div>
-            <div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px">✓</span> ③ 测试</div>
-            <div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px">✓</span> ④ 发布</div>
-            <div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:var(--orange);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px">●</span> ⑥ 实验中</div>
-            <div style="display:flex;align-items:center;gap:8px;color:var(--soft)"><span style="width:18px;height:18px;border-radius:50%;background:#e4e8ef;color:var(--soft);display:inline-flex;align-items:center;justify-content:center;font-size:10px">○</span> ⑦ 全量</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px">✓</span> ① 模板创建</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px">✓</span> ② 模板编辑</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px">✓</span> ③ 模板测试</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px">✓</span> ④ 草稿发布</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px">✓</span> ⑤ 规则配置</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:var(--orange);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px">●</span> ⑥ 模板实验</div>
+            <div style="display:flex;align-items:center;gap:8px;color:var(--soft)"><span style="width:18px;height:18px;border-radius:50%;background:#e4e8ef;color:var(--soft);display:inline-flex;align-items:center;justify-content:center;font-size:10px">○</span> ⑦ 全量上线</div>
+            <div style="display:flex;align-items:center;gap:8px;color:var(--soft)"><span style="width:18px;height:18px;border-radius:50%;background:#e4e8ef;color:var(--soft);display:inline-flex;align-items:center;justify-content:center;font-size:10px">○</span> ⑧ 成绩单</div>
           </div>
         </div>
       </div>
@@ -672,11 +678,13 @@
           <div style="border:1.5px solid var(--green);border-radius:6px;padding:10px;background:#fafff8;margin-bottom:8px">
             <div style="font-size:11px;color:var(--green);font-weight:600;margin-bottom:6px">🚀 线上版 · 6/5（已发布副本）</div>
             <div style="display:flex;align-items:center;gap:6px;font-size:11px;flex-wrap:wrap">
-              <span style="background:#fff;border:1px solid var(--green);color:var(--green);padding:3px 7px;border-radius:4px">⑤ 已配规则</span>
+              <span style="background:#fff;border:1px solid var(--green);color:var(--green);padding:3px 7px;border-radius:4px">⑤ 规则配置</span>
               <span style="color:var(--green)">→</span>
-              <span style="background:var(--orange-bg);border:1px solid var(--orange);color:var(--orange);padding:3px 7px;border-radius:4px;font-weight:600">⑥ 实验中（在这）</span>
+              <span style="background:var(--orange-bg);border:1px solid var(--orange);color:var(--orange);padding:3px 7px;border-radius:4px;font-weight:600">⑥ 模板实验（在这）</span>
               <span style="color:var(--soft)">→</span>
-              <span style="background:#f0f3f8;border:1px solid var(--border);color:var(--soft);padding:3px 7px;border-radius:4px">⑦ 全量</span>
+              <span style="background:#f0f3f8;border:1px solid var(--border);color:var(--soft);padding:3px 7px;border-radius:4px">⑦ 全量上线</span>
+              <span style="color:var(--soft)">→</span>
+              <span style="background:#f0f3f8;border:1px solid var(--border);color:var(--soft);padding:3px 7px;border-radius:4px">⑧ 成绩单</span>
             </div>
           </div>
 
