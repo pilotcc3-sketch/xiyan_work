@@ -308,11 +308,14 @@
       </div>
     </div>
 
-    <!-- 流水线下方：仅保留「草稿版本-XX中」蓝色横幅（绑定 L2 行 ②③④）；
-         上行「已发布版本-XX中」绿色横幅已下线（主行 ①②③④ 不再常驻显示） -->
-    <div id="l2StatusBadge" style="margin-top:14px;padding:10px 14px;font-size:12px;background:#f5f9ff;border:1px solid #d8e3ff;border-radius:6px;display:none">
+    <!-- 流水线下方双行横幅：
+         · 上行（绿/已发布版本）→ 仅当主指针进入共用尾段 ⑤⑥⑦⑧ 时显示；①②③④ 阶段不显示
+         · 下行（蓝/草稿版本）  → 仅当 L2 处于 editing/published 态时显示
+         · 两行同时不可见时整个 badge 容器自动隐藏 -->
+    <div id="l2StatusBadge" style="margin-top:14px;padding:10px 14px;font-size:12px;background:#f5f7fa;border:1px solid #e0e4ec;border-radius:6px;display:none">
       <div id="l2StatusLines" style="display:flex;flex-direction:column;gap:2px;line-height:1.4">
-        <span id="l2DraftStatusText" style="color:#3370ff;font-weight:500">草稿版本 · 流转中</span>
+        <span id="l2StatusText" style="color:#23a567;font-weight:500;display:none">已发布版本 · 流转中</span>
+        <span id="l2DraftStatusText" style="color:#3370ff;font-weight:500;display:none">草稿版本 · 流转中</span>
       </div>
     </div>
 
@@ -996,23 +999,35 @@
           const prefix = isL2 ? '草稿版本' : '已发布版本';
           return `${prefix}-${name}中`;
         }
-        // badge 已下线 → 文案刷新降级为 no-op；保留函数签名以兼容外部调用
+        // badge 双行可见性 + 文案刷新
+        // · text（上行/绿）：仅当主指针落在共用尾段 ⑤⑥⑦⑧ 时显示
+        // · draftText（下行/蓝）：仅当 L2 处于 editing / published 态时显示
+        // · badge 容器：任一行可见即显示，否则整体 hidden
         function refreshStatusText() {
-          if (!text && !draftText) return;
+          if (!badge && !text && !draftText) return;
           const state = stepper.getAttribute('data-l2-state') || 'idle';
           const l1Archived = stepper.getAttribute('data-l1-archived') === 'true';
           const mainCurrent = stepper.querySelector('.pf-main-row .pf-node.pf-current');
+          const mainStep = mainCurrent ? parseInt(mainCurrent.getAttribute('data-step'), 10) : 0;
+          const showTopLine = mainStep >= 5 && mainStep <= 8; // 仅 ⑤⑥⑦⑧ 显示已发布版本横幅
           if (text) {
-            if (state === 'published') {
-              text.textContent = '已发布版本 · 被覆盖中';
-            } else if (l1Archived && state !== 'editing') {
-              text.textContent = '已发布版本 · 已归档';
-            } else if (mainCurrent) {
-              text.textContent = nodeStateLabel(mainCurrent) || '已发布版本 · 流转中';
+            if (showTopLine) {
+              if (state === 'published') {
+                text.textContent = '已发布版本 · 被覆盖中';
+              } else if (l1Archived && state !== 'editing') {
+                // 主指针 ≥ ⑤ 时 L1 必然已归档；用节点文案而非"已归档"，更贴近运行态语义
+                text.textContent = nodeStateLabel(mainCurrent) || '已发布版本 · 流转中';
+              } else if (mainCurrent) {
+                text.textContent = nodeStateLabel(mainCurrent) || '已发布版本 · 流转中';
+              } else {
+                text.textContent = '已发布版本 · 流转中';
+              }
+              text.style.display = '';
             } else {
-              text.textContent = '已发布版本 · 流转中';
+              text.style.display = 'none';
             }
           }
+          let showBottomLine = false;
           if (draftText) {
             if (state === 'editing' || state === 'published') {
               if (state === 'published') {
@@ -1022,11 +1037,13 @@
                 draftText.textContent = (l2Current && nodeStateLabel(l2Current)) || '草稿版本 · 流转中';
               }
               draftText.style.display = '';
-              if (badge) badge.style.display = '';
+              showBottomLine = true;
             } else {
               draftText.style.display = 'none';
-              if (badge) badge.style.display = 'none';
             }
+          }
+          if (badge) {
+            badge.style.display = (showTopLine || showBottomLine) ? '' : 'none';
           }
         }
 
