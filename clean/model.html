@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>模板双副本心智模型 · 样式生产管理</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+  :root{
+    --bg:#f6f8fc; --card:#fff; --border:#e4e8ef; --text:#1a2332; --muted:#6b7588; --soft:#9aa3b3;
+    --blue:#3370ff; --blue-bg:#eaf1ff;
+    --orange:#f5811f; --orange-bg:#fff2e0;
+    --green:#23a567; --green-bg:#e3f6ec;
+    --purple:#7449e8; --purple-bg:#efe9ff;
+    --red:#e34d59; --red-bg:#fce8ea;
+    --gray-bg:#f0f3f8;
+    --shadow:0 1px 2px rgba(20,30,50,.04),0 6px 24px rgba(20,30,50,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:14px}
+  .wrap{max-width:1240px;margin:0 auto;padding:32px 24px 80px}
+  h1{font-size:26px;font-weight:700;margin-bottom:6px}
+  h2{font-size:18px;font-weight:600;margin:32px 0 14px;padding-left:10px;border-left:3px solid var(--blue)}
+  h3{font-size:15px;font-weight:600;margin-bottom:8px}
+  p{color:var(--muted);margin-bottom:8px}
+  .lead{font-size:15px;color:var(--muted);margin-bottom:24px}
+  code{background:var(--gray-bg);padding:1px 6px;border-radius:4px;font-size:13px;color:var(--purple);font-family:"SF Mono",Menlo,monospace}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;box-shadow:var(--shadow);margin-bottom:18px}
+
+  /* ---------- 第一图：双副本结构 ---------- */
+  .twin-wrap{display:flex;flex-direction:column;align-items:center;gap:0}
+  .id-card{background:linear-gradient(135deg,#1a2332,#3a4660);color:#fff;padding:14px 28px;border-radius:10px;text-align:center;min-width:340px;box-shadow:0 8px 24px rgba(20,30,50,.18)}
+  .id-card .label{font-size:12px;opacity:.7;letter-spacing:.5px}
+  .id-card .id{font-size:18px;font-weight:600;font-family:"SF Mono",Menlo,monospace;margin-top:2px}
+  .fork{width:2px;height:24px;background:var(--soft)}
+  .branches{display:flex;align-items:flex-start;gap:60px;position:relative}
+  .branches::before{content:"";position:absolute;top:-1px;left:25%;right:25%;height:2px;background:var(--soft)}
+  .branch{display:flex;flex-direction:column;align-items:center}
+  .branch-line{width:2px;height:24px;background:var(--soft)}
+  .copy-card{width:340px;border:2px solid;border-radius:10px;background:var(--card);overflow:hidden}
+  .copy-card.draft{border-color:var(--blue)}
+  .copy-card.pub{border-color:var(--green)}
+  .copy-head{padding:12px 16px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+  .copy-card.draft .copy-head{background:var(--blue-bg);color:var(--blue)}
+  .copy-card.pub .copy-head{background:var(--green-bg);color:var(--green)}
+  .copy-body{padding:14px 16px;font-size:13px}
+  .copy-body .row{display:flex;padding:5px 0;border-bottom:1px dashed var(--border)}
+  .copy-body .row:last-child{border-bottom:none}
+  .copy-body .k{width:78px;color:var(--muted);flex-shrink:0}
+  .copy-body .v{color:var(--text);font-weight:500}
+  .copy-body .v.no{color:var(--red)}
+  .copy-body .v.yes{color:var(--green)}
+
+  .bridge{margin:18px 0;display:flex;flex-direction:column;align-items:center;gap:6px}
+  .bridge-arrow{font-size:20px;color:var(--orange)}
+  .bridge-label{background:var(--orange-bg);color:var(--orange);padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;border:1px solid #fbcd9a}
+  .bridge-sub{font-size:12px;color:var(--muted)}
+
+  /* ---------- 第二图：状态机 ---------- */
+  .fsm{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px}
+  .fsm-trigger{font-size:12px;color:var(--muted);background:var(--gray-bg);padding:6px 14px;border-radius:6px;border:1px dashed var(--border)}
+  .fsm-arrow{color:var(--soft);font-size:18px}
+  .fsm-arrow .lbl{font-size:11px;color:var(--muted);margin-left:6px}
+  .fsm-state{display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;border:2px solid;min-width:280px;justify-content:center}
+  .fsm-state.s1{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
+  .fsm-state.s2{background:var(--orange-bg);border-color:var(--orange);color:var(--orange)}
+  .fsm-state.s3{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+  .fsm-state .num{font-weight:700;font-size:16px}
+  .fsm-state .name{font-weight:600}
+  .fsm-state .desc{font-size:12px;opacity:.85;font-weight:400}
+
+  /* ---------- 第三图：时间轴 ---------- */
+  .timeline{position:relative;padding:30px 16px 16px;background:#fafbfd;border-radius:10px;border:1px solid var(--border)}
+  .tl-row{display:flex;align-items:center;gap:14px;margin-bottom:14px;font-size:13px}
+  .tl-row:last-child{margin-bottom:0}
+  .tl-label{width:120px;color:var(--muted);text-align:right;font-weight:500;flex-shrink:0}
+  .tl-track{flex:1;display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-height:30px}
+  .tl-pill{padding:4px 12px;border-radius:14px;font-size:12px;border:1px solid;white-space:nowrap}
+  .tl-pill.draft{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
+  .tl-pill.pub-pending{background:#fffbe9;border-color:#e6c44a;color:#a07300}
+  .tl-pill.pub-exp{background:var(--orange-bg);border-color:var(--orange);color:var(--orange)}
+  .tl-pill.pub-full{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+  .tl-pill.dead{background:#f4f4f4;border-color:#bbb;color:#888;text-decoration:line-through}
+  .tl-event{display:inline-flex;align-items:center;color:var(--orange);font-size:12px;font-weight:600}
+  .tl-event::before{content:"⚡";margin-right:2px}
+  .tl-arrow{color:var(--soft)}
+  .tl-axis{position:absolute;top:8px;left:140px;right:16px;border-top:1px dashed var(--border);font-size:11px;color:var(--soft)}
+  .tl-axis span{position:absolute;top:-6px;background:#fafbfd;padding:0 6px}
+
+  /* ---------- 第四图：过桥事件 ---------- */
+  .bridge-detail{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center}
+  .bridge-side{padding:14px;border-radius:8px}
+  .bridge-side.before{background:var(--gray-bg)}
+  .bridge-side.after{background:var(--green-bg)}
+  .bridge-side h4{font-size:13px;font-weight:600;margin-bottom:8px;color:var(--muted)}
+  .bridge-side.after h4{color:var(--green)}
+  .bridge-side ul{list-style:none;font-size:13px}
+  .bridge-side li{padding:3px 0;color:var(--text)}
+  .bridge-side li::before{content:"·";color:var(--soft);margin-right:6px}
+  .bridge-mid{font-size:30px;color:var(--orange);text-align:center}
+  .bridge-warn{margin-top:14px;padding:12px 14px;background:#fff7f7;border-left:3px solid var(--red);border-radius:4px;font-size:13px;color:var(--text)}
+  .bridge-warn b{color:var(--red)}
+
+  /* ---------- 第五图：两条主流程 ---------- */
+  .flow{padding:14px 0}
+  .flow-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;margin-bottom:8px}
+  .flow-step{padding:6px 12px;border-radius:6px;border:1px solid;background:#fff;white-space:nowrap}
+  .flow-step.draft{border-color:var(--blue);color:var(--blue)}
+  .flow-step.pub{border-color:var(--green);color:var(--green)}
+  .flow-step.event{border-color:var(--orange);color:var(--orange);background:var(--orange-bg);font-weight:600}
+  .flow-arrow{color:var(--soft)}
+  .flow-domain{font-size:11px;color:var(--muted);margin-left:8px;background:var(--gray-bg);padding:2px 8px;border-radius:10px}
+
+  /* ---------- 表格对比 ---------- */
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
+  th{background:var(--gray-bg);font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+  td.mono{font-family:"SF Mono",Menlo,monospace;font-size:12px;color:var(--purple)}
+  .yes{color:var(--green);font-weight:500}
+  .no{color:var(--red);font-weight:500}
+
+  /* ---------- 命名表 ---------- */
+  .name-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .name-grid > div{background:#fff;padding:10px 14px;font-size:13px}
+  .name-grid .head{background:var(--gray-bg);font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+  .name-good{color:var(--green);font-weight:500}
+  .name-bad{color:var(--soft);text-decoration:line-through}
+
+  .legend{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:10px;flex-wrap:wrap}
+  .legend-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:middle}
+
+  .toc{background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:24px;font-size:13px}
+  .toc a{color:var(--blue);margin-right:18px;text-decoration:none}
+  .toc a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>模板双副本心智模型</h1>
+  <p class="lead">一个 <code>templateId</code> = 两份副本（草稿 + 已发布）+ 一个过桥事件（草稿发布 = 物理覆盖）</p>
+
+  <div class="toc">
+    <a href="#m1">① 双副本结构</a>
+    <a href="#m2">② 两页职责对照</a>
+    <a href="#m3">③ 已发布副本状态机</a>
+    <a href="#m4">④ 过桥事件细节</a>
+    <a href="#m5">⑤ 时间并行性</a>
+    <a href="#m6">⑥ 两条主流程</a>
+    <a href="#m7">⑦ 命名约定</a>
+  </div>
+
+  <!-- ============== 1. 双副本结构 ============== -->
+  <h2 id="m1">① 双副本结构 · 一个身份证，两份副本</h2>
+  <div class="card">
+    <div class="twin-wrap">
+      <div class="id-card">
+        <div class="label">身份证</div>
+        <div class="id">templateId = 1003721</div>
+      </div>
+      <div class="fork"></div>
+      <div class="branches">
+        <div class="branch">
+          <div class="branch-line"></div>
+          <div class="copy-card draft">
+            <div class="copy-head">
+              <span>📝 草稿副本</span>
+              <span style="font-size:12px;font-weight:400">working copy</span>
+            </div>
+            <div class="copy-body">
+              <div class="row"><span class="k">所在页</span><span class="v">模板草稿页</span></div>
+              <div class="row"><span class="k">能改 DSL</span><span class="v yes">✓ 自由编辑</span></div>
+              <div class="row"><span class="k">能投放</span><span class="v no">✗ 触发不了线上</span></div>
+              <div class="row"><span class="k">当前内容</span><span class="v">草稿版 · 编辑中</span></div>
+              <div class="row"><span class="k">参照展示</span><span class="v" style="font-size:12px">ⓘ 当前线上版（6/5）</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="branch">
+          <div class="branch-line"></div>
+          <div class="copy-card pub">
+            <div class="copy-head">
+              <span>🚀 已发布副本</span>
+              <span style="font-size:12px;font-weight:400">published copy</span>
+            </div>
+            <div class="copy-body">
+              <div class="row"><span class="k">所在页</span><span class="v">已发布模板管理页</span></div>
+              <div class="row"><span class="k">能改 DSL</span><span class="v no">✗ 不可编辑</span></div>
+              <div class="row"><span class="k">能投放</span><span class="v yes">✓ 真正给量</span></div>
+              <div class="row"><span class="k">当前内容</span><span class="v">线上版 · 6 月 5 日</span></div>
+              <div class="row"><span class="k">子状态</span><span class="v" style="font-size:12px">未生效 / 实验中 / 全量</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bridge">
+        <div class="bridge-arrow">▲ 物理覆盖 ▲</div>
+        <div class="bridge-label">⚡ 草稿发布 · MyOA 三段审批通过</div>
+        <div class="bridge-sub">两份副本之间唯一的过桥事件</div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span><span class="legend-dot" style="background:var(--blue)"></span>蓝色 = 草稿副本（可改、不投放）</span>
+      <span><span class="legend-dot" style="background:var(--green)"></span>绿色 = 已发布副本（不可改、真投放）</span>
+      <span><span class="legend-dot" style="background:var(--orange)"></span>橙色 = 过桥事件（覆盖）</span>
+    </div>
+  </div>
+
+  <!-- ============== 2. 职责对照表 ============== -->
+  <h2 id="m2">② 两页职责对照</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr><th style="width:22%">维度</th><th>📝 模板草稿页</th><th>🚀 已发布模板管理页</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>包含哪些模板</td><td>全部 <code>templateId</code>（创建即有）</td><td>仅"草稿发布过 ≥1 次"的 <code>templateId</code></td></tr>
+        <tr><td>这一行代表什么</td><td>这个模板的 <b>草稿副本</b></td><td>这个模板的 <b>已发布副本</b></td></tr>
+        <tr><td>能改 DSL 吗</td><td><span class="yes">✓ 能，随便改</span></td><td><span class="no">✗ 不能</span></td></tr>
+        <tr><td>能干的操作</td><td>编辑 / 测试 / 草稿发布</td><td>配规则 / 启动实验 / 跳过实验 / 全量上线 / 下线</td></tr>
+        <tr><td>版本展示</td><td>"草稿版 · 编辑中"<br/><span style="color:var(--muted);font-size:12px">+ ⓘ 当前线上版（6/5）参照</span></td><td>"线上版 · 6 月 5 日"<br/><span style="color:var(--muted);font-size:12px">（按草稿发布日期标识）</span></td></tr>
+        <tr><td>能否回滚</td><td>—</td><td><span class="no">✗ 不支持（物理覆盖）</span></td></tr>
+        <tr><td>子状态</td><td>—（只有"草稿"一种）</td><td>已发布-未生效 / 实验中 / 全量</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============== 3. 状态机 ============== -->
+  <h2 id="m3">③ 已发布副本状态机</h2>
+  <div class="card">
+    <p style="margin-bottom:12px">⚠️ 状态机只属于<b>已发布副本</b>。草稿副本只有"草稿"一种状态，无状态机。</p>
+    <div class="fsm">
+      <div class="fsm-trigger">入口：草稿页「草稿发布」MyOA 三段审批通过</div>
+      <div class="fsm-arrow">↓</div>
+      <div class="fsm-state s1">
+        <span class="num">⑤</span>
+        <div>
+          <div class="name">已发布-未生效</div>
+          <div class="desc">已进管理页，但还没配规则 / 还没投放</div>
+        </div>
+      </div>
+      <div class="fsm-arrow">↓<span class="lbl">配规则 + 启动 AB 实验</span></div>
+      <div class="fsm-state s2">
+        <span class="num">⑥</span>
+        <div>
+          <div class="name">已发布-实验中</div>
+          <div class="desc">AB 实验进行中，正在收集数据</div>
+        </div>
+      </div>
+      <div class="fsm-arrow">↓<span class="lbl">实验结论 OK + MyOA 二段审批（产品/研发）</span></div>
+      <div class="fsm-state s3">
+        <span class="num">⑦</span>
+        <div>
+          <div class="name">已发布-全量</div>
+          <div class="desc">全流量投放，看成绩单</div>
+        </div>
+      </div>
+    </div>
+    <div class="bridge-warn" style="margin-top:18px">
+      <b>提示：</b>"已发布"≠"在投放"。已发布只代表"它进了管理页、有线上身份"，是否真给量取决于⑤⑥⑦的子状态。仅<b>已发布-全量</b>对应可看成绩单。
+    </div>
+  </div>
+
+  <!-- ============== 4. 过桥事件 ============== -->
+  <h2 id="m4">④ 过桥事件细节 · 草稿发布 = 物理覆盖</h2>
+  <div class="card">
+    <div class="bridge-detail">
+      <div class="bridge-side before">
+        <h4>覆盖之前</h4>
+        <ul>
+          <li>📝 草稿副本：<b>草稿版 · 编辑中</b></li>
+          <li>🚀 已发布副本：<b>线上版 · 6 月 5 日</b></li>
+          <li>状态可能是 ⑤ / ⑥ / ⑦ 任意一个</li>
+        </ul>
+      </div>
+      <div class="bridge-mid">⚡<br/><span style="font-size:11px;color:var(--muted)">审批通过</span></div>
+      <div class="bridge-side after">
+        <h4>覆盖之后（瞬间发生）</h4>
+        <ul>
+          <li>🚀 已发布副本：<b>线上版 · 6 月 10 日</b>（新）</li>
+          <li>状态被强制重置为 <b>⑤ 已发布-未生效</b></li>
+          <li>📝 草稿副本：仍在，可继续改下一版</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bridge-warn">
+      <b>四条硬规则：</b>
+      <ol style="padding-left:20px;margin-top:6px">
+        <li>把当前草稿 DSL <b>快照打包</b>，物理覆盖已发布副本</li>
+        <li>旧"线上版 · 6/5" <b>不留底、不可回滚</b></li>
+        <li>如果旧线上版当时正在 ⑥ 实验中 → <b>强制中止旧实验</b>（数据停止累积）</li>
+        <li>新"线上版 · 6/10"进入 ⑤ 未生效 → <b>必须重新配规则、重新跑实验</b></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ============== 5. 时间轴并行 ============== -->
+  <h2 id="m5">⑤ 时间并行性 · 双线同时演进</h2>
+  <div class="card">
+    <p style="margin-bottom:14px">两份副本是<b>并行存在、同时演进</b>的两条线，<b>不是</b>串行的"先草稿后发布"。</p>
+    <div class="timeline">
+      <div class="tl-axis">
+        <span style="left:0%">6/1</span>
+        <span style="left:25%">6/3</span>
+        <span style="left:50%">6/5 ⚡发布</span>
+        <span style="left:75%">6/8</span>
+        <span style="right:0%">6/10 ⚡发布</span>
+      </div>
+
+      <div class="tl-row">
+        <div class="tl-label">📝 草稿副本</div>
+        <div class="tl-track">
+          <span class="tl-pill draft">草稿版 · 6/1 创建</span>
+          <span class="tl-arrow">→</span>
+          <span class="tl-pill draft">草稿版 · 6/3 编辑</span>
+          <span class="tl-arrow">→</span>
+          <span class="tl-event">6/5 发布</span>
+          <span class="tl-arrow">→</span>
+          <span class="tl-pill draft">草稿版 · 6/7 改新版</span>
+          <span class="tl-arrow">→</span>
+          <span class="tl-event">6/10 发布</span>
+          <span class="tl-arrow">→</span>
+          <span class="tl-pill draft">草稿版 · 编辑中…</span>
+        </div>
+      </div>
+
+      <div class="tl-row">
+        <div class="tl-label">🚀 已发布副本</div>
+        <div class="tl-track">
+          <span class="tl-pill" style="background:#f4f4f4;border-color:#ddd;color:#aaa">（尚未进管理页）</span>
+          <span class="tl-arrow">→</span>
+          <span class="tl-pill pub-pending">线上版 6/5 · ⑤未生效</span>
+          <span class="tl-arrow">→</span>
+          <span class="tl-pill pub-exp">线上版 6/5 · ⑥实验中</span>
+          <span class="tl-arrow">→</span>
+          <span class="tl-pill dead">线上版 6/5 强制中止</span>
+          <span class="tl-arrow">→</span>
+          <span class="tl-pill pub-pending">线上版 6/10 · ⑤未生效</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bridge-warn" style="margin-top:14px">
+      <b>关键观察：</b>当 6/10 草稿发布时，旧"线上版 6/5"还在 ⑥ 实验中 → 实验被强制中止 → 新"线上版 6/10"重新从 ⑤ 开始。<b>实验数据需要重新跑</b>。
+    </div>
+  </div>
+
+  <!-- ============== 6. 两条主流程 ============== -->
+  <h2 id="m6">⑥ 两条主流程</h2>
+  <div class="card">
+    <h3 style="color:var(--blue)">流程 A · 新模板首次上线（一次性）</h3>
+    <div class="flow">
+      <div class="flow-row">
+        <span class="flow-step draft">① 创建</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step draft">② 编辑 DSL</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step draft">③ 测试</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step event">⚡ ④ 草稿发布</span>
+        <span class="flow-domain">草稿副本域</span>
+      </div>
+      <div class="flow-row" style="padding-left:20px">
+        <span class="flow-arrow">↓ 进管理页（首次）</span>
+      </div>
+      <div class="flow-row">
+        <span class="flow-step pub">⑤ 已发布-未生效</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step pub">⑥ 已发布-实验中</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step pub">⑦ 已发布-全量</span>
+        <span class="flow-domain">已发布副本域</span>
+      </div>
+    </div>
+
+    <hr style="margin:22px 0;border:none;border-top:1px dashed var(--border)" />
+
+    <h3 style="color:var(--green)">流程 B · 老模板迭代（高频循环 · 真实日常）</h3>
+    <div class="flow">
+      <div class="flow-row">
+        <span class="flow-step pub">⑦ 旧线上版 6/5 在全量投放</span>
+        <span class="flow-domain">已发布副本域</span>
+      </div>
+      <div class="flow-row" style="padding-left:20px">
+        <span class="flow-arrow">↓ 同时</span>
+      </div>
+      <div class="flow-row">
+        <span class="flow-step draft">📝 草稿副本继续改</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step draft">② 编辑下一版</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step draft">③ 测试</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step event">⚡ ④ 草稿发布</span>
+        <span class="flow-domain">草稿副本域</span>
+      </div>
+      <div class="flow-row" style="padding-left:20px">
+        <span class="flow-arrow">↓ 物理覆盖（旧 6/5 死掉）</span>
+      </div>
+      <div class="flow-row">
+        <span class="flow-step pub">⑤ 新线上版 6/10 未生效</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step pub">⑥ 重新跑实验</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step pub">⑦ 新版 6/10 全量</span>
+        <span class="flow-domain">已发布副本域</span>
+      </div>
+      <div class="flow-row" style="padding-left:20px;color:var(--muted)">
+        <span>↻ 周而复始（每次草稿发布都覆盖一次）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 7. 命名约定 ============== -->
+  <h2 id="m7">⑦ 命名约定（避免概念混淆）</h2>
+  <div class="card">
+    <div class="name-grid">
+      <div class="head">概念</div>
+      <div class="head">推荐叫法 ✅</div>
+      <div class="head">不要叫 ✗</div>
+
+      <div>模板身份</div>
+      <div class="name-good">templateId</div>
+      <div class="name-bad">tplId / 模板号</div>
+
+      <div>草稿那份副本</div>
+      <div class="name-good">草稿副本（draft copy）</div>
+      <div class="name-bad">working / 编辑稿</div>
+
+      <div>已发布那份副本</div>
+      <div class="name-good">已发布副本（published copy）</div>
+      <div class="name-bad">上线模板 / 正式模板</div>
+
+      <div>过桥事件</div>
+      <div class="name-good">草稿发布</div>
+      <div class="name-bad">上线 / 发版</div>
+
+      <div>草稿副本指代</div>
+      <div class="name-good">草稿版 · 编辑中</div>
+      <div class="name-bad">v4 / draft</div>
+
+      <div>已发布副本指代</div>
+      <div class="name-good">线上版 · 6 月 5 日</div>
+      <div class="name-bad">v3 / 正式版 / 上线版</div>
+
+      <div>已发布副本子状态</div>
+      <div class="name-good">已发布-未生效 / 实验中 / 全量</div>
+      <div class="name-bad">未发布 / 上线中</div>
+
+      <div>"上线"这个词</div>
+      <div class="name-good">改用「全量」或「投放」</div>
+      <div class="name-bad">上线（歧义太多）</div>
+    </div>
+  </div>
+
+  <!-- ============== 落地动作 ============== -->
+  <h2>⑧ 在 Demo 上的落地动作（待办，未执行）</h2>
+  <div class="card">
+    <ol style="padding-left:22px;font-size:14px;line-height:1.9">
+      <li><b>草稿页表格新增列</b>：<code>草稿版 · 编辑中</code> + ⓘ "当前线上版（6/5）" hover 看 diff</li>
+      <li><b>管理页表格新增列</b>：<code>线上版 · 6 月 5 日</code></li>
+      <li><b>Step 4 草稿发布卡</b>加警示：「审批通过将物理覆盖管理页线上版，旧版本不可回滚；若旧版正在实验中，旧实验将被强制中止」</li>
+      <li><b>流水线抽屉</b>改造成"双副本视图"：上半截显示已发布副本走到 ⑤/⑥/⑦ 哪一步、下半截显示草稿副本是否有新版本在打磨</li>
+      <li><b>顶部 7 步骨架图</b>加分组标签：①②③④ 标"草稿副本域"、⑤⑥⑦ 标"已发布副本域"，④↔⑤ 之间画"快照覆盖"过桥箭头</li>
+    </ol>
+    <p style="margin-top:14px;color:var(--muted);font-size:13px">⚠️ 以上仅为动作清单，等你确认后再动 <code>clean/index.html</code>。</p>
+  </div>
+
+  <p style="text-align:center;margin-top:40px;color:var(--soft);font-size:12px">
+    模板双副本心智模型 · 联盟样式工作台 · 2026-06
+  </p>
+
+</div>
+</body>
+</html>
