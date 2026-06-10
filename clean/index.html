@@ -172,60 +172,52 @@
     -->
     <div class="pipeline-fork" data-l2-state="idle" data-l1-archived="false">
 
-      <!-- ① 共用起点 -->
-      <div class="pf-node pf-start" data-step="1">
-        <span class="pf-tag pf-tag-fork">🔀 共用起点</span>
-        <span class="step-no done">1</span>
-        <span class="step-name">模板创建</span>
-      </div>
-
-      <!-- 中段：上下两路 ②③④（v1 / v2 两个版本） -->
-      <div class="pf-mid">
-
-        <!-- 上路：L1 = v1 当前线上版本 -->
-        <!-- 节点状态由 JS activateStep() 动态控制：< current → done(绿实底已走过) / = current → current(蓝光晕停留) / > current → todo(灰底) -->
-        <!-- L1 ④ 草稿发布完成后 → data-l1-archived=true → 整行置灰归档 -->
-        <div class="pf-row pf-row-l1" id="l1RowEl">
-          <span class="pf-row-tag pf-row-tag-l1" id="l1BranchTag">🚀 L1 主线 · v1 进行中</span>
-          <div class="pf-row-track">
-            <span class="pf-conn pf-conn-l1"><em class="pf-time">1h30m</em></span>
-            <div class="pf-node" data-step="2" data-track="L1"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
-            <span class="pf-conn pf-conn-l1"><em class="pf-time">17h55m</em></span>
-            <div class="pf-node" data-step="3" data-track="L1"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
-            <span class="pf-conn pf-conn-l1"><em class="pf-time">17h55m</em></span>
-            <div class="pf-node" data-step="4" data-track="L1"><span class="step-no">4</span><span class="step-name">草稿发布</span></div>
-            <span class="pf-conn pf-conn-l1"></span>
-          </div>
+      <!-- ===== 主行：①─②─③─④─⑤─⑥─⑦─⑧ 一横行（L1 主干 / 共用起点 / 共用尾段全部摊平） ===== -->
+      <div class="pf-main-row">
+        <!-- ① 共用起点 -->
+        <div class="pf-node pf-start" data-step="1">
+          <span class="pf-tag pf-tag-fork">🔀 起点</span>
+          <span class="step-no done">1</span>
+          <span class="step-name">模板创建</span>
         </div>
-
-        <!-- 下路：L2 = v2 草稿支线（编辑中 → 蓝；④ 发布瞬间 → 末端橙色覆盖） -->
-        <div class="pf-row pf-row-l2" id="l2RowEl">
-          <span class="pf-row-tag pf-row-tag-l2" id="l2BranchTag">📝 L2 支线 · v2 暂无草稿</span>
-          <div class="pf-row-track">
-            <span class="pf-conn pf-conn-l2"><em class="pf-time">1h30m</em></span>
-            <div class="pf-node" id="l2Step2" data-step="2" data-track="L2"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
-            <span class="pf-conn pf-conn-l2"><em class="pf-time">17h55m</em></span>
-            <div class="pf-node" id="l2Step3" data-step="3" data-track="L2"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
-            <span class="pf-conn pf-conn-l2"><em class="pf-time">17h55m</em></span>
-            <div class="pf-node pf-bridge" id="l2Step4" data-step="4" data-track="bridge" title="④ 草稿发布通过 → 物理覆盖 L1 主干，不留底、不可回滚">
-              <span class="pf-tag pf-tag-bridge">↗ 覆盖主干</span>
-              <span class="step-no pf-no-bridge">4</span>
-              <span class="step-name pf-name-bridge">草稿发布⚡</span>
-            </div>
-            <span class="pf-conn pf-conn-bridge"></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ⑤⑥⑦⑧ 共用终段（不挂 L1/L2 track，语义=两条线汇合后共用） -->
-      <div class="pf-tail">
+        <span class="pf-conn pf-conn-l1" data-idx="1"><em class="pf-time">1h30m</em></span>
+        <!-- ②③④：L1 主干（v1 当前线上版本） -->
+        <div class="pf-node" data-step="2" data-track="L1"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
+        <span class="pf-conn pf-conn-l1" data-idx="2"><em class="pf-time">17h55m</em></span>
+        <div class="pf-node" data-step="3" data-track="L1"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
+        <span class="pf-conn pf-conn-l1" data-idx="3"><em class="pf-time">17h55m</em></span>
+        <div class="pf-node" data-step="4" data-track="L1"><span class="step-no">4</span><span class="step-name">草稿发布</span></div>
+        <span class="pf-conn pf-conn-l1" data-idx="4"></span>
+        <!-- ⑤⑥⑦⑧ 共用尾段（两条线汇合后） -->
         <div class="pf-node" data-step="5"><span class="step-no">5</span><span class="step-name">规则配置</span></div>
-        <span class="pf-conn"><em class="pf-time">1d2h</em></span>
+        <span class="pf-conn" data-idx="5"><em class="pf-time">1d2h</em></span>
         <div class="pf-node" data-step="6"><span class="step-no">6</span><span class="step-name">模板实验</span></div>
-        <span class="pf-conn"><em class="pf-time">1d8h</em></span>
+        <span class="pf-conn" data-idx="6"><em class="pf-time">1d8h</em></span>
         <div class="pf-node" data-step="7"><span class="step-no">7</span><span class="step-name">全量上线</span></div>
-        <span class="pf-conn"><em class="pf-time">4h45m</em></span>
+        <span class="pf-conn" data-idx="7"><em class="pf-time">4h45m</em></span>
         <div class="pf-node" data-step="8"><span class="step-no">8</span><span class="step-name">成绩单</span></div>
+      </div>
+
+      <!-- ===== L2 支线行：v2 草稿支线，水平方向对齐到主行 ②③④ 列 =====
+           左侧 fork-in 弧线：从主行 ① 节点底部 → 下延至 L2 ② 节点左侧
+           右侧 fork-out 弧线：从 L2 ④ 节点右侧 → 回升至主行 ⑤ 节点底部 -->
+      <div class="pf-l2-row" id="l2RowEl">
+        <span class="pf-row-tag pf-row-tag-l2" id="l2BranchTag">📝 L2 支线 · v2 暂无草稿</span>
+        <!-- fork-in：① → L2② 弧线（CSS 画的圆角折线） -->
+        <span class="pf-fork-in" aria-hidden="true"></span>
+        <span class="pf-conn pf-conn-l2" data-idx="l2-1"><em class="pf-time">1h30m</em></span>
+        <div class="pf-node" id="l2Step2" data-step="2" data-track="L2"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
+        <span class="pf-conn pf-conn-l2" data-idx="l2-2"><em class="pf-time">17h55m</em></span>
+        <div class="pf-node" id="l2Step3" data-step="3" data-track="L2"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
+        <span class="pf-conn pf-conn-l2" data-idx="l2-3"><em class="pf-time">17h55m</em></span>
+        <div class="pf-node pf-bridge" id="l2Step4" data-step="4" data-track="bridge" title="④ 草稿发布通过 → 物理覆盖 L1 主干，不留底、不可回滚">
+          <span class="pf-tag pf-tag-bridge">↗ 覆盖主干</span>
+          <span class="step-no pf-no-bridge">4</span>
+          <span class="step-name pf-name-bridge">草稿发布⚡</span>
+        </div>
+        <span class="pf-conn pf-conn-bridge" data-idx="l2-4"></span>
+        <!-- fork-out：L2④ → ⑤ 弧线 -->
+        <span class="pf-fork-out" aria-hidden="true"></span>
       </div>
     </div>
 
@@ -239,21 +231,140 @@
     <style>
       @keyframes l2Pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-      /* ===== Pipeline Fork 自渲染（不依赖 .stepper） ===== */
+      /* ===== Pipeline Fork v2：扁平拓扑（主行一横 + L2 支线下方分叉合并） ===== */
       .pipeline-fork {
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-        align-items: stretch;
-        gap: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 36px; /* 主行与 L2 行之间留分叉弧线的高度 */
         background: #fff;
         border: 1px solid #e5e8ef;
         border-radius: 10px;
-        padding: 28px 20px 22px;
+        padding: 28px 20px 56px; /* 底部多留空间放 L2 行 */
         box-sizing: border-box;
         width: 100%;
         overflow-x: auto;
         position: relative;
       }
+
+      /* 主行：8 个节点等分（grid 8 等宽列），中间用绝对定位画 conn */
+      .pf-main-row {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        align-items: center;
+        gap: 0;
+        min-width: 0;
+        position: relative;
+      }
+      .pf-main-row > .pf-node {
+        justify-self: center;
+        position: relative;
+        z-index: 2;
+      }
+      /* 主行的 conn：absolute 横跨相邻节点中线，从 col N 到 col N+1 */
+      .pf-main-row > .pf-conn {
+        position: absolute;
+        top: 50%;
+        height: 2px;
+        z-index: 1;
+        transform: translateY(-50%);
+        margin: 0;
+        flex: none;
+      }
+      /* 用 data-idx 把 7 段连线分别定位到各自的格子之间 */
+      .pf-main-row > .pf-conn[data-idx="1"] { left: calc(100%/8 * 0.5); right: calc(100%/8 * 6.5); }
+      .pf-main-row > .pf-conn[data-idx="2"] { left: calc(100%/8 * 1.5); right: calc(100%/8 * 5.5); }
+      .pf-main-row > .pf-conn[data-idx="3"] { left: calc(100%/8 * 2.5); right: calc(100%/8 * 4.5); }
+      .pf-main-row > .pf-conn[data-idx="4"] { left: calc(100%/8 * 3.5); right: calc(100%/8 * 3.5); }
+      .pf-main-row > .pf-conn[data-idx="5"] { left: calc(100%/8 * 4.5); right: calc(100%/8 * 2.5); }
+      .pf-main-row > .pf-conn[data-idx="6"] { left: calc(100%/8 * 5.5); right: calc(100%/8 * 1.5); }
+      .pf-main-row > .pf-conn[data-idx="7"] { left: calc(100%/8 * 6.5); right: calc(100%/8 * 0.5); }
+
+      /* L2 支线行：同样 8 等分 grid，但只在第 2、3、4 列放 ②③④
+         （和主行 ②③④ 列号严格对齐 → 自然垂直对齐） */
+      .pf-l2-row {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        align-items: center;
+        gap: 0;
+        min-width: 0;
+        position: relative;
+        background: linear-gradient(90deg,rgba(234,241,255,0.5) 0%,rgba(245,249,255,0.3) 100%);
+        border-radius: 6px;
+        padding: 16px 0 12px;
+        margin-top: -4px;
+      }
+      .pf-l2-row > .pf-node {
+        justify-self: center;
+        position: relative;
+        z-index: 2;
+      }
+      /* L2 三个节点占 col 2 / 3 / 4（对应主行的 ②③④） */
+      #l2Step2 { grid-column: 2; }
+      #l2Step3 { grid-column: 3; }
+      #l2Step4 { grid-column: 4; }
+      /* L2 行的 conn：absolute 横跨 L2 ②③④ 之间 */
+      .pf-l2-row > .pf-conn {
+        position: absolute;
+        top: calc(50% + 2px);
+        height: 2px;
+        z-index: 1;
+        transform: translateY(-50%);
+        margin: 0;
+        flex: none;
+      }
+      /* L2 行的 conn：4 段（fork-in→②、②→③、③→④、④→fork-out） */
+      .pf-l2-row > .pf-conn[data-idx="l2-1"] { left: calc(100%/8 * 1.5); right: calc(100%/8 * 5.5); }
+      .pf-l2-row > .pf-conn[data-idx="l2-2"] { left: calc(100%/8 * 2.5); right: calc(100%/8 * 4.5); }
+      .pf-l2-row > .pf-conn[data-idx="l2-3"] { left: calc(100%/8 * 3.5); right: calc(100%/8 * 3.5); }
+      /* 桥尾连线 ④ → fork-out 入口 */
+      .pf-l2-row > .pf-conn[data-idx="l2-4"] { left: calc(100%/8 * 4); right: calc(100%/8 * 3.5); }
+      /* fork-in：从 col 1 中点（=主行①位置）斜向下到 col 2 中点（L2②位置） */
+      .pf-fork-in {
+        position: absolute;
+        top: -34px; /* 跨过两行的 gap，连到主行底部 */
+        left: calc(100%/8 * 0.5);
+        width: calc(100%/8 * 1);
+        height: 36px;
+        border-left: 2px dashed #b9d0ff;
+        border-bottom: 2px dashed #b9d0ff;
+        border-bottom-left-radius: 14px;
+        z-index: 0;
+      }
+      /* fork-out：从 col 4 中点（L2④位置）斜向上到 col 5 中点（主行⑤位置） */
+      .pf-fork-out {
+        position: absolute;
+        top: -34px;
+        left: calc(100%/8 * 3.5);
+        width: calc(100%/8 * 1);
+        height: 36px;
+        border-right: 2px dashed #b9d0ff;
+        border-bottom: 2px dashed #b9d0ff;
+        border-bottom-right-radius: 14px;
+        z-index: 0;
+      }
+      /* L2 editing → fork 弧线变蓝实线 */
+      .pipeline-fork[data-l2-state="editing"] .pf-fork-in,
+      .pipeline-fork[data-l2-state="editing"] .pf-fork-out {
+        border-left-style: solid;
+        border-right-style: solid;
+        border-bottom-style: solid;
+        border-color: #3370ff;
+      }
+      /* L2 published → fork-out 变橙（覆盖主干） */
+      .pipeline-fork[data-l2-state="published"] .pf-fork-out {
+        border-right-style: solid;
+        border-bottom-style: solid;
+        border-color: #e8821a;
+      }
+
+      /* L2 row tag */
+      .pf-row-tag {
+        position: absolute; bottom: 4px; left: 18px;
+        font-size: 10px; padding: 0 6px;
+        border-radius: 8px; white-space: nowrap; background: #fff;
+        z-index: 3;
+      }
+      .pf-l2-row .pf-row-tag-l2 { color: #3370ff; border: 1px solid #b9d0ff; }
 
       /* 节点（圆 + 名称） */
       .pf-node {
@@ -273,7 +384,7 @@
         background: #f5f7fa; color: #8a93a6;
         transition: background .2s, border-color .2s, color .2s;
       }
-      /* 已走过（< current）：绿色实底，表示"主干历史已走过的路" */
+      /* 已走过（< current）：绿色实底 */
       .pf-node .step-no.done { background: #23a567; color: #fff; border-color: #23a567; }
       /* 当前停留（= current）：蓝色实底 + 蓝色光晕脉动 */
       .pf-node.pf-current .step-no,
@@ -290,45 +401,27 @@
       /* 未走过（> current）：节点文案变浅灰 */
       .pf-node.pf-todo .step-name { color: #b0b6c4; }
       .pf-node.pf-todo .step-no { background: #f5f7fa; color: #b0b6c4; border-color: #e0e4ec; }
-      /* 兼容旧的 pf-active（B 编辑态）：蓝光晕但不脉动 */
       .pf-node.pf-active .step-no { box-shadow: 0 0 0 4px rgba(51,112,255,.18); }
 
-      /* ① 共用起点 */
-      .pf-start {
-        background: linear-gradient(180deg,#e7f4ec 0%,#eaf1ff 100%);
-        border: 1px dashed #9bb8d6; border-radius: 8px;
-        padding: 16px 14px; margin-right: 4px;
-      }
+      /* ① 共用起点（缩成普通节点尺寸，去掉之前的虚线方框） */
+      .pf-start { padding: 4px 6px; }
+      .pf-start .step-no { background: #23a567; color: #fff; border-color: #23a567; }
+
       .pf-tag {
-        position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+        position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
         font-size: 10px; padding: 1px 7px; border-radius: 8px; white-space: nowrap;
       }
       .pf-tag-fork { color: #8a5a14; background: #fff7ec; border: 1px solid #f5c98a; }
-      .pf-tag-bridge { color: #fff; background: #e8821a; border: 1px solid #e8821a; top: -11px; }
-
-      /* 中段：上下两个 row */
-      .pf-mid { display: flex; flex-direction: column; gap: 14px; padding: 0 4px; min-width: 0; }
-      .pf-row { position: relative; border-radius: 6px; padding: 12px 10px 8px; }
-      .pf-row-l1 { background: linear-gradient(90deg,rgba(231,244,236,0.6) 0%,rgba(244,250,246,0.4) 100%); }
-      .pf-row-l2 { background: linear-gradient(90deg,rgba(234,241,255,0.7) 0%,rgba(245,249,255,0.5) 100%); }
-      .pf-row-tag {
-        position: absolute; left: 10px; font-size: 10px; padding: 0 6px;
-        border-radius: 8px; white-space: nowrap; background: #fff;
-      }
-      .pf-row-l1 .pf-row-tag-l1 { top: -10px; color: #23a567; border: 1px solid #b3dec3; }
-      .pf-row-l2 .pf-row-tag-l2 { bottom: -10px; color: #3370ff; border: 1px solid #b9d0ff; }
-      .pf-row-track {
-        display: flex; align-items: center; justify-content: space-between;
-        gap: 0; min-width: 0;
-      }
+      .pf-tag-bridge { color: #fff; background: #e8821a; border: 1px solid #e8821a; }
 
       /* 连接线 */
       .pf-conn {
-        flex: 1 1 auto; min-width: 32px;
+        flex: 1 1 auto; min-width: 24px;
         height: 2px; position: relative; margin: 0 4px;
         background: #d8dde6; border-radius: 2px;
         align-self: center;
       }
+      .pf-main-row .pf-conn { max-width: 80px; }
       .pf-conn-l1 { background: #23a567; }
       .pf-conn-l2 { background: #b9d0ff; }
       .pf-conn-bridge { background: #e8821a; }
@@ -339,9 +432,8 @@
         height: 0;
       }
       .pf-conn.pf-conn-todo .pf-time { color: #b0b6c4; }
-      /* L2 行的所有连线（含 ④→⑤ 桥尾）：仅在 L2 published（覆盖瞬间）才显示橙色实线，
-         其余状态（idle / editing 未走完）一律虚线灰 —— 表达"L2 还没合并到主干"。 */
-      .pipeline-fork:not([data-l2-state="published"]) .pf-row-l2 .pf-conn-bridge {
+      /* L2 行的所有连线：仅 published 瞬间才橙实线，其余虚灰 */
+      .pipeline-fork:not([data-l2-state="published"]) .pf-l2-row .pf-conn-bridge {
         background: transparent !important;
         border-top: 2px dashed #d0d4dc;
         height: 0;
@@ -352,10 +444,7 @@
         background: #fff; padding: 0 4px; border-radius: 3px; white-space: nowrap;
       }
 
-      /* 桥接节点（草稿发布⚡ 覆盖主干）
-         仅当：① L2 ④ 是 current（pf-current 由 JS 加，表示走到了 ④）
-              ② L2 published 瞬时态（覆盖动画播放中）
-         才显示橙色"覆盖主干"高亮。其余情况按普通 todo / idle 灰底走。 */
+      /* 桥接节点（草稿发布⚡ 覆盖主干） */
       .pf-bridge.pf-current .pf-no-bridge,
       .pipeline-fork[data-l2-state="published"] .pf-bridge .pf-no-bridge {
         background: #e8821a !important; border-color: #e8821a !important; color: #fff !important;
@@ -364,84 +453,55 @@
       .pipeline-fork[data-l2-state="published"] .pf-bridge .pf-name-bridge {
         color: #c0681a; font-weight: 600;
       }
-      /* 非 current 时 ④ 桥接的"↗ 覆盖主干"小标签也淡一点（避免抢戏） */
-      .pf-bridge:not(.pf-current) .pf-tag-bridge {
-        opacity: 0.45;
-      }
-      .pipeline-fork[data-l2-state="editing"] .pf-bridge:not(.pf-current) .pf-tag-bridge {
-        opacity: 0.55;
-      }
-
-      /* ⑤⑥⑦⑧ 共用终段 */
-      .pf-tail {
-        display: flex; align-items: center; gap: 0;
-        padding-left: 4px; flex: 0 0 auto;
-      }
-      .pf-tail .pf-conn { min-width: 36px; max-width: 56px; }
+      .pf-bridge:not(.pf-current) .pf-tag-bridge { opacity: 0.45; }
+      .pipeline-fork[data-l2-state="editing"] .pf-bridge:not(.pf-current) .pf-tag-bridge { opacity: 0.55; }
 
       /* ===========================================================
          L1 / L2 双线状态切换 · 核心规则
-         - 初始：L1 在跑（绿/蓝高亮），L2 idle 灰
-         - L1 ④ 草稿发布后：data-l1-archived="true" → L1 ②③④ 整行置灰归档
-         - L2 editing：L2 ②③④ 高亮跑流程
-         - L2 ④ 发布：published 瞬时态触发覆盖动画 → 回 idle
+         （选择器从 .pf-row-l1 / .pf-row-l2 改成 .pf-main-row [data-track="L1"] / .pf-l2-row）
          =========================================================== */
 
-      /* L1 已归档（草稿发布完成） · L1 主线 ②③④ 整行置灰（"✅ 已跑通"语义） */
-      .pipeline-fork[data-l1-archived="true"] .pf-row-l1 {
+      /* L1 已归档：主行 ②③④（data-track="L1"）整组置灰 */
+      .pipeline-fork[data-l1-archived="true"] .pf-main-row .pf-node[data-track="L1"] {
         opacity: 0.55;
         filter: grayscale(0.7);
       }
-      /* L1 归档时，row-tag 文案变成"已跑通归档"配色（绿调，区别于纯灰未启动） */
-      .pipeline-fork[data-l1-archived="true"] .pf-row-l1 .pf-row-tag-l1 {
-        color: #5a8a6e;
-        border-color: #c5d8cc;
-        background: #f3f9f5;
-      }
-      .pipeline-fork[data-l1-archived="true"] .pf-row-l1 .pf-node { cursor: not-allowed; }
-      .pipeline-fork[data-l1-archived="true"] .pf-row-l1 .pf-node:hover { transform: none; }
-      .pipeline-fork[data-l1-archived="true"] .pf-row-l1 .pf-node:hover::after {
+      .pipeline-fork[data-l1-archived="true"] .pf-main-row .pf-node[data-track="L1"] { cursor: not-allowed; }
+      .pipeline-fork[data-l1-archived="true"] .pf-main-row .pf-node[data-track="L1"]:hover { transform: none; }
+      .pipeline-fork[data-l1-archived="true"] .pf-main-row .pf-node[data-track="L1"]:hover::after {
         content: "✅ v1 已发布归档（已跑通）· 新一轮请走 L2";
         position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
         margin-top: 6px; padding: 3px 8px; font-size: 11px; color: #fff;
         background: #4a4f5c; border-radius: 4px; white-space: nowrap; z-index: 10;
       }
 
-      /* idle / published：L2 支线整行置灰（节点圆圈 / 文字 / 连线 / row 标签） */
-      .pipeline-fork[data-l2-state="idle"] .pf-row-l2,
-      .pipeline-fork[data-l2-state="published"] .pf-row-l2 {
+      /* idle / published：L2 整行置灰 */
+      .pipeline-fork[data-l2-state="idle"] .pf-l2-row,
+      .pipeline-fork[data-l2-state="published"] .pf-l2-row {
         opacity: 0.5;
         filter: grayscale(0.8);
       }
-      /* L2 idle 态 · 节点不可点；hover 提示分两种语义 */
-      .pipeline-fork[data-l2-state="idle"] .pf-row-l2 .pf-node {
-        cursor: not-allowed;
-      }
-      .pipeline-fork[data-l2-state="idle"] .pf-row-l2 .pf-node:hover {
-        transform: none;
-      }
-      /* 语义 A：L1 还在跑（v1 未归档）→ "等 L1 ④ 完成后启动"（流程未开始） */
-      .pipeline-fork[data-l2-state="idle"][data-l1-archived="false"] .pf-row-l2 .pf-node:hover::after {
+      .pipeline-fork[data-l2-state="idle"] .pf-l2-row .pf-node { cursor: not-allowed; }
+      .pipeline-fork[data-l2-state="idle"] .pf-l2-row .pf-node:hover { transform: none; }
+      .pipeline-fork[data-l2-state="idle"][data-l1-archived="false"] .pf-l2-row .pf-node:hover::after {
         content: "⏳ 等 L1 ④ 完成草稿发布后再启动 v2";
         position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
         margin-top: 6px; padding: 3px 8px; font-size: 11px; color: #fff;
         background: #4a4f5c; border-radius: 4px; white-space: nowrap; z-index: 10;
       }
-      /* 语义 B：L1 已归档 + L2 idle → "暂无草稿，点击新建"（待启动） */
-      .pipeline-fork[data-l2-state="idle"][data-l1-archived="true"] .pf-row-l2 .pf-node:hover::after {
+      .pipeline-fork[data-l2-state="idle"][data-l1-archived="true"] .pf-l2-row .pf-node:hover::after {
         content: "💤 暂无 v2 草稿，点击新建拉起";
         position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
         margin-top: 6px; padding: 3px 8px; font-size: 11px; color: #fff;
         background: #4a4f5c; border-radius: 4px; white-space: nowrap; z-index: 10;
       }
-      /* 语义 C：L2 published 瞬时态 → "v2 已覆盖归档"（已跑通的灰） */
-      .pipeline-fork[data-l2-state="published"] .pf-row-l2 .pf-node:hover::after {
+      .pipeline-fork[data-l2-state="published"] .pf-l2-row .pf-node:hover::after {
         content: "✅ v2 已覆盖 L1（已跑通）";
         position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
         margin-top: 6px; padding: 3px 8px; font-size: 11px; color: #fff;
         background: #4a4f5c; border-radius: 4px; white-space: nowrap; z-index: 10;
       }
-      /* published 瞬时态 · 触发覆盖动画：L2 ④ 桥接节点向上闪一次 */
+      /* published 瞬时态 · 触发覆盖动画 */
       @keyframes l2OverridePulse {
         0%   { transform: translateY(0)    scale(1);    box-shadow: 0 0 0 0    rgba(232,130,26,0); }
         40%  { transform: translateY(-6px) scale(1.08); box-shadow: 0 0 0 10px rgba(232,130,26,.35); }
@@ -1370,14 +1430,17 @@
               onlineBadge.textContent = '已上线 v2';
               onlineBadge.className = 'badge ok';
             }
+            // 副标题从"v2（草稿）"切到"v2"（已不是草稿，是已上线主干）
+            const onlineSubL2 = document.getElementById('onlineStatusSub');
+            if (onlineSubL2) onlineSubL2.innerHTML = '当前模板：<b>开屏-夏日冰镇风 v2</b> · 状态：<span class="badge ok" id="onlineStatusBadge">已上线 v2</span>';
             if (tip) tip.textContent = '✅ 审批通过 · L2 ④ 已覆盖 L1 主干（v1 → v2），支线归档置灰';
             if (typeof window.mergeL2 === 'function') window.mergeL2();
             btnApprove.textContent = '✅ 已通过 · L2 已覆盖 L1';
-            // btnSubmit 不锁死：L2 覆盖后又会回到 L1-archived 状态，
-            // 此时按钮应显示"🚀 拉起 v3 提交上线"引导，点击触发 forkL2 confirm
+            // btnSubmit 锁死为终态展示：本轮 L2 v2 已发布完成
+            // 拉新版（v3）的入口在【② 模板编辑】，不在这里
             if (btnSubmit) {
-              btnSubmit.disabled = false;
-              btnSubmit.textContent = '🚀 拉起 v3 草稿';
+              btnSubmit.disabled = true;
+              btnSubmit.textContent = '✅ v2 已上线';
             }
           } else {
             // L1 首发完成
@@ -1388,13 +1451,13 @@
             if (tip) tip.textContent = '✅ 审批通过 · L1 v1 首发完成 → ②③④ 已归档置灰，可点【② 模板编辑】拉起 L2 v2 草稿';
             if (typeof window.publishL1 === 'function') window.publishL1();
             btnApprove.textContent = '✅ L1 已发布 · ②③④ 归档';
-            // btnSubmit 保持可点 + 文案换成引导态：
-            // L1-archived 阶段点击会弹 confirm 引导用户去 ② 拉起 L2 v2（forkL2）
-            // 之后 forkL2 内部 __resetSubmitOnlineBtn 会把按钮恢复成"🚀 提交上线"，
-            // 走和 L1 完全一样的"提交 → MyOA 三段审批 → 通过"流程
+            // btnSubmit 锁死为终态展示：本轮 L1 v1 已发布完成
+            // 拉 L2 v2 的入口在【② 模板编辑】（点 ② 触发 forkL2）
+            // forkL2 内部的 __resetSubmitOnlineBtn 会把按钮恢复成"🚀 提交上线"，
+            // 副标题恢复成"v2（草稿）·未提交"，走和 L1 完全等价的草稿发布审批
             if (btnSubmit) {
-              btnSubmit.disabled = false;
-              btnSubmit.textContent = '🚀 拉起 v2 草稿';
+              btnSubmit.disabled = true;
+              btnSubmit.textContent = '✅ v1 已上线';
             }
           }
           btnApprove.disabled = true;
