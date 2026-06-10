@@ -318,25 +318,28 @@
       .pf-l2-row > .pf-conn[data-idx="l2-3"] { left: calc(100%/8 * 3.5); right: calc(100%/8 * 3.5); }
       /* 桥尾连线 ④ → fork-out 入口 */
       .pf-l2-row > .pf-conn[data-idx="l2-4"] { left: calc(100%/8 * 4); right: calc(100%/8 * 3.5); }
-      /* fork-in：从 col 1 中点（=主行①位置）斜向下到 col 2 中点（L2②位置） */
+      /* fork-in / fork-out 父级是 .pf-l2-row（top:0 = L2 行顶端）
+         主行 ① 节点中心 ≈ L2 行 top - (gap 36 + 主行节点半径 22) = -58px
+         L2 ② 节点中心 ≈ L2 行 top + (padding-top 16 + 节点半径 22) = +38px
+         → fork-in 容器：top:-58px, height:96px，左竖线起自主行节点中心、底横线落在 L2 节点中心 */
       .pf-fork-in {
         position: absolute;
-        top: -34px; /* 跨过两行的 gap，连到主行底部 */
+        top: -58px;
         left: calc(100%/8 * 0.5);
         width: calc(100%/8 * 1);
-        height: 36px;
+        height: 96px;
         border-left: 2px dashed #b9d0ff;
         border-bottom: 2px dashed #b9d0ff;
         border-bottom-left-radius: 14px;
         z-index: 0;
       }
-      /* fork-out：从 col 4 中点（L2④位置）斜向上到 col 5 中点（主行⑤位置） */
+      /* fork-out：L2④ 节点中心（+38）→ 弯上 → 横段在主行⑤节点中心（-58 + 96 起算……改用对称镜像几何） */
       .pf-fork-out {
         position: absolute;
-        top: -34px;
+        top: -58px;
         left: calc(100%/8 * 3.5);
         width: calc(100%/8 * 1);
-        height: 36px;
+        height: 96px;
         border-right: 2px dashed #b9d0ff;
         border-bottom: 2px dashed #b9d0ff;
         border-bottom-right-radius: 14px;
