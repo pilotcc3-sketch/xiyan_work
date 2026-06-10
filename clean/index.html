@@ -501,12 +501,17 @@
         background: #fff2e0;
         border: 1px solid #f5c98a;
       }
-      /* 主行 ②③④（data-track="L1"）始终不显示 toast：
-         - 首次草稿发布前：还没有"已发布版本"的概念，标"已发布版本-XX中"会误导
-         - L1 归档后：节点已置灰，没必要再打 toast
+      /* 主行 ①②③④ 一律不显示 toast：
+         - ① 共用起点：永久 done，标注无意义
+         - ②③④（data-track="L1"）：首次草稿发布前没有"已发布版本"概念；归档后已置灰
          仅共用尾段 ⑤⑥⑦⑧（无 data-track 标记）保留主行 toast */
-      .pf-main-row .pf-node[data-track="L1"][data-toast].pf-current::after {
-        display: none;
+      .pf-main-row .pf-node[data-track="L1"][data-toast]::after,
+      .pf-main-row .pf-node.pf-start[data-toast]::after,
+      .pf-main-row .pf-node[data-step="1"][data-toast]::after,
+      .pf-main-row .pf-node[data-step="2"][data-toast]::after,
+      .pf-main-row .pf-node[data-step="3"][data-toast]::after,
+      .pf-main-row .pf-node[data-step="4"][data-toast]::after {
+        display: none !important;
       }
       /* L2 idle：L2 行节点不显示 toast（待启动状态没意义） */
       .pipeline-fork[data-l2-state="idle"] .pf-l2-row .pf-node[data-toast]::after {
