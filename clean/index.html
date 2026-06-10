@@ -198,13 +198,9 @@
         <div class="pf-node" data-step="8"><span class="step-no">8</span><span class="step-name">成绩单</span></div>
       </div>
 
-      <!-- ===== L2 支线行：v2 草稿支线，水平方向对齐到主行 ②③④ 列 =====
-           左侧 fork-in 弧线：从主行 ① 节点底部 → 下延至 L2 ② 节点左侧
-           右侧 fork-out 弧线：从 L2 ④ 节点右侧 → 回升至主行 ⑤ 节点底部 -->
+      <!-- ===== L2 支线行：v2 草稿支线，水平方向对齐到主行 ②③④ 列 ===== -->
       <div class="pf-l2-row" id="l2RowEl">
         <span class="pf-row-tag pf-row-tag-l2" id="l2BranchTag">📝 L2 支线 · v2 暂无草稿</span>
-        <!-- fork-in：① → L2② 弧线（CSS 画的圆角折线） -->
-        <span class="pf-fork-in" aria-hidden="true"></span>
         <span class="pf-conn pf-conn-l2" data-idx="l2-1"></span>
         <div class="pf-node" id="l2Step2" data-step="2" data-track="L2"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
         <span class="pf-conn pf-conn-l2" data-idx="l2-2"><em class="pf-time">17h55m</em></span>
@@ -216,8 +212,6 @@
           <span class="step-name pf-name-bridge">草稿发布⚡</span>
         </div>
         <span class="pf-conn pf-conn-bridge" data-idx="l2-4"></span>
-        <!-- fork-out：L2④ → ⑤ 弧线 -->
-        <span class="pf-fork-out" aria-hidden="true"></span>
       </div>
     </div>
 
@@ -320,47 +314,8 @@
       .pf-l2-row > .pf-conn[data-idx="l2-2"] { left: calc(100%/8 * 1.5); right: calc(100%/8 * 5.5); }
       /* ③→④：col 3 中点 → col 4 中点 */
       .pf-l2-row > .pf-conn[data-idx="l2-3"] { left: calc(100%/8 * 2.5); right: calc(100%/8 * 4.5); }
-      /* fork-in / fork-out 父级是 .pf-l2-row（top:0 = L2 行顶端）
-         主行 ① 节点中心 ≈ L2 行 top - (gap 36 + 主行节点半径 22) = -58px
-         L2 ② 节点中心 ≈ L2 行 top + (padding-top 16 + 节点半径 22) = +38px
-         → fork-in 容器：top:-58px, height:96px，左竖线起自主行节点中心、底横线落在 L2 节点中心 */
-      .pf-fork-in {
-        position: absolute;
-        top: -58px;
-        left: calc(100%/8 * 0.5);
-        width: calc(100%/8 * 1);
-        height: 96px;
-        border-left: 2px dashed #b9d0ff;
-        border-bottom: 2px dashed #b9d0ff;
-        border-bottom-left-radius: 14px;
-        z-index: 0;
-      }
-      /* fork-out：L2④ 节点中心（+38）→ 弯上 → 横段在主行⑤节点中心（-58 + 96 起算……改用对称镜像几何） */
-      .pf-fork-out {
-        position: absolute;
-        top: -58px;
-        left: calc(100%/8 * 3.5);
-        width: calc(100%/8 * 1);
-        height: 96px;
-        border-right: 2px dashed #b9d0ff;
-        border-bottom: 2px dashed #b9d0ff;
-        border-bottom-right-radius: 14px;
-        z-index: 0;
-      }
-      /* L2 editing → fork 弧线变蓝实线 */
-      .pipeline-fork[data-l2-state="editing"] .pf-fork-in,
-      .pipeline-fork[data-l2-state="editing"] .pf-fork-out {
-        border-left-style: solid;
-        border-right-style: solid;
-        border-bottom-style: solid;
-        border-color: #3370ff;
-      }
-      /* L2 published → fork-out 变橙（覆盖主干） */
-      .pipeline-fork[data-l2-state="published"] .pf-fork-out {
-        border-right-style: solid;
-        border-bottom-style: solid;
-        border-color: #e8821a;
-      }
+      /* fork-in / fork-out 弧线已废弃：稳态下两条灰虚线视觉噪声大，editing 时 L2 行已有自身蓝实线连线表明流转，无需再用弧线连回主行 */
+      /* L2 editing → 整行高亮（节点恢复亮度由整行 opacity 控制；以前的 fork 弧线高亮已移除） */
 
       /* L2 row tag */
       .pf-row-tag {
