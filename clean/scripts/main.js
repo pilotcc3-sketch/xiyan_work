@@ -350,8 +350,8 @@
     //                            data-l1-archived=true  → 整行灰，节点不参与正向标记
     //   L2 行 ②③④（v2）          data-l2-state=editing  → 按 current/done/todo 渲染
     //                            data-l2-state=idle/published → 整行灰
-    //   ⑤⑥⑦⑧ 共用尾段           data-l1-archived=true → 强制 done 常亮（v1 历史走完）
-    //                            否则按 current/done/todo 渲染
+    //   ⑤⑥⑦⑧ 共用尾段           按 current 一个一个推进点亮（done/current/todo），
+    //                            不因 L1 归档而整段强制 done
     const stepperEl = document.querySelector('#pipelineDrawer .pipeline-fork');
     const l1Archived = stepperEl ? stepperEl.getAttribute('data-l1-archived') === 'true' : false;
     const l2State = stepperEl ? (stepperEl.getAttribute('data-l2-state') || 'idle') : 'idle';
@@ -366,9 +366,8 @@
       const track = node.dataset.track; // 'L1' | 'L2' | 'bridge' | undefined(共用)
       const isL1Mid = track === 'L1' && n >= 2 && n <= 4;
       const isL2Mid = (track === 'L2' || track === 'bridge') && n >= 2 && n <= 4;
-      const isTail  = n >= 5 && n <= 8; // ⑤⑥⑦⑧ 共用尾段（HTML 上挂 L1 track，但语义共用）
 
-      // L1 已归档：L1 中段 ②③④ 整行灰，不参向 done/current
+      // L1 已归档：L1 中段 ②③④ 整行灰，不参与 done/current
       if (isL1Mid && l1Archived) {
         node.classList.add('pf-todo');
         return;
@@ -378,18 +377,7 @@
         node.classList.add('pf-todo');
         return;
       }
-      // ⑤⑥⑦⑧ 共用尾段：L1 历史已跑通 → 强制 done 常亮（即使 current 还停在 ②③④）
-      // 但当前 current 步本身仍要显示 current 高亮（蓝光晕）
-      if (isTail && l1Archived) {
-        if (n === current) {
-          node.classList.add('pf-current');
-          if (numEl) numEl.classList.add('current');
-        } else {
-          if (numEl) numEl.classList.add('done');
-        }
-        return;
-      }
-      // 其余按 current 比较渲染
+      // 其余（含 ⑤⑥⑦⑧ 共用尾段）按 current 比较渲染：一个一个推进点亮
       if (n < current) {
         if (numEl) numEl.classList.add('done');
       } else if (n === current) {
