@@ -149,8 +149,18 @@
   <div class="side-drawer-body">
 
     <!-- Stepper · fork-merge：① 共用起点 ║ 上=主干历史 ②③④ / 下=L2 支线 ②③④⚡ ║ ⑤⑥⑦⑧ 共用终段 -->
-    <!-- data-l2-state: editing=有人编辑 v2（亮）/ idle=无人编辑（灰）/ published=新版已上线（支线归档灰） -->
-    <div class="pipeline-fork" data-l2-state="editing">
+    <!--
+      L1/L2 双行规则（参见《需求-流水线-环节流转.md》）：
+      · L1 上行 = 线上有效版本，是既成事实，永远亮，永不置灰
+      · L2 下行 = 草稿支线，存在 idle / editing 两种稳态 + published 一种瞬时态
+      · 状态切换：
+        idle      → 默认稳态，L2 ②③④ 置灰，无草稿在编辑
+        editing   → 用户点【模板编辑】拉起新草稿，L2 ②③④ 变亮、顺序流转
+        published → 瞬时态，L2 ④ 审批通过的瞬间触发覆盖动画，~1.5s 后自动回 idle
+      · 判断标准：是否存在"未合并的 L2 草稿"，有就 editing，没有就 idle
+      默认进入抽屉 = A 稳态 = idle
+    -->
+    <div class="pipeline-fork" data-l2-state="idle">
 
       <!-- ① 共用起点 -->
       <div class="pf-node pf-start" data-step="1">
@@ -167,7 +177,7 @@
           <span class="pf-row-tag pf-row-tag-l1">🚀 主干历史 · 已发布走过的路</span>
           <div class="pf-row-track">
             <span class="pf-conn pf-conn-l1"><em class="pf-time">1h30m</em></span>
-            <div class="pf-node" data-step="2" data-track="L1"><span class="step-no done">2</span><span class="step-name">模板编辑</span></div>
+            <div class="pf-node pf-active" data-step="2" data-track="L1"><span class="step-no done">2</span><span class="step-name">模板编辑</span></div>
             <span class="pf-conn pf-conn-l1"><em class="pf-time">17h55m</em></span>
             <div class="pf-node" data-step="3" data-track="L1"><span class="step-no done">3</span><span class="step-name">模板测试</span></div>
             <span class="pf-conn pf-conn-l1"><em class="pf-time">17h55m</em></span>
@@ -178,10 +188,10 @@
 
         <!-- 下路：L2 支线（蓝色 → 末端橙色覆盖） -->
         <div class="pf-row pf-row-l2" id="l2RowEl">
-          <span class="pf-row-tag pf-row-tag-l2" id="l2BranchTag">📝 L2 支线 · 当前在编辑的那一份</span>
+          <span class="pf-row-tag pf-row-tag-l2" id="l2BranchTag">📝 L2 支线 · 暂无草稿</span>
           <div class="pf-row-track">
             <span class="pf-conn pf-conn-l2"><em class="pf-time">1h30m</em></span>
-            <div class="pf-node pf-active" id="l2Step2" data-step="2" data-track="L2"><span class="step-no done">2</span><span class="step-name">模板编辑</span></div>
+            <div class="pf-node" id="l2Step2" data-step="2" data-track="L2"><span class="step-no done">2</span><span class="step-name">模板编辑</span></div>
             <span class="pf-conn pf-conn-l2"><em class="pf-time">17h55m</em></span>
             <div class="pf-node" id="l2Step3" data-step="3" data-track="L2"><span class="step-no done">3</span><span class="step-name">模板测试</span></div>
             <span class="pf-conn pf-conn-l2"><em class="pf-time">17h55m</em></span>
@@ -208,10 +218,10 @@
     </div>
 
     <!-- 流水线下方：L2 支线状态说明 -->
-    <div id="l2StatusBadge" style="margin-top:14px;padding:10px 14px;font-size:12px;background:#f5f9ff;border:1px solid #d8e3ff;border-radius:6px;display:flex;align-items:center;gap:10px">
-      <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3370ff;animation:l2Pulse 1.6s infinite;flex:0 0 auto"></span>
-      <span id="l2StatusText" style="color:#3370ff;font-weight:500">📝 L2 支线 · @小樊 正在编辑 v2 草稿（②模板编辑 进行中）</span>
-      <span style="margin-left:auto;font-size:11px;color:#8a93a6">支线在没人编辑 v2、或新版上线后会自动置灰</span>
+    <div id="l2StatusBadge" style="margin-top:14px;padding:10px 14px;font-size:12px;background:#f5f7fa;border:1px solid #e0e4ec;border-radius:6px;display:flex;align-items:center;gap:10px">
+      <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#c4cad6;flex:0 0 auto"></span>
+      <span id="l2StatusText" style="color:#8a93a6;font-weight:500">💤 L2 支线 · 当前无人编辑 v2（支线空闲，可点「新建草稿」拉起）</span>
+      <span style="margin-left:auto;font-size:11px;color:#8a93a6">L1 上行永远亮 · L2 在没人编辑或新版上线后自动置灰</span>
     </div>
 
     <style>
@@ -310,10 +320,39 @@
       }
       .pf-tail .pf-conn { min-width: 36px; max-width: 56px; }
 
-      /* L2 状态切换 · idle/published 置灰支线 */
+      /* ===========================================================
+         L2 状态切换 · 核心规则
+         - L1 上行永远亮（绿），永不置灰，无任何 data-l2-state 选择器作用于 .pf-row-l1
+         - L2 下行随 data-l2-state 在 idle / editing / published 间切换
+         =========================================================== */
+
+      /* idle / published：L2 支线整行置灰（节点圆圈 / 文字 / 连线 / row 标签） */
       .pipeline-fork[data-l2-state="idle"] .pf-row-l2,
       .pipeline-fork[data-l2-state="published"] .pf-row-l2 {
-        opacity: 0.45; filter: grayscale(0.7);
+        opacity: 0.5;
+        filter: grayscale(0.8);
+      }
+      /* idle 态 · L2 节点不可点击 + hover 提示"暂无草稿，点击新建" */
+      .pipeline-fork[data-l2-state="idle"] .pf-row-l2 .pf-node {
+        cursor: not-allowed;
+      }
+      .pipeline-fork[data-l2-state="idle"] .pf-row-l2 .pf-node:hover {
+        transform: none;
+      }
+      .pipeline-fork[data-l2-state="idle"] .pf-row-l2 .pf-node:hover::after {
+        content: "暂无草稿，点击新建";
+        position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+        margin-top: 6px; padding: 3px 8px; font-size: 11px; color: #fff;
+        background: #4a4f5c; border-radius: 4px; white-space: nowrap; z-index: 10;
+      }
+      /* published 瞬时态 · 触发覆盖动画：L2 ④ 桥接节点向上闪一次 */
+      @keyframes l2OverridePulse {
+        0%   { transform: translateY(0)    scale(1);    box-shadow: 0 0 0 0    rgba(232,130,26,0); }
+        40%  { transform: translateY(-6px) scale(1.08); box-shadow: 0 0 0 10px rgba(232,130,26,.35); }
+        100% { transform: translateY(0)    scale(1);    box-shadow: 0 0 0 0    rgba(232,130,26,0); }
+      }
+      .pipeline-fork[data-l2-state="published"] .pf-bridge .pf-no-bridge {
+        animation: l2OverridePulse 1.2s ease-out 1;
       }
     </style>
 
@@ -326,25 +365,12 @@
         const dot = badge.querySelector('span:first-child');
         const text = document.getElementById('l2StatusText');
         const tag = document.getElementById('l2BranchTag');
+
+        // ----- 状态视觉应用 -----
         function apply() {
-          const state = stepper.getAttribute('data-l2-state') || 'editing';
-          if (state === 'idle') {
-            dot.style.background = '#c4cad6';
-            dot.style.animation = 'none';
-            text.textContent = '💤 L2 支线 · 当前无人编辑 v2（支线空闲，可点「新建草稿」拉起）';
-            text.style.color = '#8a93a6';
-            badge.style.background = '#f5f7fa';
-            badge.style.borderColor = '#e0e4ec';
-            if (tag) tag.textContent = '📝 L2 支线 · 当前空闲';
-          } else if (state === 'published') {
-            dot.style.background = '#23a567';
-            dot.style.animation = 'none';
-            text.textContent = '✅ L2 支线 · v2 草稿已发布并覆盖主干（6/6 10:15），支线已归档';
-            text.style.color = '#23a567';
-            badge.style.background = '#f0faf4';
-            badge.style.borderColor = '#cce8d6';
-            if (tag) tag.textContent = '📝 L2 支线 · v2 已合并归档';
-          } else {
+          const state = stepper.getAttribute('data-l2-state') || 'idle';
+          if (state === 'editing') {
+            // B 状态：L2 行变亮、顺序流转，L2 ② 当前激活
             dot.style.background = '#3370ff';
             dot.style.animation = 'l2Pulse 1.6s infinite';
             text.textContent = '📝 L2 支线 · @小樊 正在编辑 v2 草稿（②模板编辑 进行中）';
@@ -352,13 +378,57 @@
             badge.style.background = '#f5f9ff';
             badge.style.borderColor = '#d8e3ff';
             if (tag) tag.textContent = '📝 L2 支线 · 当前在编辑的那一份';
+            // L2 ② 节点高亮为当前激活
+            const l2s2 = document.getElementById('l2Step2');
+            if (l2s2) l2s2.classList.add('pf-active');
+          } else if (state === 'published') {
+            // C 瞬时态：覆盖动画播放中（~1.2s），文案表达"刚发布、马上灰回去"
+            dot.style.background = '#e8821a';
+            dot.style.animation = 'none';
+            text.textContent = '⚡ L2 ④ 审批通过 · 内容正在覆盖 L1 主干（v1 → v2）';
+            text.style.color = '#e8821a';
+            badge.style.background = '#fff7ec';
+            badge.style.borderColor = '#f5c98a';
+            if (tag) tag.textContent = '⚡ L2 → L1 覆盖中';
+            // 1.5s 后自动回 idle（瞬时态不是稳态）
+            setTimeout(() => {
+              if (stepper.getAttribute('data-l2-state') === 'published') {
+                stepper.setAttribute('data-l2-state', 'idle');
+                apply();
+              }
+            }, 1500);
+          } else {
+            // A 状态（idle，默认稳态）：L2 ②③④ 置灰、无草稿
+            dot.style.background = '#c4cad6';
+            dot.style.animation = 'none';
+            text.textContent = '💤 L2 支线 · 当前无人编辑 v2（支线空闲，可点「新建草稿」拉起）';
+            text.style.color = '#8a93a6';
+            badge.style.background = '#f5f7fa';
+            badge.style.borderColor = '#e0e4ec';
+            if (tag) tag.textContent = '📝 L2 支线 · 暂无草稿';
+            // 清除 L2 行所有 pf-active
+            document.querySelectorAll('#l2RowEl .pf-node.pf-active').forEach(n => n.classList.remove('pf-active'));
           }
         }
         apply();
-        // 控制台演示：toggleL2() 三态循环
+
+        // ----- 公开 API：状态切换 -----
+        // forkL2()  : A → B（点【模板编辑】拉起新草稿）
+        // mergeL2() : B → A（L2 ④ 审批通过 → published 瞬时态 → 1.5s 后 idle）
+        // toggleL2(): 控制台演示用，三态循环
+        window.forkL2 = function () {
+          stepper.setAttribute('data-l2-state', 'editing');
+          apply();
+          return 'editing';
+        };
+        window.mergeL2 = function () {
+          stepper.setAttribute('data-l2-state', 'published');
+          apply();
+          return 'published → idle (1.5s)';
+        };
         window.toggleL2 = function () {
-          const order = ['editing', 'idle', 'published'];
-          const cur = stepper.getAttribute('data-l2-state') || 'editing';
+          const order = ['idle', 'editing', 'published'];
+          const cur = stepper.getAttribute('data-l2-state') || 'idle';
           const next = order[(order.indexOf(cur) + 1) % order.length];
           stepper.setAttribute('data-l2-state', next);
           apply();
@@ -376,7 +446,22 @@
           });
         }
         nodes.forEach(n => {
-          n.addEventListener('click', () => activateNode(n.dataset.step));
+          n.addEventListener('click', (e) => {
+            // idle 态下点击 L2 行节点 → 不切面板，提示拉起草稿
+            const state = stepper.getAttribute('data-l2-state') || 'idle';
+            const isL2 = n.dataset.track === 'L2' || n.dataset.track === 'bridge';
+            if (state === 'idle' && isL2) {
+              e.preventDefault();
+              e.stopPropagation();
+              const ok = confirm('当前 L2 支线暂无草稿，是否基于线上版本拉起一份新草稿（v2）？');
+              if (ok) {
+                window.forkL2();
+                activateNode('2');
+              }
+              return;
+            }
+            activateNode(n.dataset.step);
+          });
         });
         // 兼容外部 jump 按钮（DOM ready 后再绑定，因为按钮分布在下方各 step-content 内）
         function bindJumpBtns() {
