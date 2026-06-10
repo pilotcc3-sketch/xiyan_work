@@ -637,6 +637,7 @@
             <div class="ioa-result-actions">
               <button class="btn-ghost sm" id="btnUrgeDraftMyOA">📣 发群内提醒</button>
               <a class="btn-text sm" href="https://my.woa.com/p2/applyList.html" target="_blank" rel="noopener">前往 MyOA ↗</a>
+              <button class="btn-primary sm" id="btnMockApprovePass" style="margin-left:auto;background:#e8821a;border-color:#e8821a;" title="演示用：模拟 MyOA 审批通过 → L2 ④ 触发覆盖 L1 主干 → L2 行重新置灰">⚡ 模拟审批通过（覆盖 L1）</button>
             </div>
           </div>
         </div>
@@ -1108,5 +1109,78 @@
 </div>
 
 <script src="./scripts/main.js"></script>
+
+<!-- ④ 草稿发布 · 提交上线 + 模拟审批通过 → 触发 L2 覆盖 L1 → L2 行重新置灰 -->
+<script>
+  (function () {
+    function $(id) { return document.getElementById(id); }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const btnSubmit  = $('btnSubmitOnline');      // 🚀 提交上线
+      const btnApprove = $('btnMockApprovePass');   // ⚡ 模拟审批通过
+      const ioaCard    = $('ioaResultDraft');       // MyOA 审批单回填卡
+      const ioaStatus  = $('ioaResultStatusDraft'); // 审批中 / 已通过
+      const ioaRemark  = $('ioaResultRemarkDraft'); // 备注回填
+      const tip        = $('onlineStatusTip');      // 提交按钮旁的灰字提示
+      const onlineBadge= $('onlineStatusBadge');    // 模板上线状态 badge
+
+      // 1) 提交上线 → 显示 MyOA 审批单卡片 + 把上线状态切到"审批中"
+      if (btnSubmit) {
+        btnSubmit.addEventListener('click', function () {
+          const remark = prompt('请填写本次提交上线的备注（演示用，可留空）：', '6/10 提交：开屏夏日冰镇风 v2 草稿，已自测通过');
+          if (remark === null) return; // 用户取消
+          if (ioaRemark) ioaRemark.textContent = remark || '—';
+          if (ioaCard) ioaCard.style.display = '';
+          if (ioaStatus) {
+            ioaStatus.textContent = '审批中';
+            ioaStatus.className = 'badge wait';
+          }
+          if (onlineBadge) {
+            onlineBadge.textContent = '审批中';
+            onlineBadge.className = 'badge wait';
+          }
+          if (tip) tip.textContent = 'MyOA 审批单已下发，等待测试 / 产品 / 技术 三段审批';
+          // 顺手让 L2 进入 editing 态（如果还在 idle）
+          if (typeof window.forkL2 === 'function') {
+            const stepper = document.querySelector('#pipelineDrawer .pipeline-fork');
+            if (stepper && stepper.getAttribute('data-l2-state') === 'idle') {
+              window.forkL2();
+            }
+          }
+        });
+      }
+
+      // 2) 模拟审批通过 → L2 ④ 触发覆盖动画 → 1.5s 后 L2 行重新置灰（mergeL2 内置）
+      if (btnApprove) {
+        btnApprove.addEventListener('click', function () {
+          if (!ioaCard || ioaCard.style.display === 'none') {
+            alert('请先点【🚀 提交上线】下发 MyOA 审批单');
+            return;
+          }
+          // 审批单状态 → 已通过
+          if (ioaStatus) {
+            ioaStatus.textContent = '已通过';
+            ioaStatus.className = 'badge ok';
+          }
+          // 模板上线状态 → 已上线
+          if (onlineBadge) {
+            onlineBadge.textContent = '已上线 v2';
+            onlineBadge.className = 'badge ok';
+          }
+          if (tip) tip.textContent = '✅ 审批通过 · L2 ④ 已覆盖 L1 主干（v1 → v2），支线归档置灰';
+          // 触发 L2 → L1 覆盖动画 + 自动回 idle
+          if (typeof window.mergeL2 === 'function') {
+            window.mergeL2();
+          }
+          // 按钮自身禁用，避免重复点
+          btnApprove.disabled = true;
+          btnApprove.style.opacity = '0.5';
+          btnApprove.style.cursor = 'not-allowed';
+          btnApprove.textContent = '✅ 已通过 · 已覆盖 L1';
+        });
+      }
+    });
+  })();
+</script>
 </body>
 </html>
