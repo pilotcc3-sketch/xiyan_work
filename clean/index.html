@@ -310,8 +310,11 @@
 
     <!-- 流水线下方：L1 / L2 双线状态说明 -->
     <div id="l2StatusBadge" style="margin-top:14px;padding:10px 14px;font-size:12px;background:#f5f7fa;border:1px solid #e0e4ec;border-radius:6px;display:flex;align-items:center;gap:10px">
-      <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#23a567;flex:0 0 auto"></span>
-      <span id="l2StatusText" style="color:#23a567;font-weight:500">🚀 已发布版本 · 流转中</span>
+      <span id="l2StatusDot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#23a567;flex:0 0 auto"></span>
+      <div id="l2StatusLines" style="display:flex;flex-direction:column;gap:2px;line-height:1.4">
+        <span id="l2StatusText" style="color:#23a567;font-weight:500">🚀 已发布版本 · 流转中</span>
+        <span id="l2DraftStatusText" style="color:#3370ff;font-weight:500;display:none">📝 草稿版本 · 流转中</span>
+      </div>
       <span style="margin-left:auto;font-size:11px;color:#8a93a6">L1 ④ 发布完 → ②③④ 归档置灰 · L2 拉起新草稿 → 覆盖主干后 L2 也置灰</span>
     </div>
 
@@ -985,29 +988,65 @@
         const stepper = document.querySelector('#pipelineDrawer .pipeline-fork');
         if (!stepper) return;
         const badge = document.getElementById('l2StatusBadge');
-        const dot = badge.querySelector('span:first-child');
+        const dot = document.getElementById('l2StatusDot');
         const text = document.getElementById('l2StatusText');
+        const draftText = document.getElementById('l2DraftStatusText');
+
+        // 从节点 data-toast 读出"主干/草稿 + xx中"原始文案；fallback 用 step-name
+        function nodeStateLabel(node) {
+          if (!node) return '';
+          const t = node.getAttribute('data-toast');
+          if (t) return t; // 形如 "已发布版本-规则配置中" / "草稿版本-编辑中"
+          const name = node.querySelector('.step-name')?.textContent?.trim() || '';
+          return name ? `· ${name}中` : '';
+        }
+        // 刷新两行文案（在 __refreshPipeline 之后调用，确保 pf-current 已就位）
+        function refreshStatusText() {
+          const state = stepper.getAttribute('data-l2-state') || 'idle';
+          const l1Archived = stepper.getAttribute('data-l1-archived') === 'true';
+          // 上行：已发布版本
+          const mainCurrent = stepper.querySelector('.pf-main-row .pf-node.pf-current');
+          if (l1Archived && state !== 'editing' && state !== 'published') {
+            // 归档但暂无草稿
+            text.textContent = '💤 已发布版本归档 · 暂无草稿（点 L2 行 ② 拉起新草稿）';
+          } else if (mainCurrent) {
+            text.textContent = `🚀 ${nodeStateLabel(mainCurrent)}`;
+          } else {
+            text.textContent = '🚀 已发布版本 · 流转中';
+          }
+          // 下行：草稿版本（仅 editing/published 显示）
+          if (state === 'editing' || state === 'published') {
+            const l2Current = stepper.querySelector('.pf-l2-row .pf-node.pf-current');
+            if (state === 'published') {
+              draftText.textContent = '⚡ 草稿 ④审批通过 · 内容正在覆盖主干';
+            } else if (l2Current) {
+              draftText.textContent = `📝 ${nodeStateLabel(l2Current)}`;
+            } else {
+              draftText.textContent = '📝 草稿版本 · 流转中';
+            }
+            draftText.style.display = '';
+          } else {
+            draftText.style.display = 'none';
+          }
+        }
 
         // ----- 状态视觉应用 -----
         function apply() {
           const state = stepper.getAttribute('data-l2-state') || 'idle';
           const l1Archived = stepper.getAttribute('data-l1-archived') === 'true';
+          // 文案颜色 / badge 配色 / dot 动画 — 文案内容统一交给 refreshStatusText
           if (state === 'editing') {
-            // L2 v2 草稿在编辑
             dot.style.background = '#3370ff';
             dot.style.animation = 'l2Pulse 1.6s infinite';
-            text.textContent = '📝 草稿版本 · @小樊 正在编辑';
-            text.style.color = '#3370ff';
+            text.style.color = '#23a567';        // 上行（已发布版本）保持绿
             badge.style.background = '#f5f9ff';
             badge.style.borderColor = '#d8e3ff';
             const l2s2 = document.getElementById('l2Step2');
             if (l2s2) l2s2.classList.add('pf-active');
           } else if (state === 'published') {
-            // L2 ④ 覆盖瞬时态（~1.2s）
             dot.style.background = '#e8821a';
             dot.style.animation = 'none';
-            text.textContent = '⚡ 草稿 ④审批通过 · 内容正在覆盖主干';
-            text.style.color = '#e8821a';
+            text.style.color = '#23a567';
             badge.style.background = '#fff7ec';
             badge.style.borderColor = '#f5c98a';
             setTimeout(() => {
@@ -1017,19 +1056,15 @@
               }
             }, 1500);
           } else if (l1Archived) {
-            // L1 已归档但 L2 还没拉起（待启动：等待人来拉草稿）
             dot.style.background = '#c4cad6';
             dot.style.animation = 'none';
-            text.textContent = '💤 已发布版本归档 · 暂无草稿（点 L2 行 ② 拉起新草稿）';
             text.style.color = '#8a93a6';
             badge.style.background = '#f5f7fa';
             badge.style.borderColor = '#e0e4ec';
             document.querySelectorAll('#l2RowEl .pf-node.pf-active').forEach(n => n.classList.remove('pf-active'));
           } else {
-            // 默认初始：L1 在跑，L2 还没轮到（流程未开始）
             dot.style.background = '#23a567';
             dot.style.animation = 'l2Pulse 1.6s infinite';
-            text.textContent = '🚀 已发布版本 · 流转中';
             text.style.color = '#23a567';
             badge.style.background = '#f0f9f4';
             badge.style.borderColor = '#b3dec3';
@@ -1044,7 +1079,11 @@
               window.__activateStep(activeContent.dataset.stepContent);
             }
           }
+          // pipeline 重渲染后 pf-current 已最新 → 再刷文案
+          refreshStatusText();
         }
+        // 暴露给外部（main.js activateStep 内调用，节点点击/jump 时同步刷新两行文案）
+        window.__refreshL2StatusText = refreshStatusText;
         apply();
 
         // ----- 公开 API：状态切换 -----

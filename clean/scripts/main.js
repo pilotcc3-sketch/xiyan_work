@@ -458,6 +458,10 @@
         }
       }
     });
+    // pf-current 已就位 → 同步刷新流水线下方"已发布版本 / 草稿版本"两行状态文案
+    if (typeof window.__refreshL2StatusText === 'function') {
+      window.__refreshL2StatusText();
+    }
   }
 
   // 把两步 done-at 时间戳之差渲染成「实际耗时」（不是预估时间）
