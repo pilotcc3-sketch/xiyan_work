@@ -454,17 +454,296 @@
     </div>
   </div>
 
-  <!-- ============== 落地动作 ============== -->
-  <h2>⑧ 在 Demo 上的落地动作（待办，未执行）</h2>
+  <!-- ============== Demo 改造方案 ============== -->
+  <h2>⑧ Demo 该怎么改（可视化对比）</h2>
+  <p class="lead" style="margin-bottom:14px">当前 demo 把 7 步画成串行直线，掩盖了"双副本并行 + 物理覆盖"的真相。下面 5 个改造点，按"骨架→表格→交互→抽屉→警示"由外到内列出。</p>
+
+  <!-- 改造点 1：骨架图分域 -->
   <div class="card">
-    <ol style="padding-left:22px;font-size:14px;line-height:1.9">
-      <li><b>草稿页表格新增列</b>：<code>草稿版 · 编辑中</code> + ⓘ "当前线上版（6/5）" hover 看 diff</li>
-      <li><b>管理页表格新增列</b>：<code>线上版 · 6 月 5 日</code></li>
-      <li><b>Step 4 草稿发布卡</b>加警示：「审批通过将物理覆盖管理页线上版，旧版本不可回滚；若旧版正在实验中，旧实验将被强制中止」</li>
-      <li><b>流水线抽屉</b>改造成"双副本视图"：上半截显示已发布副本走到 ⑤/⑥/⑦ 哪一步、下半截显示草稿副本是否有新版本在打磨</li>
-      <li><b>顶部 7 步骨架图</b>加分组标签：①②③④ 标"草稿副本域"、⑤⑥⑦ 标"已发布副本域"，④↔⑤ 之间画"快照覆盖"过桥箭头</li>
-    </ol>
-    <p style="margin-top:14px;color:var(--muted);font-size:13px">⚠️ 以上仅为动作清单，等你确认后再动 <code>clean/index.html</code>。</p>
+    <h3 style="margin-bottom:12px">改造点 ① 顶部 7 步骨架图：从「直线串行」改为「双泳道 + 过桥」</h3>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px">
+      <!-- 改前 -->
+      <div style="background:#fafbfd;border:1px dashed var(--border);border-radius:8px;padding:14px">
+        <div style="font-size:12px;color:var(--red);font-weight:600;margin-bottom:10px">✗ 现状：直线串行（误导）</div>
+        <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:11px">
+          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">①创建</span>
+          <span style="color:var(--soft)">→</span>
+          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">②编辑</span>
+          <span style="color:var(--soft)">→</span>
+          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">③测试</span>
+          <span style="color:var(--soft)">→</span>
+          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">④发布</span>
+          <span style="color:var(--soft)">→</span>
+          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">⑤规则</span>
+          <span style="color:var(--soft)">→</span>
+          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">⑥实验</span>
+          <span style="color:var(--soft)">→</span>
+          <span style="background:#fff;border:1px solid var(--border);padding:6px 8px;border-radius:6px">⑦全量</span>
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:var(--muted);line-height:1.7">问题：看起来像一次性走完，实际上 ①②③④ 和 ⑤⑥⑦ 是两个并行域，且 ④ 后会循环回 ②。</div>
+      </div>
+
+      <!-- 改后 -->
+      <div style="background:#fafbfd;border:1px solid var(--green);border-radius:8px;padding:14px">
+        <div style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:10px">✓ 改后：双泳道 + 过桥事件</div>
+        <!-- 草稿域 -->
+        <div style="border:1.5px solid var(--blue);border-radius:6px;padding:8px;background:var(--blue-bg)">
+          <div style="font-size:11px;color:var(--blue);font-weight:600;margin-bottom:6px">📝 草稿副本域（模板草稿页）</div>
+          <div style="display:flex;align-items:center;gap:3px;flex-wrap:wrap;font-size:11px">
+            <span style="background:#fff;border:1px solid var(--blue);padding:5px 8px;border-radius:5px">①创建</span>
+            <span style="color:var(--blue)">→</span>
+            <span style="background:#fff;border:1px solid var(--blue);padding:5px 8px;border-radius:5px">②编辑</span>
+            <span style="color:var(--blue)">→</span>
+            <span style="background:#fff;border:1px solid var(--blue);padding:5px 8px;border-radius:5px">③测试</span>
+            <span style="color:var(--blue)">→</span>
+            <span style="background:#fff;border:1px solid var(--blue);padding:5px 8px;border-radius:5px">④草稿发布</span>
+          </div>
+        </div>
+        <!-- 过桥 -->
+        <div style="text-align:center;margin:6px 0;font-size:11px">
+          <span style="background:var(--orange-bg);color:var(--orange);padding:3px 10px;border-radius:10px;border:1px solid #fbcd9a">⬇ 快照覆盖（不可回滚）</span>
+        </div>
+        <!-- 已发布域 -->
+        <div style="border:1.5px solid var(--green);border-radius:6px;padding:8px;background:var(--green-bg)">
+          <div style="font-size:11px;color:var(--green);font-weight:600;margin-bottom:6px">🚀 已发布副本域（已发布模板管理页）</div>
+          <div style="display:flex;align-items:center;gap:3px;flex-wrap:wrap;font-size:11px">
+            <span style="background:#fff;border:1px solid var(--green);padding:5px 8px;border-radius:5px">⑤未生效</span>
+            <span style="color:var(--green)">→</span>
+            <span style="background:#fff;border:1px solid var(--green);padding:5px 8px;border-radius:5px">⑥实验中</span>
+            <span style="color:var(--green)">→</span>
+            <span style="background:#fff;border:1px solid var(--green);padding:5px 8px;border-radius:5px">⑦全量</span>
+            <span style="color:var(--soft);margin-left:4px">↺</span>
+            <span style="font-size:10px;color:var(--muted)">回②改下一版</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 改造点 2：草稿页表格新增列 -->
+  <div class="card">
+    <h3 style="margin-bottom:12px">改造点 ② 草稿页表格：新增「草稿版本 + 当前线上版」双列</h3>
+
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead>
+          <tr style="background:var(--blue-bg);color:var(--blue)">
+            <th style="padding:8px;text-align:left;border:1px solid var(--border)">templateId</th>
+            <th style="padding:8px;text-align:left;border:1px solid var(--border)">模板名</th>
+            <th style="padding:8px;text-align:left;border:1px solid var(--border);background:#dbe7ff">草稿版（NEW）</th>
+            <th style="padding:8px;text-align:left;border:1px solid var(--border);background:#dbe7ff">当前线上版（NEW）</th>
+            <th style="padding:8px;text-align:left;border:1px solid var(--border)">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:8px;border:1px solid var(--border);font-family:monospace">1003723</td>
+            <td style="padding:8px;border:1px solid var(--border)">双端_激励_1003723</td>
+            <td style="padding:8px;border:1px solid var(--border)">
+              <span style="background:var(--blue-bg);color:var(--blue);padding:2px 8px;border-radius:4px;font-size:11px">草稿版 · 编辑中</span>
+            </td>
+            <td style="padding:8px;border:1px solid var(--border)">
+              <span style="background:var(--green-bg);color:var(--green);padding:2px 8px;border-radius:4px;font-size:11px">线上版 · 6/5</span>
+              <span style="color:var(--soft);font-size:11px;margin-left:4px;cursor:help" title="hover 看 DSL diff">ⓘ</span>
+            </td>
+            <td style="padding:8px;border:1px solid var(--border)"><a style="color:var(--blue)">编辑</a> · <a style="color:var(--blue)">发布</a></td>
+          </tr>
+          <tr>
+            <td style="padding:8px;border:1px solid var(--border);font-family:monospace">1003888</td>
+            <td style="padding:8px;border:1px solid var(--border)">新模板_首发</td>
+            <td style="padding:8px;border:1px solid var(--border)">
+              <span style="background:var(--blue-bg);color:var(--blue);padding:2px 8px;border-radius:4px;font-size:11px">草稿版 · 编辑中</span>
+            </td>
+            <td style="padding:8px;border:1px solid var(--border);color:var(--soft);font-size:11px">— 尚未发布过 —</td>
+            <td style="padding:8px;border:1px solid var(--border)"><a style="color:var(--blue)">编辑</a> · <a style="color:var(--blue)">发布</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:10px;color:var(--muted);font-size:12px">⓵ "草稿版 · 编辑中" 永远存在；⓶ "当前线上版 · 6/5" 仅当 templateId 已发布过才显示，hover 可看草稿 vs 线上 DSL 差异。</p>
+  </div>
+
+  <!-- 改造点 3：管理页表格新增列 -->
+  <div class="card">
+    <h3 style="margin-bottom:12px">改造点 ③ 已发布模板管理页表格：新增「线上版 · 发布日期」列</h3>
+
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead>
+          <tr style="background:var(--green-bg);color:var(--green)">
+            <th style="padding:8px;text-align:left;border:1px solid var(--border)">templateId</th>
+            <th style="padding:8px;text-align:left;border:1px solid var(--border)">模板名</th>
+            <th style="padding:8px;text-align:left;border:1px solid var(--border);background:#c4ebd5">线上版（NEW）</th>
+            <th style="padding:8px;text-align:left;border:1px solid var(--border)">子状态</th>
+            <th style="padding:8px;text-align:left;border:1px solid var(--border)">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:8px;border:1px solid var(--border);font-family:monospace">1003723</td>
+            <td style="padding:8px;border:1px solid var(--border)">双端_激励_1003723</td>
+            <td style="padding:8px;border:1px solid var(--border)">
+              <span style="background:var(--green-bg);color:var(--green);padding:2px 8px;border-radius:4px;font-size:11px">线上版 · 6/5</span>
+            </td>
+            <td style="padding:8px;border:1px solid var(--border)"><span style="background:var(--orange-bg);color:var(--orange);padding:2px 8px;border-radius:4px;font-size:11px">已发布-实验中</span></td>
+            <td style="padding:8px;border:1px solid var(--border)"><a style="color:var(--green)">流水线</a></td>
+          </tr>
+          <tr>
+            <td style="padding:8px;border:1px solid var(--border);font-family:monospace">1003721</td>
+            <td style="padding:8px;border:1px solid var(--border)">商品信息_系统弹窗</td>
+            <td style="padding:8px;border:1px solid var(--border)">
+              <span style="background:var(--green-bg);color:var(--green);padding:2px 8px;border-radius:4px;font-size:11px">线上版 · 5/28</span>
+            </td>
+            <td style="padding:8px;border:1px solid var(--border)"><span style="background:var(--blue-bg);color:var(--blue);padding:2px 8px;border-radius:4px;font-size:11px">已发布-未生效</span></td>
+            <td style="padding:8px;border:1px solid var(--border)"><a style="color:var(--green)">流水线</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:10px;color:var(--muted);font-size:12px">⓵ 子状态聚焦"在投放上的位置"；⓶ "线上版 · 日期" 让用户清楚这一行是哪天发布的快照，方便和草稿页对照。</p>
+  </div>
+
+  <!-- 改造点 4：草稿发布警示 -->
+  <div class="card">
+    <h3 style="margin-bottom:12px">改造点 ④ Step 4 草稿发布卡：增加「物理覆盖警示」</h3>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <!-- 改前 -->
+      <div style="background:#fafbfd;border:1px dashed var(--border);border-radius:8px;padding:14px">
+        <div style="font-size:12px;color:var(--red);font-weight:600;margin-bottom:10px">✗ 现状</div>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:12px">
+          <div style="font-weight:600;margin-bottom:6px">④ 草稿发布</div>
+          <div style="font-size:12px;color:var(--muted)">MyOA 三段审批（测试 / 产品 / 技术）</div>
+          <button style="margin-top:10px;background:var(--blue);color:#fff;border:none;padding:6px 14px;border-radius:5px;font-size:12px;cursor:pointer">提交审批</button>
+        </div>
+      </div>
+
+      <!-- 改后 -->
+      <div style="background:#fafbfd;border:1px solid var(--green);border-radius:8px;padding:14px">
+        <div style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:10px">✓ 改后</div>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:12px">
+          <div style="font-weight:600;margin-bottom:6px">④ 草稿发布</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:10px">MyOA 三段审批（测试 / 产品 / 技术）</div>
+
+          <!-- 警示框 NEW -->
+          <div style="background:#fff5f5;border:1px solid #fbcaca;border-left:3px solid var(--red);border-radius:4px;padding:8px 10px;font-size:11px;line-height:1.7;margin-bottom:10px">
+            <div style="color:var(--red);font-weight:600;margin-bottom:4px">⚠ 审批通过即触发以下不可逆操作</div>
+            <div style="color:#5a3535">
+              · 当前草稿将<b>物理覆盖</b>线上版 5/28，旧线上版<b>不留底、不可回滚</b><br>
+              · 若线上版当前为「实验中」，<b>旧实验将被强制中止</b>，新版本须重走 ⑤⑥⑦
+            </div>
+          </div>
+
+          <button style="background:var(--blue);color:#fff;border:none;padding:6px 14px;border-radius:5px;font-size:12px;cursor:pointer">我已知悉，提交审批</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 改造点 5：流水线抽屉 -->
+  <div class="card">
+    <h3 style="margin-bottom:12px">改造点 ⑤ 流水线抽屉：从「单线 7 步」改为「双副本视图」</h3>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <!-- 改前 -->
+      <div style="background:#fafbfd;border:1px dashed var(--border);border-radius:8px;padding:14px">
+        <div style="font-size:12px;color:var(--red);font-weight:600;margin-bottom:10px">✗ 现状：只画一条 7 步线</div>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:14px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px">templateId 1003723 · 流水线</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:11px">
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px">✓</span> ① 创建</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px">✓</span> ② 编辑</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px">✓</span> ③ 测试</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px">✓</span> ④ 发布</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:var(--orange);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px">●</span> ⑥ 实验中</div>
+            <div style="display:flex;align-items:center;gap:8px;color:var(--soft)"><span style="width:18px;height:18px;border-radius:50%;background:#e4e8ef;color:var(--soft);display:inline-flex;align-items:center;justify-content:center;font-size:10px">○</span> ⑦ 全量</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 改后 -->
+      <div style="background:#fafbfd;border:1px solid var(--green);border-radius:8px;padding:14px">
+        <div style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:10px">✓ 改后：上下分双副本</div>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:14px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:10px">templateId 1003723 · 流水线</div>
+
+          <!-- 上半截：已发布副本 -->
+          <div style="border:1.5px solid var(--green);border-radius:6px;padding:10px;background:#fafff8;margin-bottom:8px">
+            <div style="font-size:11px;color:var(--green);font-weight:600;margin-bottom:6px">🚀 线上版 · 6/5（已发布副本）</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:11px;flex-wrap:wrap">
+              <span style="background:#fff;border:1px solid var(--green);color:var(--green);padding:3px 7px;border-radius:4px">⑤ 已配规则</span>
+              <span style="color:var(--green)">→</span>
+              <span style="background:var(--orange-bg);border:1px solid var(--orange);color:var(--orange);padding:3px 7px;border-radius:4px;font-weight:600">⑥ 实验中（在这）</span>
+              <span style="color:var(--soft)">→</span>
+              <span style="background:#f0f3f8;border:1px solid var(--border);color:var(--soft);padding:3px 7px;border-radius:4px">⑦ 全量</span>
+            </div>
+          </div>
+
+          <!-- 过桥小提示 -->
+          <div style="text-align:center;font-size:10px;color:var(--soft);margin:4px 0">⬆ 由下方草稿 6/5 发布快照而来</div>
+
+          <!-- 下半截：草稿副本 -->
+          <div style="border:1.5px solid var(--blue);border-radius:6px;padding:10px;background:#fafbff">
+            <div style="font-size:11px;color:var(--blue);font-weight:600;margin-bottom:6px">📝 草稿版 · 编辑中（草稿副本）</div>
+            <div style="font-size:11px;color:var(--text);line-height:1.7">
+              · 最近编辑：6/8 14:23<br>
+              · 与线上版 diff：<b style="color:var(--orange)">3 处变更</b>（hover 看详情）<br>
+              · <a style="color:var(--blue);cursor:pointer">去草稿页编辑 →</a> · <a style="color:var(--blue);cursor:pointer">直接草稿发布 →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:10px;color:var(--muted);font-size:12px">改造后用户在一个抽屉里同时看到：① 这个 templateId 线上跑到第几步、② 草稿是否有新版本在打磨、③ 两份是否有 diff。</p>
+  </div>
+
+  <!-- 改造优先级 -->
+  <div class="card" style="background:#fff8e7;border-color:#f4c455">
+    <h3 style="margin-bottom:10px">改造优先级建议</h3>
+    <table style="width:100%;font-size:13px;border-collapse:collapse">
+      <thead>
+        <tr style="background:#fff;color:var(--text)">
+          <th style="padding:8px;text-align:left;border-bottom:1px solid #f4c455">优先级</th>
+          <th style="padding:8px;text-align:left;border-bottom:1px solid #f4c455">改造点</th>
+          <th style="padding:8px;text-align:left;border-bottom:1px solid #f4c455">收益</th>
+          <th style="padding:8px;text-align:left;border-bottom:1px solid #f4c455">工作量</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:8px"><b style="color:var(--red)">P0</b></td>
+          <td style="padding:8px">① 骨架图分双泳道</td>
+          <td style="padding:8px">最大化纠正心智模型</td>
+          <td style="padding:8px">中（动 layout）</td>
+        </tr>
+        <tr>
+          <td style="padding:8px"><b style="color:var(--red)">P0</b></td>
+          <td style="padding:8px">④ Step 4 物理覆盖警示</td>
+          <td style="padding:8px">避免误操作 / 强化"不可回滚"认知</td>
+          <td style="padding:8px">小（加文案块）</td>
+        </tr>
+        <tr>
+          <td style="padding:8px"><b style="color:var(--orange)">P1</b></td>
+          <td style="padding:8px">② 草稿页表格双列</td>
+          <td style="padding:8px">让用户看清"我改的版本 vs 线上跑的版本"</td>
+          <td style="padding:8px">小</td>
+        </tr>
+        <tr>
+          <td style="padding:8px"><b style="color:var(--orange)">P1</b></td>
+          <td style="padding:8px">③ 管理页表格"线上版"列</td>
+          <td style="padding:8px">和草稿页对照锚点</td>
+          <td style="padding:8px">小</td>
+        </tr>
+        <tr>
+          <td style="padding:8px"><b style="color:#888">P2</b></td>
+          <td style="padding:8px">⑤ 流水线抽屉双副本视图</td>
+          <td style="padding:8px">深度场景才用，可放后</td>
+          <td style="padding:8px">中</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px;color:#7a5b1a;font-size:12px">⚠️ 以上仅为方案示意，等你确认后再动 <code>clean/index.html</code>。建议先做 P0 两项跑给团队看反馈，再迭代 P1/P2。</p>
   </div>
 
   <p style="text-align:center;margin-top:40px;color:var(--soft);font-size:12px">
