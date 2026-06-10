@@ -426,18 +426,17 @@
       .pf-conn-l1 { background: #23a567; }
       .pf-conn-l2 { background: #b9d0ff; }
       .pf-conn-bridge { background: #e8821a; }
-      /* 未走过的连线（>= current）：灰色虚线 */
+      /* 未走过的连线（>= current）：灰虚线
+         注：连线已是 absolute + height:2px，不能再 height:0，否则 border-top 与 absolute 元素的 box 模型冲突 */
       .pf-conn.pf-conn-todo {
         background: transparent !important;
-        border-top: 2px dashed #d0d4dc;
-        height: 0;
+        border-top: 2px dashed #a8b0bd;
       }
       .pf-conn.pf-conn-todo .pf-time { color: #b0b6c4; }
       /* L2 行的所有连线：仅 published 瞬间才橙实线，其余虚灰 */
       .pipeline-fork:not([data-l2-state="published"]) .pf-l2-row .pf-conn-bridge {
         background: transparent !important;
-        border-top: 2px dashed #d0d4dc;
-        height: 0;
+        border-top: 2px dashed #a8b0bd;
       }
       .pf-time {
         position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
@@ -476,9 +475,11 @@
         background: #4a4f5c; border-radius: 4px; white-space: nowrap; z-index: 10;
       }
 
-      /* idle / published：L2 整行置灰 */
-      .pipeline-fork[data-l2-state="idle"] .pf-l2-row,
-      .pipeline-fork[data-l2-state="published"] .pf-l2-row {
+      /* idle / published：L2 整行置灰（节点 + 文字压暗，但连线保持原色，否则虚线在白底上看不见） */
+      .pipeline-fork[data-l2-state="idle"] .pf-l2-row > .pf-node,
+      .pipeline-fork[data-l2-state="idle"] .pf-l2-row > .pf-row-tag,
+      .pipeline-fork[data-l2-state="published"] .pf-l2-row > .pf-node,
+      .pipeline-fork[data-l2-state="published"] .pf-l2-row > .pf-row-tag {
         opacity: 0.5;
         filter: grayscale(0.8);
       }
