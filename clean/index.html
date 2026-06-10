@@ -289,7 +289,6 @@
            左侧 fork-in 折线：从主行 ① 节点底部 → 弯下 → 接到 L2 ② 节点左侧
            右侧 fork-out 折线：从 L2 ④ 节点右侧 → 弯上 → 接到主行 ⑤ 节点底部 -->
       <div class="pf-l2-row" id="l2RowEl">
-        <span class="pf-row-tag pf-row-tag-l2" id="l2BranchTag">📝 草稿版本 · 暂无草稿</span>
         <!-- fork-in：① → L2② 折线 -->
         <span class="pf-fork-in" aria-hidden="true"></span>
         <!-- fork-out：L2④ → ⑤ 折线 -->
@@ -516,15 +515,6 @@
         to   { opacity: 1; transform: translate(-50%, 0); }
       }
 
-      /* L2 row tag */
-      .pf-row-tag {
-        position: absolute; bottom: 4px; left: 18px;
-        font-size: 10px; padding: 0 6px;
-        border-radius: 8px; white-space: nowrap; background: #fff;
-        z-index: 3;
-      }
-      .pf-l2-row .pf-row-tag-l2 { color: #3370ff; border: 1px solid #b9d0ff; }
-
       /* 节点（圆 + 名称） */
       .pf-node {
         display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -636,9 +626,7 @@
 
       /* idle / published：L2 整行置灰（节点 + 文字压暗，但连线保持原色，否则虚线在白底上看不见） */
       .pipeline-fork[data-l2-state="idle"] .pf-l2-row > .pf-node,
-      .pipeline-fork[data-l2-state="idle"] .pf-l2-row > .pf-row-tag,
-      .pipeline-fork[data-l2-state="published"] .pf-l2-row > .pf-node,
-      .pipeline-fork[data-l2-state="published"] .pf-l2-row > .pf-row-tag {
+      .pipeline-fork[data-l2-state="published"] .pf-l2-row > .pf-node {
         opacity: 0.5;
         filter: grayscale(0.8);
       }
@@ -977,7 +965,6 @@
         const badge = document.getElementById('l2StatusBadge');
         const dot = badge.querySelector('span:first-child');
         const text = document.getElementById('l2StatusText');
-        const tag = document.getElementById('l2BranchTag');
 
         // ----- 状态视觉应用 -----
         function apply() {
@@ -991,7 +978,6 @@
             text.style.color = '#3370ff';
             badge.style.background = '#f5f9ff';
             badge.style.borderColor = '#d8e3ff';
-            if (tag) tag.textContent = '📝 草稿版本 · 编辑中';
             const l2s2 = document.getElementById('l2Step2');
             if (l2s2) l2s2.classList.add('pf-active');
           } else if (state === 'published') {
@@ -1002,7 +988,6 @@
             text.style.color = '#e8821a';
             badge.style.background = '#fff7ec';
             badge.style.borderColor = '#f5c98a';
-            if (tag) tag.textContent = '✅ 草稿已覆盖（已跑通归档）';
             setTimeout(() => {
               if (stepper.getAttribute('data-l2-state') === 'published') {
                 stepper.setAttribute('data-l2-state', 'idle');
@@ -1017,7 +1002,6 @@
             text.style.color = '#8a93a6';
             badge.style.background = '#f5f7fa';
             badge.style.borderColor = '#e0e4ec';
-            if (tag) tag.textContent = '💤 草稿版本 · 待启动（点 ② 新建草稿）';
             document.querySelectorAll('#l2RowEl .pf-node.pf-active').forEach(n => n.classList.remove('pf-active'));
           } else {
             // 默认初始：L1 在跑，L2 还没轮到（流程未开始）
@@ -1027,7 +1011,6 @@
             text.style.color = '#23a567';
             badge.style.background = '#f0f9f4';
             badge.style.borderColor = '#b3dec3';
-            if (tag) tag.textContent = '⏳ 草稿版本 · 等已发布版本 ④ 完成后启动';
             document.querySelectorAll('#l2RowEl .pf-node.pf-active').forEach(n => n.classList.remove('pf-active'));
           }
           // 状态变了 → 重刷 pf-node 的 done/current/todo（仅重渲染，不推进任何指针）
