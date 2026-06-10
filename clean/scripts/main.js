@@ -330,8 +330,11 @@
   //   - L2 推进期间，mainCursor 不变（⑤⑥⑦⑧ 当前进度保留 V1 走到的位置）
   let mainCursor = 1;
   let l2Cursor = 0;
+  // viewCursor：用户当前"在看"哪一步（仅视觉，不参与业务流转）
+  // null 表示没有显式 viewing，UI 跟随 mainCursor / l2Cursor 渲染
+  let viewCursor = null;
   // 全局暴露查询接口（供其他模块或调试用）
-  window.__getPipelineCursors = () => ({ mainCursor, l2Cursor });
+  window.__getPipelineCursors = () => ({ mainCursor, l2Cursor, viewCursor });
   // 仅按当前指针重渲染（不改任何指针），供 apply()/状态切换 调用
   window.__refreshPipeline = () => activateStep(String(mainCursor), { __refresh: true });
 
@@ -343,16 +346,22 @@
     // 入口分流：
     //   __refresh === true → 不改任何指针，仅按当前 mainCursor / l2Cursor 重绘
     //   reset === true     → 强制把 mainCursor 设为 requested（用于打开抽屉切换不同模板）
-    //   track === 'L2'     → 只更新 l2Cursor，不动 mainCursor
+    //   track === 'view'   → 仅切看板 + 设 viewCursor，不改 mainCursor / l2Cursor（"浏览态"）
+    //   track === 'L2'     → 只更新 l2Cursor，不动 mainCursor（草稿版本推进）
     //   track === 'main' / null（默认）→ 推进 mainCursor（单调递增，不回退）
     if (isRefresh) {
       // skip：不改指针
     } else if (isReset) {
       mainCursor = Math.max(1, requested);
       l2Cursor = 0;
+      viewCursor = null;
+    } else if (track === 'view') {
+      // 浏览态：不改业务指针，只标记当前在看哪一步
+      viewCursor = requested;
     } else if (track === 'L2') {
       // L2 节点：clamp 到 [2,4]
       l2Cursor = Math.max(2, Math.min(4, requested));
+      viewCursor = null;
     } else {
       // 主线节点：单调推进（避免回退导致 ⑤⑥⑦⑧ 进度被拉回）
       // 但允许显式回到 ① 复位（initial = 1）
@@ -362,6 +371,7 @@
       } else {
         mainCursor = Math.max(mainCursor, requested);
       }
+      viewCursor = null;
     }
     // 右侧 step-content 面板切换：
     //   refresh 模式不动面板；其余以 requested 为准（用户点哪显示哪）
@@ -407,7 +417,7 @@
       const n = parseInt(node.dataset.step, 10);
       const numEl = node.querySelector('.step-no');
       // 清旧
-      node.classList.remove('pf-current', 'pf-todo');
+      node.classList.remove('pf-current', 'pf-todo', 'pf-viewing');
       if (numEl) numEl.classList.remove('done', 'current');
 
       const nodeTrack = node.dataset.track; // 'L1' | 'L2' | 'bridge' | undefined(共用)
@@ -446,6 +456,23 @@
         node.classList.add('pf-todo');
       }
     });
+    // ===== 浏览态标记（pf-viewing）=====
+    // 仅当 viewCursor 不为 null 且与"业务上正在闪烁的节点"不重合时打 viewing 标记
+    // 业务上正在闪烁 = pf-current（mainCursor 落点 + L2 editing 时的 l2Cursor 落点）
+    if (viewCursor != null) {
+      pfNodes.forEach(node => {
+        const n = parseInt(node.dataset.step, 10);
+        if (n !== viewCursor) return;
+        // viewing 节点不可与 current 重叠（current 优先级高，已经是焦点）
+        if (node.classList.contains('pf-current')) return;
+        // L1 归档行的 ②③④ 不接收 viewing（已置灰，业务语义是"已沉淀"）
+        const nodeTrack = node.dataset.track;
+        if (l1Archived && nodeTrack === 'L1' && n >= 2 && n <= 4) return;
+        // L2 idle 行不接收 viewing（草稿版本未启动，节点不可交互）
+        if (l2State === 'idle' && (nodeTrack === 'L2' || nodeTrack === 'bridge') && n >= 2 && n <= 4) return;
+        node.classList.add('pf-viewing');
+      });
+    }
     // 连线状态：用"右侧节点是否高亮（done/current）"判定，否则灰虚线
     document.querySelectorAll('#pipelineDrawer .pipeline-fork .pf-conn').forEach(conn => {
       let right = conn.nextElementSibling;
@@ -757,7 +784,12 @@
   // ============ ⑦ 模板实验 · 跳过按钮（弹窗 + 产研审批） ============
   const btnSkipExp = document.getElementById('btnSkipExp');
   if (btnSkipExp) {
-    btnSkipExp.addEventListener('click', () => showDialog('dlgSkipExp'));
+    btnSkipExp.addEventListener('click', () => {
+      // 收起所属 ⋯ 菜单（若被嵌在 <details class="step-more-menu"> 中）
+      const menu = btnSkipExp.closest('details.step-more-menu');
+      if (menu) menu.open = false;
+      showDialog('dlgSkipExp');
+    });
   }
   const dlgSkipExpSubmitBtn = document.getElementById('dlgSkipExpSubmitBtn');
   if (dlgSkipExpSubmitBtn) {

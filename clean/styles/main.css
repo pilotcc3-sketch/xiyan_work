@@ -336,6 +336,40 @@ input { font-family: inherit; }
 .step-content-head h3 { font-size: var(--fs-h2); font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
 .step-content-head p { color: var(--color-text-3); font-size: var(--fs-cap); }
 
+/* head 右侧操作区（如 ⋯ 菜单）：仅在显式 with-actions 时启用 flex 布局，避免影响其他步骤 */
+.step-content-head.with-actions { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-3); }
+.step-content-head.with-actions h3 { flex: 1; min-width: 0; margin-bottom: 0; }
+
+/* ⋯ 更多操作菜单（基于原生 <details>，无新增 JS） */
+.step-more-menu { position: relative; flex: 0 0 auto; }
+.step-more-menu summary { list-style: none; }
+.step-more-menu summary::-webkit-details-marker { display: none; }
+.step-more-trigger {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  font-size: 18px; line-height: 1; color: var(--color-text-2);
+  cursor: pointer; user-select: none;
+  transition: background .15s ease, color .15s ease;
+}
+.step-more-trigger:hover { background: var(--color-bg); color: var(--color-text-1); }
+.step-more-menu[open] .step-more-trigger { background: var(--color-bg); color: var(--color-text-1); }
+.step-more-pop {
+  position: absolute; top: calc(100% + 4px); right: 0; z-index: 10;
+  min-width: 240px; padding: var(--sp-2);
+  background: var(--color-card); border: 1px solid var(--color-border-2);
+  border-radius: var(--radius-card); box-shadow: 0 8px 24px rgba(20,30,60,.12);
+}
+.step-more-item {
+  display: block; width: 100%; text-align: left;
+  padding: 8px 10px; border-radius: 6px;
+  font-size: var(--fs-cap); color: var(--color-text-1); background: transparent;
+  border: none; cursor: pointer;
+}
+.step-more-item:hover { background: var(--color-bg); }
+.step-more-item.danger { color: #c13838; }
+.step-more-item.danger:hover { background: #fef0f0; }
+.step-more-hint { padding: 6px 10px 4px; font-size: 12px; line-height: 1.5; }
+
 .aligner { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); margin-bottom: var(--sp-4); }
 .aligner-col { background: var(--color-bg); border-radius: var(--radius-card); overflow: hidden; }
 .aligner-col-head { padding: var(--sp-3) var(--sp-4); font-size: var(--fs-cap); color: var(--color-text-2); border-bottom: 1px solid var(--color-border-2); background: var(--color-card-2); }
@@ -870,6 +904,12 @@ input { font-family: inherit; }
 .tpl-meta-cell { background: rgba(255,255,255,.6); border-radius: var(--radius-card); padding: var(--sp-2) var(--sp-3); }
 .tmc-label { font-size: var(--fs-cap); color: var(--color-text-2); margin-bottom: 2px; }
 .tmc-val { font-size: var(--fs-body); color: var(--color-text-1); font-weight: 500; }
+.tpl-meta-collab {
+  margin-top: var(--sp-3); padding-top: var(--sp-3);
+  border-top: 1px dashed var(--color-border-2);
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.tpl-meta-collab .tmc-label { margin-bottom: 0; font-weight: 500; }
 
 .badge.ok { background: var(--color-success-soft); color: var(--color-success); }
 

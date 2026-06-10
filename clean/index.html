@@ -554,6 +554,37 @@
       .pf-node.pf-todo .step-no { background: #f5f7fa; color: #b0b6c4; border-color: #e0e4ec; }
       .pf-node.pf-active .step-no { box-shadow: 0 0 0 4px rgba(51,112,255,.18); }
 
+      /* ============================================================
+         浏览态（pf-viewing）：用户点击查看，但业务上没推进
+         视觉差异：
+           · current  = 实底 + 脉动（业务推进态）
+           · viewing  = 描边 + 静止（仅视觉焦点）
+           · 两者形状/质感不同，避免被误读为"已推进到这一步"
+         ============================================================ */
+      .pf-node.pf-viewing .step-no {
+        background: #fff;
+        color: #3370ff;
+        border-color: #3370ff;
+        border-width: 2px;
+        box-shadow: 0 0 0 3px rgba(51,112,255,.14);
+        animation: none;
+      }
+      .pf-node.pf-viewing .step-name { color: #3370ff; font-weight: 500; }
+      /* viewing 叠加在 todo 上时（看一个还没到的步骤）：保留浅灰底，但加蓝描边表明"正在查看" */
+      .pf-node.pf-viewing.pf-todo .step-no {
+        background: #fff;
+        color: #3370ff;
+        border-color: #3370ff;
+      }
+      .pf-node.pf-viewing.pf-todo .step-name { color: #3370ff; }
+      /* viewing 叠加在 done（绿色已走过）上时：保留绿底，再外加一圈蓝描边作为"正在查看"焦点环 */
+      .pf-node.pf-viewing .step-no.done {
+        background: #23a567;
+        color: #fff;
+        border-color: #23a567;
+        box-shadow: 0 0 0 3px rgba(51,112,255,.35);
+      }
+
       /* ① 共用起点（缩成普通节点尺寸，去掉之前的虚线方框） */
       .pf-start { padding: 4px 6px; }
       .pf-start .step-no { background: #23a567; color: #fff; border-color: #23a567; }
@@ -1197,17 +1228,19 @@
             }
             // 推进 L2 指针（不动 mainCursor，保留 ⑤⑥⑦⑧ 进度）
             if (isL2 && state === 'editing') {
-              activateNode(n.dataset.step, { track: 'L2' });
+              // 节点点击 = 浏览（不再推进 L2 cursor，业务推进交给 trigger）
+              activateNode(n.dataset.step, { track: 'view' });
               return;
             }
-            // 主线节点（① / L1 / 共用尾段⑤⑥⑦⑧）：推进 mainCursor
-            activateNode(n.dataset.step);
+            // 主线节点（① / L1 / 共用尾段⑤⑥⑦⑧）：节点点击 = 浏览
+            // 真正的 mainCursor 推进交给业务 trigger（如 publishL1 / 自动流转）
+            activateNode(n.dataset.step, { track: 'view' });
           });
         });
         // jump 按钮已下线：环节流转改为达到条件自动推进 + 节点直接交互
         function initActivePane() {
           const initial = document.querySelector('#pipelineDrawer .step-content.active');
-          if (initial) activateNode(initial.dataset.stepContent);
+          if (initial) activateNode(initial.dataset.stepContent, { track: 'view' });
         }
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', initActivePane);
@@ -1521,7 +1554,16 @@
 
       <!-- Step 6 · 模板实验（adata 在线数据 / 跳过需弹窗 + 产研审批） -->
       <div class="step-content" data-step-content="6">
-        <div class="step-content-head"><h3>⑥ 模板实验 <span class="badge skill">TAB 实验平台 · adata 在线数据</span></h3></div>
+        <div class="step-content-head with-actions">
+          <h3>⑥ 模板实验 <span class="badge skill">TAB 实验平台 · adata 在线数据</span></h3>
+          <details class="step-more-menu">
+            <summary class="step-more-trigger" title="更多操作">⋯</summary>
+            <div class="step-more-pop">
+              <button class="step-more-item danger" id="btnSkipExp">↷ 跳过本步（需产研审批）</button>
+              <div class="step-more-hint muted">异常分支：跳过实验直接进入全量上线，需产品 + 研发审批。</div>
+            </div>
+          </details>
+        </div>
 
         <!-- A. 跳转 TAB 实验平台 -->
         <div class="card">
@@ -1561,9 +1603,6 @@
           </div>
         </div>
 
-        <div class="step-foot" style="justify-content:flex-end">
-          <button class="btn-text danger sm" id="btnSkipExp">↷ 跳过本步（需产研审批）</button>
-        </div>
       </div>
 
       <!-- Step 7 · 模板全量上线（弹窗 备注+实验数据+审批节点 → MyOA） -->
@@ -1739,11 +1778,12 @@
             <div class="tpl-meta-cell"><div class="tmc-label">布局结构</div><div class="tmc-val">无切割</div></div>
             <div class="tpl-meta-cell"><div class="tmc-label">创建人</div><div class="tmc-val">小樊</div></div>
           </div>
-        </div>
-
-        <div class="step-foot">
-          <button class="btn-primary sm" id="btnInviteIM">📱 一键拉协作群</button>
-          <span class="muted" id="imGroupTip">默认群名：【模板1003638】夏日冰镇风开屏 · 协作群</span>
+          <!-- 协作信息条：与「创建人」聚合在同一信息卡内 -->
+          <div class="tpl-meta-collab">
+            <span class="tmc-label" style="margin-right:8px;">协作</span>
+            <button class="btn-primary sm" id="btnInviteIM">📱 一键拉协作群</button>
+            <span class="muted" id="imGroupTip">默认群名：【模板1003638】夏日冰镇风开屏 · 协作群</span>
+          </div>
         </div>
       </div>
 
