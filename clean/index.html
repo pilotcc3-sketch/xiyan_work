@@ -139,13 +139,13 @@
       <div class="side-drawer-title" id="pipelineDrawerTitle">模板生产流水线</div>
       <div class="side-drawer-sub" id="pipelineDrawerSub">
         ① 共用起点 →
-        <span style="color:#23a567">🚀 主干历史 ②③④</span> /
-        <span style="color:#3370ff">📝 支线 ②③<span style="color:#e8821a">④⚡覆盖</span></span>
+        <span style="color:#23a567">🚀 已发布版本 ②③④</span> /
+        <span style="color:#3370ff">📝 草稿版本 ②③<span style="color:#e8821a">④⚡覆盖</span></span>
         → ⑤⑥⑦⑧ 共用终段
       </div>
     </div>
 
-    <!-- ===== 头部右侧：版本预览按钮（弹出 V1 已发布 / V2 草稿 双 tab popover） ===== -->
+    <!-- ===== 头部右侧：版本预览按钮（弹出 已发布版本 / 草稿版本 双 tab popover） ===== -->
     <div class="hd-vp-wrap" id="hdVpWrap">
       <button class="hd-vp-btn" id="hdVpBtn" type="button" aria-haspopup="dialog" aria-expanded="false">
         <span class="hd-vp-icon">🖼</span>
@@ -158,22 +158,22 @@
           <div class="hd-vp-tabs" role="tablist">
             <button type="button" class="hd-vp-tab is-active" data-vp-tab="v1" role="tab" aria-selected="true">
               <span class="hd-vp-tab-dot" style="background:#23a567"></span>
-              已发布样式 <b>V1</b>
+              已发布版本
             </button>
             <button type="button" class="hd-vp-tab" data-vp-tab="v2" role="tab" aria-selected="false">
               <span class="hd-vp-tab-dot" style="background:#3370ff"></span>
-              草稿页样式 <b>V2</b>
+              草稿版本
               <span class="hd-vp-tab-empty" id="hdVpV2Empty" hidden>· 暂无</span>
             </button>
           </div>
           <button type="button" class="hd-vp-close" id="hdVpClose" aria-label="关闭">✕</button>
         </div>
 
-        <!-- V1 面板：已发布版本（线上有效），渲染 UI 复用 ②模板编辑环节的"夏日冰镇风"画面 -->
+        <!-- 已发布版本面板：线上当前生效，渲染 UI 复用 ②模板编辑环节的"夏日冰镇风"画面 -->
         <div class="hd-vp-panel is-active" data-vp-panel="v1">
           <div class="hd-vp-meta">
             <span class="hd-vp-meta-tag" style="color:#23a567;border-color:#b7e0c8;background:#eaf7f0">🚀 已发布 · 全量在跑</span>
-            <span class="hd-vp-meta-id">模板ID 1003638 · v1</span>
+            <span class="hd-vp-meta-id">模板ID 1003638</span>
             <span class="hd-vp-meta-time">发布于 6/3 16:42</span>
           </div>
           <div class="hd-vp-body">
@@ -187,32 +187,32 @@
               </div>
             </div>
             <div class="hd-vp-info">
-              <div class="hd-vp-info-row"><span class="hd-vp-info-k">版本</span><span class="hd-vp-info-v">v1（线上当前生效）</span></div>
+              <div class="hd-vp-info-row"><span class="hd-vp-info-k">状态</span><span class="hd-vp-info-v">已发布（线上当前生效）</span></div>
               <div class="hd-vp-info-row"><span class="hd-vp-info-k">基础机型</span><span class="hd-vp-info-v">iPhone 14 Pro · 1179×2556</span></div>
               <div class="hd-vp-info-row"><span class="hd-vp-info-k">最近更新</span><span class="hd-vp-info-v">6/3 16:42 · @小樊</span></div>
-              <a class="hd-vp-link" href="https://tsa.woa.com/domo-admin/union-form-editor?id=1003638&ver=v1" target="_blank" rel="noopener">📄 模板详情页（v1） ↗</a>
+              <a class="hd-vp-link" href="https://tsa.woa.com/domo-admin/union-form-editor?id=1003638" target="_blank" rel="noopener">📄 模板详情页（已发布） ↗</a>
             </div>
           </div>
         </div>
 
-        <!-- V2 面板：草稿页版本（idle 时显示空态，editing/published 时显示渲染） -->
+        <!-- 草稿版本面板：idle 时显示空态，editing/published 时显示渲染 -->
         <div class="hd-vp-panel" data-vp-panel="v2">
           <!-- 空态（idle 默认显示） -->
           <div class="hd-vp-empty" id="hdVpV2EmptyBlock">
             <div class="hd-vp-empty-icon">📝</div>
-            <div class="hd-vp-empty-title">暂无 V2 草稿</div>
-            <div class="hd-vp-empty-sub">点击 L2 行的【② 模板编辑】拉起 V2 新版本草稿</div>
+            <div class="hd-vp-empty-title">暂无草稿版本</div>
+            <div class="hd-vp-empty-sub">点击 L2 行的【② 模板编辑】拉起新一轮草稿</div>
           </div>
           <!-- 有草稿时（editing/published）显示，由 JS 切换 -->
           <div class="hd-vp-meta" id="hdVpV2MetaBlock" hidden>
             <span class="hd-vp-meta-tag" style="color:#3370ff;border-color:#b9d0ff;background:#eaf1ff">📝 草稿编辑中</span>
-            <span class="hd-vp-meta-id">模板ID 1003638 · v2</span>
+            <span class="hd-vp-meta-id">模板ID 1003638</span>
             <span class="hd-vp-meta-time">最近编辑：刚刚 · @小樊</span>
           </div>
           <div class="hd-vp-body" id="hdVpV2BodyBlock" hidden>
             <div class="hd-vp-phone">
               <div class="hd-vp-screen">
-                <!-- v2 草稿稍作差异化：换主色 + 文案微调，体现"在编版本" -->
+                <!-- 草稿稍作差异化：换主色 + 文案微调，体现"在编版本" -->
                 <div class="ph-rect" style="top:6%;left:8%;width:84%;height:42%;background:linear-gradient(135deg,#fde9b9,#fbc2eb);border-radius:14px;"></div>
                 <div class="ph-text" style="top:52%;left:8%;font-size:18px;font-weight:600;color:#1a1a1a;">夏日冰镇风 · 新</div>
                 <div class="ph-text" style="top:60%;left:8%;font-size:11px;color:#666;">冰爽升级 · 立享福利</div>
@@ -221,10 +221,10 @@
               <div class="hd-vp-phone-tag">DRAFT</div>
             </div>
             <div class="hd-vp-info">
-              <div class="hd-vp-info-row"><span class="hd-vp-info-k">版本</span><span class="hd-vp-info-v">v2（草稿，未发布）</span></div>
+              <div class="hd-vp-info-row"><span class="hd-vp-info-k">状态</span><span class="hd-vp-info-v">草稿（未发布）</span></div>
               <div class="hd-vp-info-row"><span class="hd-vp-info-k">基础机型</span><span class="hd-vp-info-v">iPhone 14 Pro · 1179×2556</span></div>
-              <div class="hd-vp-info-row"><span class="hd-vp-info-k">基于</span><span class="hd-vp-info-v">v1 fork（6/3 16:42）</span></div>
-              <a class="hd-vp-link" href="https://tsa.woa.com/domo-admin/union-form-editor?id=1003638&ver=v2&draft=1" target="_blank" rel="noopener">📄 模板详情页（v2 草稿） ↗</a>
+              <div class="hd-vp-info-row"><span class="hd-vp-info-k">基于</span><span class="hd-vp-info-v">已发布版本 fork（6/3 16:42）</span></div>
+              <a class="hd-vp-link" href="https://tsa.woa.com/domo-admin/union-form-editor?id=1003638&draft=1" target="_blank" rel="noopener">📄 模板详情页（草稿） ↗</a>
             </div>
           </div>
         </div>
@@ -262,64 +262,57 @@
       <!-- ===== 主行：①─②─③─④─⑤─⑥─⑦─⑧ 一横行（L1 主干 / 共用起点 / 共用尾段全部摊平） ===== -->
       <div class="pf-main-row">
         <!-- ① 共用起点 -->
-        <div class="pf-node pf-start" data-step="1">
+        <div class="pf-node pf-start" data-step="1" data-toast="共用起点">
           <span class="pf-tag pf-tag-fork">🔀 起点</span>
           <span class="step-no done">1</span>
           <span class="step-name">模板创建</span>
         </div>
         <span class="pf-conn pf-conn-l1" data-idx="1"><em class="pf-time">1h30m</em></span>
-        <!-- ②③④：L1 主干（v1 当前线上版本） -->
-        <div class="pf-node" data-step="2" data-track="L1"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
+        <!-- ②③④：L1 主干（已发布版本当前生效） -->
+        <div class="pf-node" data-step="2" data-track="L1" data-toast="已发布版本-编辑中"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
         <span class="pf-conn pf-conn-l1" data-idx="2"><em class="pf-time">17h55m</em></span>
-        <div class="pf-node" data-step="3" data-track="L1"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
+        <div class="pf-node" data-step="3" data-track="L1" data-toast="已发布版本-测试中"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
         <span class="pf-conn pf-conn-l1" data-idx="3"><em class="pf-time">17h55m</em></span>
-        <div class="pf-node" data-step="4" data-track="L1"><span class="step-no">4</span><span class="step-name">草稿发布</span></div>
+        <div class="pf-node" data-step="4" data-track="L1" data-toast="已发布版本-发布中"><span class="step-no">4</span><span class="step-name">草稿发布</span></div>
         <span class="pf-conn pf-conn-l1" data-idx="4"></span>
         <!-- ⑤⑥⑦⑧ 共用尾段（两条线汇合后） -->
-        <div class="pf-node" data-step="5"><span class="step-no">5</span><span class="step-name">规则配置</span></div>
+        <div class="pf-node" data-step="5" data-toast="已发布版本-规则配置中"><span class="step-no">5</span><span class="step-name">规则配置</span></div>
         <span class="pf-conn" data-idx="5"><em class="pf-time">1d2h</em></span>
-        <div class="pf-node" data-step="6"><span class="step-no">6</span><span class="step-name">模板实验</span></div>
+        <div class="pf-node" data-step="6" data-toast="已发布版本-实验中"><span class="step-no">6</span><span class="step-name">模板实验</span></div>
         <span class="pf-conn" data-idx="6"><em class="pf-time">1d8h</em></span>
-        <div class="pf-node" data-step="7"><span class="step-no">7</span><span class="step-name">全量上线</span></div>
+        <div class="pf-node" data-step="7" data-toast="已发布版本-全量上线中"><span class="step-no">7</span><span class="step-name">全量上线</span></div>
         <span class="pf-conn" data-idx="7"><em class="pf-time">4h45m</em></span>
-        <div class="pf-node" data-step="8"><span class="step-no">8</span><span class="step-name">成绩单</span></div>
+        <div class="pf-node" data-step="8" data-toast="已发布版本-成绩单出炉"><span class="step-no">8</span><span class="step-name">成绩单</span></div>
       </div>
 
       <!-- ===== L2 支线行：v2 草稿支线，水平方向对齐到主行 ②③④ 列 =====
            左侧 fork-in 折线：从主行 ① 节点底部 → 弯下 → 接到 L2 ② 节点左侧
            右侧 fork-out 折线：从 L2 ④ 节点右侧 → 弯上 → 接到主行 ⑤ 节点底部 -->
       <div class="pf-l2-row" id="l2RowEl">
-        <span class="pf-row-tag pf-row-tag-l2" id="l2BranchTag">📝 L2 支线 · v2 暂无草稿</span>
+        <span class="pf-row-tag pf-row-tag-l2" id="l2BranchTag">📝 草稿版本 · 暂无草稿</span>
         <!-- fork-in：① → L2② 折线 -->
         <span class="pf-fork-in" aria-hidden="true"></span>
         <!-- fork-out：L2④ → ⑤ 折线 -->
         <span class="pf-fork-out" aria-hidden="true"></span>
         <span class="pf-conn pf-conn-l2" data-idx="l2-1"></span>
-        <div class="pf-node" id="l2Step2" data-step="2" data-track="L2"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
+        <div class="pf-node" id="l2Step2" data-step="2" data-track="L2" data-toast="草稿版本-编辑中"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
         <span class="pf-conn pf-conn-l2" data-idx="l2-2"><em class="pf-time">17h55m</em></span>
-        <div class="pf-node" id="l2Step3" data-step="3" data-track="L2"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
+        <div class="pf-node" id="l2Step3" data-step="3" data-track="L2" data-toast="草稿版本-测试中"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
         <span class="pf-conn pf-conn-l2" data-idx="l2-3"><em class="pf-time">17h55m</em></span>
-        <div class="pf-node pf-bridge" id="l2Step4" data-step="4" data-track="bridge" title="④ 草稿发布通过 → 物理覆盖 L1 主干，不留底、不可回滚">
+        <div class="pf-node pf-bridge" id="l2Step4" data-step="4" data-track="bridge" data-toast="草稿版本-发布覆盖中" title="④ 草稿发布通过 → 物理覆盖 L1 主干，不留底、不可回滚">
           <span class="pf-tag pf-tag-bridge">↗ 覆盖主干</span>
           <span class="step-no pf-no-bridge">4</span>
           <span class="step-name pf-name-bridge">草稿发布⚡</span>
         </div>
         <span class="pf-conn pf-conn-bridge" data-idx="l2-4"></span>
       </div>
-
-      <!-- L2 行下方常驻提示条：仅在「L1 归档待拉起 / V2 编辑中 / V2 覆盖中」三种关键态显示
-           简写版，紧贴 L2 让用户一眼看到当前 L2 在干嘛 -->
-      <div class="pf-l2-pin" id="l2PinTip" hidden>
-        <span class="pf-l2-pin-dot" aria-hidden="true"></span>
-        <span class="pf-l2-pin-text" id="l2PinText">L2 状态</span>
-      </div>
     </div>
 
     <!-- 流水线下方：L1 / L2 双线状态说明 -->
     <div id="l2StatusBadge" style="margin-top:14px;padding:10px 14px;font-size:12px;background:#f5f7fa;border:1px solid #e0e4ec;border-radius:6px;display:flex;align-items:center;gap:10px">
       <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#23a567;flex:0 0 auto"></span>
-      <span id="l2StatusText" style="color:#23a567;font-weight:500">🚀 L1 主线 · v1 流转中（②模板编辑 → ③测试 → ④草稿发布）</span>
-      <span style="margin-left:auto;font-size:11px;color:#8a93a6">L1 ④ 发布完 → ②③④ 归档置灰 · L2 拉草稿启动 v2 → 覆盖 L1 后 L2 也置灰</span>
+      <span id="l2StatusText" style="color:#23a567;font-weight:500">🚀 已发布版本 · 流转中（②模板编辑 → ③测试 → ④草稿发布）</span>
+      <span style="margin-left:auto;font-size:11px;color:#8a93a6">L1 ④ 发布完 → ②③④ 归档置灰 · L2 拉起新草稿 → 覆盖主干后 L2 也置灰</span>
     </div>
 
     <style>
@@ -384,7 +377,7 @@
         position: relative;
         background: linear-gradient(90deg,rgba(234,241,255,0.5) 0%,rgba(245,249,255,0.3) 100%);
         border-radius: 6px;
-        padding: 16px 0 12px;
+        padding: 16px 0 32px;     /* 底部加大留 toast 位 */
         margin-top: -4px;
       }
       .pf-l2-row > .pf-node {
@@ -463,56 +456,62 @@
       }
 
       /* ============================================================
-         L2 行下方常驻提示条 .pf-l2-pin
-         仅在「L1 归档待拉起 V2 / V2 编辑中 / V2 覆盖中」三种关键态显示
-         紧贴 L2 行下方，使用三种状态色对应：金黄 / 蓝 / 橙
+         节点常驻 toast 标签：current（主行）/ active（L2 行）节点正下方
+         显示 data-toast 文案，告诉用户该版本当前在哪个环节
+         - 主行节点（L1 ②③④ 或 共用尾段 ⑤⑥⑦⑧）：绿色，「已发布版本-XXX中」
+         - L2 行节点：蓝色，「草稿版本-XXX中」
+         - bridge 节点（L2 ④ 覆盖瞬间）：橙色，「草稿版本-发布覆盖中」
+         不影响节点高度（absolute 定位浮在节点下方）
          ============================================================ */
-      .pf-l2-pin {
-        margin-top: 14px;
-        padding: 8px 12px;
-        font-size: 12px;
-        line-height: 1.4;
-        border: 1px solid;
-        border-radius: 6px;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
+      .pf-node[data-toast].pf-current::after,
+      .pf-node[data-toast].pf-active::after {
+        content: attr(data-toast);
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 3px 9px;
+        font-size: 11px;
         font-weight: 500;
-        animation: l2PinIn .25s ease-out;
+        line-height: 1.4;
+        white-space: nowrap;
+        border-radius: 10px;
+        z-index: 5;
+        pointer-events: none;
+        animation: pfToastIn .25s ease-out;
       }
-      .pf-l2-pin[hidden] { display: none; }
-      .pf-l2-pin-dot {
-        display: inline-block;
-        width: 6px; height: 6px;
-        border-radius: 50%;
-        flex: 0 0 auto;
+      /* 主行 current → 绿色（已发布版本） */
+      .pf-main-row .pf-node[data-toast].pf-current::after {
+        color: #1d7a4a;
+        background: #eaf7f0;
+        border: 1px solid #b7e0c8;
       }
-      @keyframes l2PinIn {
-        from { opacity: 0; transform: translateY(-2px); }
-        to   { opacity: 1; transform: translateY(0); }
-      }
-      /* 三态主题色 */
-      .pf-l2-pin[data-tone="warn"] {
-        color: #b06b00;
-        background: #fff8e6;
-        border-color: #f5d889;
-      }
-      .pf-l2-pin[data-tone="warn"] .pf-l2-pin-dot { background: #f5b81c; }
-      .pf-l2-pin[data-tone="info"] {
+      /* L2 行 active / current → 蓝色（草稿版本） */
+      .pf-l2-row .pf-node[data-toast].pf-active::after,
+      .pf-l2-row .pf-node[data-toast].pf-current::after {
         color: #1a55cc;
-        background: #f0f5ff;
-        border-color: #b9d0ff;
+        background: #eaf1ff;
+        border: 1px solid #b9d0ff;
       }
-      .pf-l2-pin[data-tone="info"] .pf-l2-pin-dot {
-        background: #3370ff;
-        animation: l2Pulse 1.6s infinite;
-      }
-      .pf-l2-pin[data-tone="hot"] {
+      /* L2 ④ bridge 当前 / 覆盖中 → 橙色 */
+      .pf-l2-row .pf-bridge[data-toast].pf-current::after,
+      .pipeline-fork[data-l2-state="published"] .pf-l2-row .pf-bridge[data-toast]::after {
         color: #b25e0a;
         background: #fff2e0;
-        border-color: #f5c98a;
+        border: 1px solid #f5c98a;
       }
-      .pf-l2-pin[data-tone="hot"] .pf-l2-pin-dot { background: #e8821a; }
+      /* L1 已归档：主行 ②③④ 不再显示 toast（避免和 L2 行同时刷一堆） */
+      .pipeline-fork[data-l1-archived="true"] .pf-main-row .pf-node[data-track="L1"][data-toast].pf-current::after {
+        display: none;
+      }
+      /* L2 idle：L2 行节点不显示 toast（待启动状态没意义） */
+      .pipeline-fork[data-l2-state="idle"] .pf-l2-row .pf-node[data-toast]::after {
+        display: none;
+      }
+      @keyframes pfToastIn {
+        from { opacity: 0; transform: translate(-50%, -2px); }
+        to   { opacity: 1; transform: translate(-50%, 0); }
+      }
 
       /* L2 row tag */
       .pf-row-tag {
@@ -626,7 +625,7 @@
       .pipeline-fork[data-l1-archived="true"] .pf-main-row .pf-node[data-track="L1"] { cursor: not-allowed; }
       .pipeline-fork[data-l1-archived="true"] .pf-main-row .pf-node[data-track="L1"]:hover { transform: none; }
       .pipeline-fork[data-l1-archived="true"] .pf-main-row .pf-node[data-track="L1"]:hover::after {
-        content: "✅ v1 已发布归档（已跑通）· 新一轮请走 L2";
+        content: "✅ 已发布版本归档（已跑通）· 新一轮请走草稿版本";
         position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
         margin-top: 6px; padding: 3px 8px; font-size: 11px; color: #fff;
         background: #4a4f5c; border-radius: 4px; white-space: nowrap; z-index: 10;
@@ -643,19 +642,19 @@
       .pipeline-fork[data-l2-state="idle"] .pf-l2-row .pf-node { cursor: not-allowed; }
       .pipeline-fork[data-l2-state="idle"] .pf-l2-row .pf-node:hover { transform: none; }
       .pipeline-fork[data-l2-state="idle"][data-l1-archived="false"] .pf-l2-row .pf-node:hover::after {
-        content: "⏳ 等 L1 ④ 完成草稿发布后再启动 v2";
+        content: "⏳ 等已发布版本完成 ④草稿发布后再启动草稿";
         position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
         margin-top: 6px; padding: 3px 8px; font-size: 11px; color: #fff;
         background: #4a4f5c; border-radius: 4px; white-space: nowrap; z-index: 10;
       }
       .pipeline-fork[data-l2-state="idle"][data-l1-archived="true"] .pf-l2-row .pf-node:hover::after {
-        content: "💤 暂无 v2 草稿，点击新建拉起";
+        content: "💤 暂无草稿版本，点击新建拉起";
         position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
         margin-top: 6px; padding: 3px 8px; font-size: 11px; color: #fff;
         background: #4a4f5c; border-radius: 4px; white-space: nowrap; z-index: 10;
       }
       .pipeline-fork[data-l2-state="published"] .pf-l2-row .pf-node:hover::after {
-        content: "✅ v2 已覆盖 L1（已跑通）";
+        content: "✅ 草稿已覆盖主干（已跑通）";
         position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
         margin-top: 6px; padding: 3px 8px; font-size: 11px; color: #fff;
         background: #4a4f5c; border-radius: 4px; white-space: nowrap; z-index: 10;
@@ -704,9 +703,9 @@
         color: #8a5a14;
         font-weight: 700;
       }
-      /* 节点上方的小气泡提示："点这里创建 V2 新版本 ↓" */
+      /* 节点上方的小气泡提示："点这里创建新一轮草稿 ↓" */
       .pipeline-fork[data-l1-archived="true"][data-l2-state="idle"] .pf-l2-row > #l2Step2::before {
-        content: "✨ 点这里创建 V2 新版本";
+        content: "✨ 点这里创建新一轮草稿";
         position: absolute;
         bottom: calc(100% + 10px);
         left: 50%;
@@ -976,28 +975,6 @@
         const dot = badge.querySelector('span:first-child');
         const text = document.getElementById('l2StatusText');
         const tag = document.getElementById('l2BranchTag');
-        const pin = document.getElementById('l2PinTip');
-        const pinText = document.getElementById('l2PinText');
-
-        // ----- L2 行下方常驻提示条 -----
-        function applyPin(state, l1Archived) {
-          if (!pin || !pinText) return;
-          if (state === 'editing') {
-            pin.hidden = false;
-            pin.setAttribute('data-tone', 'info');
-            pinText.textContent = '📝 V2 草稿编辑中 · @小樊';
-          } else if (state === 'published') {
-            pin.hidden = false;
-            pin.setAttribute('data-tone', 'hot');
-            pinText.textContent = '⚡ V2 覆盖主干 v1 → v2';
-          } else if (l1Archived) {
-            pin.hidden = false;
-            pin.setAttribute('data-tone', 'warn');
-            pinText.textContent = '💤 L1 已归档 · 待拉起 V2 草稿（点 L2ⓘ ② 新建）';
-          } else {
-            pin.hidden = true;
-          }
-        }
 
         // ----- 状态视觉应用 -----
         function apply() {
@@ -1007,22 +984,22 @@
             // L2 v2 草稿在编辑
             dot.style.background = '#3370ff';
             dot.style.animation = 'l2Pulse 1.6s infinite';
-            text.textContent = '📝 L2 支线 · @小樊 正在编辑 v2 草稿（②模板编辑 进行中）';
+            text.textContent = '📝 草稿版本 · @小樊 正在编辑（②模板编辑 进行中）';
             text.style.color = '#3370ff';
             badge.style.background = '#f5f9ff';
             badge.style.borderColor = '#d8e3ff';
-            if (tag) tag.textContent = '📝 L2 支线 · v2 编辑中';
+            if (tag) tag.textContent = '📝 草稿版本 · 编辑中';
             const l2s2 = document.getElementById('l2Step2');
             if (l2s2) l2s2.classList.add('pf-active');
           } else if (state === 'published') {
             // L2 ④ 覆盖瞬时态（~1.2s）
             dot.style.background = '#e8821a';
             dot.style.animation = 'none';
-            text.textContent = '⚡ L2 ④ 审批通过 · 内容正在覆盖 L1 主干（v1 → v2）';
+            text.textContent = '⚡ 草稿 ④审批通过 · 内容正在覆盖主干';
             text.style.color = '#e8821a';
             badge.style.background = '#fff7ec';
             badge.style.borderColor = '#f5c98a';
-            if (tag) tag.textContent = '✅ L2 支线 · v2 已覆盖（已跑通归档）';
+            if (tag) tag.textContent = '✅ 草稿已覆盖（已跑通归档）';
             setTimeout(() => {
               if (stepper.getAttribute('data-l2-state') === 'published') {
                 stepper.setAttribute('data-l2-state', 'idle');
@@ -1033,25 +1010,23 @@
             // L1 已归档但 L2 还没拉起（待启动：等待人来拉草稿）
             dot.style.background = '#c4cad6';
             dot.style.animation = 'none';
-            text.textContent = '💤 L1 v1 已归档 · L2 v2 暂无草稿（点 L2 行 ② 拉起新草稿）';
+            text.textContent = '💤 已发布版本归档 · 暂无草稿（点 L2 行 ② 拉起新草稿）';
             text.style.color = '#8a93a6';
             badge.style.background = '#f5f7fa';
             badge.style.borderColor = '#e0e4ec';
-            if (tag) tag.textContent = '💤 L2 支线 · v2 待启动（点 ② 新建草稿）';
+            if (tag) tag.textContent = '💤 草稿版本 · 待启动（点 ② 新建草稿）';
             document.querySelectorAll('#l2RowEl .pf-node.pf-active').forEach(n => n.classList.remove('pf-active'));
           } else {
             // 默认初始：L1 在跑，L2 还没轮到（流程未开始）
             dot.style.background = '#23a567';
             dot.style.animation = 'l2Pulse 1.6s infinite';
-            text.textContent = '🚀 L1 主线 · v1 流转中（②模板编辑 → ③测试 → ④草稿发布）';
+            text.textContent = '🚀 已发布版本 · 流转中（②模板编辑 → ③测试 → ④草稿发布）';
             text.style.color = '#23a567';
             badge.style.background = '#f0f9f4';
             badge.style.borderColor = '#b3dec3';
-            if (tag) tag.textContent = '⏳ L2 支线 · 等 L1 ④ 完成后启动';
+            if (tag) tag.textContent = '⏳ 草稿版本 · 等已发布版本 ④ 完成后启动';
             document.querySelectorAll('#l2RowEl .pf-node.pf-active').forEach(n => n.classList.remove('pf-active'));
           }
-          // 同步 L2 行下方常驻提示条
-          applyPin(state, l1Archived);
           // 状态变了 → 重刷 pf-node 的 done/current/todo（仅重渲染，不推进任何指针）
           if (typeof window.__refreshPipeline === 'function') {
             window.__refreshPipeline();
@@ -1074,7 +1049,7 @@
           stepper.setAttribute('data-l1-archived', 'true');
           // 同步更新 L1 行 row-tag 文案：✅ 标识表达"已跑通归档"（区别于纯灰未启动）
           const l1Tag = document.getElementById('l1BranchTag');
-          if (l1Tag) l1Tag.textContent = '✅ L1 主线 · v1 已发布归档（②③④ 跑通）';
+          if (l1Tag) l1Tag.textContent = '✅ 已发布版本 · 归档完成（②③④ 跑通）';
           // 主指针推到 ⑤：L1 ④ 完成 → 进入共用尾段第一步（规则配置）
           if (typeof window.__activateStep === 'function') {
             window.__activateStep('5');
@@ -1096,9 +1071,9 @@
           const onlineBadge = document.getElementById('onlineStatusBadge');
           if (onlineBadge) { onlineBadge.textContent = '未提交'; onlineBadge.className = 'badge wait'; }
           const onlineSub = document.getElementById('onlineStatusSub');
-          if (onlineSub) onlineSub.innerHTML = '当前模板：<b>开屏-夏日冰镇风 v2（草稿）</b> · 状态：<span class="badge wait" id="onlineStatusBadge">未提交</span>';
+          if (onlineSub) onlineSub.innerHTML = '当前模板：<b>开屏-夏日冰镇风（草稿版本）</b> · 状态：<span class="badge wait" id="onlineStatusBadge">未提交</span>';
           const tip = document.getElementById('onlineStatusTip');
-          if (tip) tip.textContent = '点击后弹窗填写备注 → 下发 MyOA 审批（L2 v2 覆盖 L1）';
+          if (tip) tip.textContent = '点击后弹窗填写备注 → 下发 MyOA 审批（草稿覆盖主干）';
           if (typeof window.__resetSubmitOnlineBtn === 'function') window.__resetSubmitOnlineBtn();
           // L2 指针重置到 ②（推进 L2 不动主指针，⑤⑥⑦⑧ 进度保留）
           if (typeof window.__activateStep === 'function') {
@@ -1150,13 +1125,13 @@
             // L1 已归档：L1 ②③④ 不可点（已沉淀历史）
             if (isL1 && l1Archived && stepNum >= 2 && stepNum <= 4) {
               e.preventDefault(); e.stopPropagation();
-              alert('L1 v1 已发布归档，②③④ 已沉淀。新一轮请走 L2 支线（点 L2 行的 ② 模板编辑）。');
+              alert('已发布版本归档完成，②③④ 已沉淀。新一轮请走草稿版本（点 L2 行的 ② 模板编辑）。');
               return;
             }
-            // L1 未归档：L2 行不能点（v1 还在跑，不允许并行 v2）
+            // L1 未归档：L2 行不能点（已发布版本还在跑，不允许并行草稿）
             if (isL2 && !l1Archived) {
               e.preventDefault(); e.stopPropagation();
-              alert('当前 L1 v1 还在流转中（②③④），需先完成 L1 ④ 草稿发布后，再启动 L2 v2 草稿。');
+              alert('当前已发布版本还在流转中（②③④），需先完成 ④草稿发布 后，再启动草稿版本。');
               return;
             }
             // L1 已归档 + L2 idle 状态下点 L2 → 直接拉起 v2 草稿 + toast 提示
@@ -1171,7 +1146,7 @@
                 window.forkL2();
                 return;
               }
-              const ok = confirm('L1 v1 已归档，是否基于 v1 拉起 L2 v2 草稿？');
+              const ok = confirm('已发布版本已归档，是否基于它拉起新一轮草稿？');
               if (ok) {
                 window.forkL2();
                 // forkL2 内已经把 l2Cursor 推到 2，这里不重复触发
@@ -1949,10 +1924,10 @@
           const line = currentLine();
           // L1 已归档但 L2 还没拉起 → 引导先去 ② 编辑拉草稿
           if (line === 'L1-archived') {
-            const ok = confirm('当前 v1 已归档、L2 v2 还没人拉起编辑。是否现在拉起 v2 草稿（forkL2）？');
+            const ok = confirm('当前已发布版本已归档、草稿版本还没人拉起编辑。是否现在拉起新一轮草稿（forkL2）？');
             if (ok && typeof window.forkL2 === 'function') {
               window.forkL2();
-              alert('已拉起 L2 v2 草稿，请先去【② 模板编辑】填内容、③ 测试，再回 ④ 提交上线');
+              alert('已拉起新一轮草稿版本，请先去【② 模板编辑】填内容、③ 测试，再回 ④ 提交上线');
             }
             return;
           }
