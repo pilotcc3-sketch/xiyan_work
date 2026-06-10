@@ -339,6 +339,13 @@
         height: 0;
       }
       .pf-conn.pf-conn-todo .pf-time { color: #b0b6c4; }
+      /* L2 行的所有连线（含 ④→⑤ 桥尾）：仅在 L2 published（覆盖瞬间）才显示橙色实线，
+         其余状态（idle / editing 未走完）一律虚线灰 —— 表达"L2 还没合并到主干"。 */
+      .pipeline-fork:not([data-l2-state="published"]) .pf-row-l2 .pf-conn-bridge {
+        background: transparent !important;
+        border-top: 2px dashed #d0d4dc;
+        height: 0;
+      }
       .pf-time {
         position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
         font-style: normal; font-size: 11px; color: #6b7280;
@@ -543,6 +550,17 @@
             window.publishL1();
           }
           stepper.setAttribute('data-l2-state', 'editing');
+          // 新一轮审批：清掉 L1 留下的 MyOA 审批单卡 + 重置提交上线按钮
+          // （L2 ④ 是第二个审批，和 L1 的不是同一单）
+          const ioaCard = document.getElementById('ioaResultDraft');
+          if (ioaCard) ioaCard.style.display = 'none';
+          const onlineBadge = document.getElementById('onlineStatusBadge');
+          if (onlineBadge) { onlineBadge.textContent = '未提交'; onlineBadge.className = 'badge wait'; }
+          const onlineSub = document.getElementById('onlineStatusSub');
+          if (onlineSub) onlineSub.innerHTML = '当前模板：<b>开屏-夏日冰镇风 v2（草稿）</b> · 状态：<span class="badge wait" id="onlineStatusBadge">未提交</span>';
+          const tip = document.getElementById('onlineStatusTip');
+          if (tip) tip.textContent = '点击后弹窗填写备注 → 下发 MyOA 审批（L2 v2 覆盖 L1）';
+          if (typeof window.__resetSubmitOnlineBtn === 'function') window.__resetSubmitOnlineBtn();
           // L2 指针重置到 ②（推进 L2 不动主指针，⑤⑥⑦⑧ 进度保留）
           if (typeof window.__activateStep === 'function') {
             window.__activateStep('2', { track: 'L2' });
@@ -1355,6 +1373,8 @@
             if (tip) tip.textContent = '✅ 审批通过 · L2 ④ 已覆盖 L1 主干（v1 → v2），支线归档置灰';
             if (typeof window.mergeL2 === 'function') window.mergeL2();
             btnApprove.textContent = '✅ 已通过 · L2 已覆盖 L1';
+            // L2 提交按钮也要从"已提交（审批中）"换成已发布终态
+            if (btnSubmit) btnSubmit.textContent = '✅ L2 v2 已发布 · 已覆盖 L1';
           } else {
             // L1 首发完成
             if (onlineBadge) {
@@ -1364,6 +1384,8 @@
             if (tip) tip.textContent = '✅ 审批通过 · L1 v1 首发完成 → ②③④ 已归档置灰，可点【② 模板编辑】拉起 L2 v2 草稿';
             if (typeof window.publishL1 === 'function') window.publishL1();
             btnApprove.textContent = '✅ L1 已发布 · ②③④ 归档';
+            // L1 提交按钮：从"已提交（审批中）"换成已发布终态（避免误导用户以为还在审批中）
+            if (btnSubmit) btnSubmit.textContent = '✅ L1 v1 已发布 · ②③④ 归档';
           }
           btnApprove.disabled = true;
           btnApprove.style.opacity = '0.5';

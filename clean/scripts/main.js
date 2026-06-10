@@ -685,6 +685,15 @@
   if (btnSubmitOnline) {
     btnSubmitOnline.addEventListener('click', () => showDialog('dlgDraftOnline'));
   }
+  // 重置提交上线按钮态：每次切换 line（L1 归档 / L2 拉起 / L2 覆盖）都要复位，
+  // 否则一次"已提交（审批中）"会永久留在 DOM 上，跨阶段误导用户
+  window.__resetSubmitOnlineBtn = function () {
+    if (!btnSubmitOnline) return;
+    btnSubmitOnline.disabled = false;
+    btnSubmitOnline.style.opacity = '';
+    btnSubmitOnline.style.cursor = '';
+    btnSubmitOnline.textContent = '🚀 提交上线';
+  };
   const dlgDraftSubmitBtn = document.getElementById('dlgDraftSubmitBtn');
   if (dlgDraftSubmitBtn) {
     dlgDraftSubmitBtn.addEventListener('click', () => {
