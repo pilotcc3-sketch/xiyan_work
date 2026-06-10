@@ -1373,8 +1373,12 @@
             if (tip) tip.textContent = '✅ 审批通过 · L2 ④ 已覆盖 L1 主干（v1 → v2），支线归档置灰';
             if (typeof window.mergeL2 === 'function') window.mergeL2();
             btnApprove.textContent = '✅ 已通过 · L2 已覆盖 L1';
-            // L2 提交按钮也要从"已提交（审批中）"换成已发布终态
-            if (btnSubmit) btnSubmit.textContent = '✅ L2 v2 已发布 · 已覆盖 L1';
+            // btnSubmit 不锁死：L2 覆盖后又会回到 L1-archived 状态，
+            // 此时按钮应显示"🚀 拉起 v3 提交上线"引导，点击触发 forkL2 confirm
+            if (btnSubmit) {
+              btnSubmit.disabled = false;
+              btnSubmit.textContent = '🚀 拉起 v3 草稿';
+            }
           } else {
             // L1 首发完成
             if (onlineBadge) {
@@ -1384,8 +1388,14 @@
             if (tip) tip.textContent = '✅ 审批通过 · L1 v1 首发完成 → ②③④ 已归档置灰，可点【② 模板编辑】拉起 L2 v2 草稿';
             if (typeof window.publishL1 === 'function') window.publishL1();
             btnApprove.textContent = '✅ L1 已发布 · ②③④ 归档';
-            // L1 提交按钮：从"已提交（审批中）"换成已发布终态（避免误导用户以为还在审批中）
-            if (btnSubmit) btnSubmit.textContent = '✅ L1 v1 已发布 · ②③④ 归档';
+            // btnSubmit 保持可点 + 文案换成引导态：
+            // L1-archived 阶段点击会弹 confirm 引导用户去 ② 拉起 L2 v2（forkL2）
+            // 之后 forkL2 内部 __resetSubmitOnlineBtn 会把按钮恢复成"🚀 提交上线"，
+            // 走和 L1 完全一样的"提交 → MyOA 三段审批 → 通过"流程
+            if (btnSubmit) {
+              btnSubmit.disabled = false;
+              btnSubmit.textContent = '🚀 拉起 v2 草稿';
+            }
           }
           btnApprove.disabled = true;
           btnApprove.style.opacity = '0.5';
