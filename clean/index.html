@@ -44,7 +44,7 @@
           <div class="board-card-head">
             <span class="board-card-icon chart">📦</span>
             <span class="board-card-title">模板池</span>
-            <span class="muted">· 全员共享 · L1 主干（已发布） / L2 支线（草稿）</span>
+            <span class="muted">· 全员共享</span>
           </div>
 
 
@@ -60,24 +60,20 @@
               <button class="pill" data-filter="已发布-实验中">已发布-实验中</button>
               <button class="pill" data-filter="已发布-全量">已发布-全量</button>
             </div>
-            <!-- RULE 4 提示：DSL 改动自动回退 ② -->
-            <div style="margin:0 0 10px;padding:8px 12px;background:#fff7ec;border:1px solid #f5c98a;border-radius:6px;font-size:12px;color:#8a5a14;display:flex;align-items:center;gap:8px;flex-wrap:wrap" title="同一条草稿支线全局唯一，任何人都能继续改它；但只要 DSL 有改动，已通过的测试 / 已提的审批单全部作废，必须从 ② 重跑。">
-              <span style="font-weight:600">⚠ 硬规则</span>
-              <span>草稿支线全局唯一，<b>审批中也允许任意人继续改</b>；但 DSL 一改即<b style="color:#c0392b">自动回退 ②</b>，已通过的 ③ 测试 / 已提的 ④ 审批<b style="color:#c0392b">作废</b>。</span>
-            </div>
+            <!-- RULE 4 提示已移除 -->
             <table class="data-table plain-table">
-              <thead><tr><th>模板ID</th><th>模板名称</th><th>二级场景</th><th>状态</th><th title="该 L1 主干是否被 L2 草稿支线 fork · 全局唯一">L2 支线</th><th>创建人</th><th>昨日消耗</th><th>CTR</th><th>CTCVR</th><th class="col-act">操作</th></tr></thead>
+              <thead><tr><th>模板ID</th><th>模板名称</th><th>二级场景</th><th>状态</th><th>创建人</th><th>昨日消耗</th><th>CTR</th><th>CTCVR</th><th class="col-act">操作</th></tr></thead>
               <tbody>
                 <!-- 草稿态（L2 支线编辑中 / 测试中 / 待审批），尚未发布 → 后 4 列均 — -->
-                <tr class="tpl-row" data-status="编辑中"><td>1003638</td><td>开屏-夏日冰镇风 v1</td><td>开屏</td><td><span class="badge draft">编辑中</span></td><td><span class="muted">—</span></td><td>小樊</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td class="col-act"><a class="link" href="javascript:void(0)" data-pipeline="1003638">流水线 →</a></td></tr>
-                <tr class="tpl-row" data-status="测试中"><td>1003805</td><td>开屏-母婴节-探索</td><td>开屏</td><td><span class="badge draft">测试中</span></td><td><span class="muted">—</span></td><td>小樊</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td class="col-act"><a class="link" href="javascript:void(0)" data-pipeline="1003805">流水线 →</a></td></tr>
-                <tr class="tpl-row" data-status="待草稿发布审批"><td>1003810</td><td>插屏-双十一预热</td><td>插屏</td><td><span class="badge wait">待草稿发布审批</span></td><td><span class="muted">—</span></td><td>小樊</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td class="col-act"><a class="link" href="javascript:void(0)" data-pipeline="1003810">流水线 →</a></td></tr>
-                <tr class="tpl-row" data-status="编辑中"><td>1003815</td><td>原生-知识付费-暑期</td><td>原生</td><td><span class="badge draft">编辑中</span></td><td><span class="muted">—</span></td><td>小樊</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td class="col-act"><a class="link" href="javascript:void(0)" data-pipeline="1003815">流水线 →</a></td></tr>
+                <tr class="tpl-row" data-status="编辑中"><td>1003638</td><td>开屏-夏日冰镇风 v1</td><td>开屏</td><td><span class="badge draft">编辑中</span></td><td>小樊</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td class="col-act"><a class="link" href="javascript:void(0)" data-pipeline="1003638">流水线 →</a></td></tr>
+                <tr class="tpl-row" data-status="测试中"><td>1003805</td><td>开屏-母婴节-探索</td><td>开屏</td><td><span class="badge draft">测试中</span></td><td>小樊</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td class="col-act"><a class="link" href="javascript:void(0)" data-pipeline="1003805">流水线 →</a></td></tr>
+                <tr class="tpl-row" data-status="待草稿发布审批"><td>1003810</td><td>插屏-双十一预热</td><td>插屏</td><td><span class="badge wait">待草稿发布审批</span></td><td>小樊</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td class="col-act"><a class="link" href="javascript:void(0)" data-pipeline="1003810">流水线 →</a></td></tr>
+                <tr class="tpl-row" data-status="编辑中"><td>1003815</td><td>原生-知识付费-暑期</td><td>原生</td><td><span class="badge draft">编辑中</span></td><td>小樊</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td class="col-act"><a class="link" href="javascript:void(0)" data-pipeline="1003815">流水线 →</a></td></tr>
                 <!-- 已发布态：包含完整运行指标 -->
-                <tr class="tpl-row" data-status="已发布-全量"><td>1003690</td><td>【小店】弹窗+商品信息_自渲染_信息流_视频_图文</td><td>信息流</td><td><span class="badge ok">已发布-全量</span></td><td><span class="muted">—</span></td><td>小樊</td><td>¥421w</td><td>9.85%</td><td>2.18%</td><td class="col-act"><a class="link" href="javascript:void(0)" data-report="1003690">成绩单 →</a></td></tr>
-                <tr class="tpl-row" data-status="已发布-实验中"><td>1003723</td><td>双端_激励_1003723模板</td><td>激励视频</td><td><span class="badge waitin">已发布-实验中</span></td><td><span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:10px;background:#eaf1ff;border:1px solid #3370ff;color:#3370ff;font-size:11px" title="该 L1 已被 fork 出 L2 支线，正在编辑 · 实验只认 templateId，不感知 DSL 变更">📝 @小樊 编辑中</span></td><td>小樊</td><td>¥412w</td><td>62.5%</td><td>4.76%</td><td class="col-act"><a class="link" href="javascript:void(0)" data-pipeline="1003723">流水线 →</a></td></tr>
-                <tr class="tpl-row" data-status="已发布-未生效"><td>1003721</td><td>商品信息_系统弹窗_插屏半屏-9x16视频-大区域-左下</td><td>插屏</td><td><span class="badge draft">已发布-未生效</span></td><td><span class="muted">—</span></td><td>小樊</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td class="col-act"><a class="link" href="javascript:void(0)" data-pipeline="1003721">流水线 →</a></td></tr>
-                <tr class="tpl-row" data-status="已发布-全量"><td>1001023</td><td>【全突破】自渲染_信息流_图片_透明模板</td><td>信息流</td><td><span class="badge ok">已发布-全量</span></td><td><span class="muted">—</span></td><td>小樊</td><td>¥274w</td><td>8.49%</td><td>1.35%</td><td class="col-act"><a class="link" href="javascript:void(0)" data-report="1001023">成绩单 →</a></td></tr>
+                <tr class="tpl-row" data-status="已发布-全量"><td>1003690</td><td>【小店】弹窗+商品信息_自渲染_信息流_视频_图文</td><td>信息流</td><td><span class="badge ok">已发布-全量</span></td><td>小樊</td><td>¥421w</td><td>9.85%</td><td>2.18%</td><td class="col-act"><a class="link" href="javascript:void(0)" data-report="1003690">成绩单 →</a></td></tr>
+                <tr class="tpl-row" data-status="已发布-实验中"><td>1003723</td><td>双端_激励_1003723模板</td><td>激励视频</td><td><span class="badge waitin">已发布-实验中</span></td><td>小樊</td><td>¥412w</td><td>62.5%</td><td>4.76%</td><td class="col-act"><a class="link" href="javascript:void(0)" data-pipeline="1003723">流水线 →</a></td></tr>
+                <tr class="tpl-row" data-status="已发布-未生效"><td>1003721</td><td>商品信息_系统弹窗_插屏半屏-9x16视频-大区域-左下</td><td>插屏</td><td><span class="badge draft">已发布-未生效</span></td><td>小樊</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td class="col-act"><a class="link" href="javascript:void(0)" data-pipeline="1003721">流水线 →</a></td></tr>
+                <tr class="tpl-row" data-status="已发布-全量"><td>1001023</td><td>【全突破】自渲染_信息流_图片_透明模板</td><td>信息流</td><td><span class="badge ok">已发布-全量</span></td><td>小樊</td><td>¥274w</td><td>8.49%</td><td>1.35%</td><td class="col-act"><a class="link" href="javascript:void(0)" data-report="1001023">成绩单 →</a></td></tr>
               </tbody>
             </table>
           </div>
