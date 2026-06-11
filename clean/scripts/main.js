@@ -35,6 +35,23 @@
     });
   });
 
+  // ============ 模板池状态筛选（按 data-filter 过滤 .tpl-row[data-status]）============
+  // 触发条件：filter-bar 上有 data-pool-filter 属性 → 命中即按 data-filter 切换 .tpl-row 显示
+  // 复用上面通用 pill 的 active 切换；这里只追加"行过滤"行为，不重复绑 active 样式
+  document.querySelectorAll('.filter-bar[data-pool-filter]').forEach(bar => {
+    const table = bar.parentElement.querySelector('table');
+    if (!table) return;
+    const rows = table.querySelectorAll('tbody tr.tpl-row');
+    bar.querySelectorAll('.pill').forEach(p => {
+      p.addEventListener('click', () => {
+        const f = p.dataset.filter || 'all';
+        rows.forEach(r => {
+          r.style.display = (f === 'all' || r.dataset.status === f) ? '' : 'none';
+        });
+      });
+    });
+  });
+
   // ============ 二级抽屉通用 ============
   const sideMask = document.getElementById('sideDrawerMask');
   const formDrawer = document.getElementById('formDrawer');
