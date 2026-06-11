@@ -6,14 +6,10 @@
 
 
 
-  // ============ 模板池 Tab ============
-  function activatePoolTab(name) {
-    document.querySelectorAll('.pool-tabs .tab').forEach(t => t.classList.toggle('active', t.dataset.pooltab === name));
-    document.querySelectorAll('.pool-pane').forEach(p => p.classList.toggle('active', p.dataset.pane === name));
-  }
-  document.querySelectorAll('.pool-tabs .tab').forEach(tab => {
-    tab.addEventListener('click', () => activatePoolTab(tab.dataset.pooltab));
-  });
+  // ============ 模板池 Tab（已下线：草稿/正式合并为一张表，按状态 pill 筛选） ============
+  // 保留兼容性 stub：万一外部代码还在调用 activatePoolTab，无副作用即可
+  function activatePoolTab() { /* no-op */ }
+  void activatePoolTab;
 
   // ============ Filter Pills ============
   document.querySelectorAll('.filter-bar, .table-toolbar-right').forEach(bar => {
