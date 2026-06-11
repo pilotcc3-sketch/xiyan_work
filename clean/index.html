@@ -1035,13 +1035,9 @@
           }
           let showBottomLine = false;
           if (draftText) {
-            if (state === 'editing' || state === 'published') {
-              if (state === 'published') {
-                draftText.textContent = '草稿版本 · ④审批通过，覆盖主干中';
-              } else {
-                const l2Current = stepper.querySelector('.pf-l2-row .pf-node.pf-current');
-                draftText.textContent = (l2Current && nodeStateLabel(l2Current)) || '草稿版本 · 流转中';
-              }
+            // 仅在 L2 草稿版本上线（④覆盖瞬间, state=published）时显示蓝/橙色草稿 banner；其他阶段（editing 等）一律隐藏
+            if (state === 'published') {
+              draftText.textContent = '草稿版本 · ④审批通过，覆盖主干中';
               draftText.style.display = '';
               showBottomLine = true;
             } else {
