@@ -292,8 +292,8 @@
       </div>
     </div>
 
-    <!-- 流水线下方常驻提示：环节 ① 信息卡说明（永远显示，不依赖点击 / 状态） -->
-    <div class="pf-info-tip" role="note" aria-label="环节 ① 模板基础信息说明">
+    <!-- 流水线下方信息卡说明：仅在点击环节 ① 时短暂显示 -->
+    <div class="pf-info-tip" id="pfInfoTip" role="note" aria-label="环节 ① 模板基础信息说明" hidden>
       <span class="pf-info-icon" aria-hidden="true">ℹ️</span>
       <span><b>环节 ① 模板创建</b>仅展示模板基础信息（ID / 名称 / 二级场景 / 创建人 / 创建时间等），不可编辑，不影响后续环节状态</span>
     </div>
@@ -557,22 +557,27 @@
       /* 点击信息卡后的临时高亮（不与 pf-current 冲突，避免被误读为当前环节） */
       .pf-start[data-readonly="info"].pf-active-info .step-no { box-shadow: 0 0 0 4px rgba(245, 201, 138, .45); }
 
-      /* 流水线下方常驻信息卡说明条（深色提示，呼应 ① 节点的信息卡语义） */
+      /* 流水线下方信息卡说明条：仅点击 ① 时短暂显示，轻量浅色（呼应 ① 节点黄色信息卡语义） */
       .pf-info-tip {
-        margin-top: 12px;
-        padding: 12px 18px;
-        background: #2a2d33;
-        color: #e8e8ea;
-        border-radius: 10px;
-        font-size: 13px;
+        margin-top: 10px;
+        padding: 8px 14px;
+        background: #fff7ec;
+        color: #8a5a14;
+        border: 1px solid #f5c98a;
+        border-radius: 8px;
+        font-size: 12.5px;
         line-height: 1.5;
         display: flex;
         align-items: center;
-        gap: 10px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
+        gap: 8px;
+        opacity: 0;
+        transform: translateY(-4px);
+        transition: opacity .2s ease, transform .2s ease;
       }
-      .pf-info-tip b { color: #fff; font-weight: 600; }
-      .pf-info-icon { font-size: 16px; flex-shrink: 0; }
+      .pf-info-tip[hidden] { display: none !important; }
+      .pf-info-tip.show { opacity: 1; transform: translateY(0); }
+      .pf-info-tip b { color: #6b4710; font-weight: 600; }
+      .pf-info-icon { font-size: 14px; flex-shrink: 0; }
 
       .pf-tag {
         position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
@@ -1187,12 +1192,32 @@
             c.classList.toggle('active', c.dataset.stepContent === no);
           });
         }
+        // 信息卡说明条的显示控制：仅点 ① 时短暂显示，点其他节点立即隐藏
+        const infoTipEl = document.getElementById('pfInfoTip');
+        let infoTipTimer = null;
+        function showInfoTip() {
+          if (!infoTipEl) return;
+          infoTipEl.hidden = false;
+          // 强制 reflow，确保 transition 触发
+          void infoTipEl.offsetWidth;
+          infoTipEl.classList.add('show');
+          if (infoTipTimer) clearTimeout(infoTipTimer);
+          infoTipTimer = setTimeout(hideInfoTip, 4000);
+        }
+        function hideInfoTip() {
+          if (!infoTipEl) return;
+          infoTipEl.classList.remove('show');
+          if (infoTipTimer) { clearTimeout(infoTipTimer); infoTipTimer = null; }
+          // 等过渡结束再 hidden
+          setTimeout(() => { if (!infoTipEl.classList.contains('show')) infoTipEl.hidden = true; }, 220);
+        }
+
         nodes.forEach(n => {
           n.addEventListener('click', (e) => {
             // ① 共用起点（信息卡）：与流转完全解耦
             //   · 不调 __activateStep（不会动 mainCursor / l2Cursor）
             //   · 不会让已完成的环节置灰回退
-            //   · 仅切右侧 step-content（展示模板基础信息）+ 弹一次 toast 说明
+            //   · 仅切右侧 step-content（展示模板基础信息）+ 流水线下方显示一次浅色信息卡说明
             if (n.classList.contains('pf-start') && n.dataset.readonly === 'info') {
               e.preventDefault(); e.stopPropagation();
               // 切右侧面板到 step-content[data-step-content="1"]，但不重渲染流水线状态
@@ -1202,9 +1227,13 @@
               // 视觉上加个临时高亮（不依赖 pf-current，避免被状态机当成"当前环节"）
               nodes.forEach(x => x.classList.remove('pf-active-info'));
               n.classList.add('pf-active-info');
-              // 说明文案已常驻在流水线下方的 .pf-info-tip 卡片中，无需再 toast
+              // 流水线下方浅色信息卡说明：4s 后自动隐藏
+              showInfoTip();
               return;
             }
+            // 点了非 ① 节点：立即隐藏信息卡说明 + 移除 ① 的临时高亮
+            hideInfoTip();
+            nodes.forEach(x => x.classList.remove('pf-active-info'));
             const state = stepper.getAttribute('data-l2-state') || 'idle';
             const l1Archived = stepper.getAttribute('data-l1-archived') === 'true';
             const isL1 = n.dataset.track === 'L1';
