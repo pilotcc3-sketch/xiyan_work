@@ -1252,6 +1252,14 @@
               activateNode(n.dataset.step, { track: 'L2' });
               return;
             }
+            // 共用尾段 ⑤⑥⑦⑧：必须 L1 ④ 草稿发布审批通过（l1Archived=true）后才能进入
+            // 否则 ②③④ 还在跑，不允许越过 ④ 直接跳到 ⑤⑥⑦⑧
+            const isTail = !isL1 && !isL2 && stepNum >= 5 && stepNum <= 8;
+            if (isTail && !l1Archived) {
+              e.preventDefault(); e.stopPropagation();
+              alert('④ 草稿发布审批尚未通过，⑤⑥⑦⑧ 暂不可进入。请先完成 ④ 草稿发布的 MyOA 审批。');
+              return;
+            }
             // 主线节点（① / L1 / 共用尾段⑤⑥⑦⑧）：推进 mainCursor
             activateNode(n.dataset.step);
           });
