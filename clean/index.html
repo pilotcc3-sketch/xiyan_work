@@ -236,16 +236,16 @@
         <span class="pf-conn pf-conn-l1" data-idx="1"></span>
         <!-- ②③④：L1 主干（已发布版本当前生效）。data-toast 已下线：主行 ①②③④ 不再显示常驻 toast 长条 -->
         <div class="pf-node" data-step="2" data-track="L1"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
-        <span class="pf-conn pf-conn-l1" data-idx="2"><em class="pf-time">17h55m</em></span>
+        <span class="pf-conn pf-conn-l1" data-idx="2"></span>
         <div class="pf-node" data-step="3" data-track="L1"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
         <span class="pf-conn pf-conn-l1" data-idx="3"><em class="pf-time">17h55m</em></span>
         <div class="pf-node" data-step="4" data-track="L1"><span class="step-no">4</span><span class="step-name">草稿发布</span></div>
         <span class="pf-conn pf-conn-l1" data-idx="4"></span>
         <!-- ⑤⑥⑦⑧ 共用尾段（两条线汇合后） -->
         <div class="pf-node" data-step="5" data-toast="已发布版本-规则配置中"><span class="step-no">5</span><span class="step-name">规则配置</span></div>
-        <span class="pf-conn" data-idx="5"><em class="pf-time">1d2h</em></span>
+        <span class="pf-conn" data-idx="5"></span>
         <div class="pf-node" data-step="6" data-toast="已发布版本-实验中"><span class="step-no">6</span><span class="step-name">模板实验</span></div>
-        <span class="pf-conn" data-idx="6"><em class="pf-time">1d8h</em></span>
+        <span class="pf-conn" data-idx="6"></span>
         <div class="pf-node" data-step="7" data-toast="已发布版本-全量上线中"><span class="step-no">7</span><span class="step-name">全量上线</span></div>
         <span class="pf-conn" data-idx="7"><em class="pf-time">4h45m</em></span>
         <div class="pf-node" data-step="8" data-toast="已发布版本-成绩单出炉"><span class="step-no">8</span><span class="step-name">成绩单</span></div>
@@ -261,7 +261,7 @@
         <span class="pf-fork-out" aria-hidden="true"></span>
         <span class="pf-conn pf-conn-l2" data-idx="l2-1"></span>
         <div class="pf-node" id="l2Step2" data-step="2" data-track="L2" data-toast="草稿版本-编辑中"><span class="step-no">2</span><span class="step-name">模板编辑</span></div>
-        <span class="pf-conn pf-conn-l2" data-idx="l2-2"><em class="pf-time">17h55m</em></span>
+        <span class="pf-conn pf-conn-l2" data-idx="l2-2"></span>
         <div class="pf-node" id="l2Step3" data-step="3" data-track="L2" data-toast="草稿版本-测试中"><span class="step-no">3</span><span class="step-name">模板测试</span></div>
         <span class="pf-conn pf-conn-l2" data-idx="l2-3"><em class="pf-time">17h55m</em></span>
         <div class="pf-node pf-bridge" id="l2Step4" data-step="4" data-track="bridge" data-toast="草稿版本-待发布" title="④ 草稿发布通过 → 物理覆盖 L1 主干，不留底、不可回滚">
@@ -1015,7 +1015,7 @@
           const l1Archived = stepper.getAttribute('data-l1-archived') === 'true';
           const mainCurrent = stepper.querySelector('.pf-main-row .pf-node.pf-current');
           const mainStep = mainCurrent ? parseInt(mainCurrent.getAttribute('data-step'), 10) : 0;
-          const showTopLine = mainStep >= 5 && mainStep <= 8; // 仅 ⑤⑥⑦⑧ 显示已发布版本横幅
+          const showTopLine = state === 'published'; // 仅在 L2 草稿版本上线（④覆盖瞬间）显示绿色 banner（提示"覆盖中"）；其他阶段隐藏
           if (text) {
             if (showTopLine) {
               if (state === 'published') {
