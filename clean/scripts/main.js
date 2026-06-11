@@ -539,7 +539,8 @@
       const stageText = inferStageText(row);
       document.getElementById('pipelineDrawerTitle').textContent = `模板生产流水线 · ${tplName}`;
       document.getElementById('pipelineDrawerSub').textContent =
-        `模板ID：${tplId}${stageText ? ' · 当前阶段：' + stageText : ''}`;
+        `模板ID：${tplId}`;
+      pipelineDrawer.dataset.stage = stageText || '';
       renderReport(tplId, stageText);
       activateStep(stepNo, { reset: true });
       showDrawer(pipelineDrawer);
@@ -555,7 +556,8 @@
       const stageText = inferStageText(row) || '已上线';
       document.getElementById('pipelineDrawerTitle').textContent = `模板数据成绩单 · ${tplName}`;
       document.getElementById('pipelineDrawerSub').textContent =
-        `模板ID：${tplId} · 当前阶段：${stageText}`;
+        `模板ID：${tplId}`;
+      pipelineDrawer.dataset.stage = stageText;
       renderReport(tplId, stageText);
       activateStep('8', { reset: true });
       showDrawer(pipelineDrawer);
@@ -579,9 +581,7 @@
 
   document.querySelectorAll('[data-jump-empty]').forEach(b => {
     b.addEventListener('click', () => {
-      const sub = document.getElementById('pipelineDrawerSub')?.textContent || '';
-      const match = sub.match(/当前阶段：(\S+?)\s/);
-      const stage = match ? match[1] : '';
+      const stage = pipelineDrawer.dataset.stage || '';
       const step = STAGE_TO_STEP[stage] || '2';
       activateStep(step);
     });
