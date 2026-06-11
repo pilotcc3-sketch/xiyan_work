@@ -539,7 +539,7 @@
       const stageText = inferStageText(row);
       document.getElementById('pipelineDrawerTitle').textContent = `模板生产流水线 · ${tplName}`;
       document.getElementById('pipelineDrawerSub').textContent =
-        `模板ID：${tplId}${stageText ? ' · 当前阶段：' + stageText : ''} · 创建 → 编辑 → 测试 → 草稿发布 → 规则配置 → 实验 → 全量上线 → 成绩单`;
+        `模板ID：${tplId}${stageText ? ' · 当前阶段：' + stageText : ''}`;
       renderReport(tplId, stageText);
       activateStep(stepNo, { reset: true });
       showDrawer(pipelineDrawer);
@@ -599,7 +599,7 @@
           trigger.click();
         } else {
           document.getElementById('pipelineDrawerTitle').textContent = '模板生产流水线 · 开屏-夏日冰镇风 v1';
-          document.getElementById('pipelineDrawerSub').textContent = '模板ID：1003638 · 创建 → 编辑 → 测试 → 草稿发布 → 规则配置 → 实验 → 全量上线 → 成绩单';
+          document.getElementById('pipelineDrawerSub').textContent = '模板ID：1003638';
           activateStep('1');
           showDrawer(pipelineDrawer);
         }
