@@ -555,7 +555,7 @@
       const stageText = inferStageText(row) || '已上线';
       document.getElementById('pipelineDrawerTitle').textContent = `模板数据成绩单 · ${tplName}`;
       document.getElementById('pipelineDrawerSub').textContent =
-        `模板ID：${tplId} · 当前阶段：${stageText} · 已上线后自动出 v1 报告`;
+        `模板ID：${tplId} · 当前阶段：${stageText}`;
       renderReport(tplId, stageText);
       activateStep('8', { reset: true });
       showDrawer(pipelineDrawer);
