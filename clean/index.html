@@ -244,10 +244,11 @@
 
       <!-- ===== 主行：①─②─③─④─⑤─⑥─⑦─⑧ 一横行（L1 主干 / 共用起点 / 共用尾段全部摊平） ===== -->
       <div class="pf-main-row">
-        <!-- ① 共用起点 -->
-        <div class="pf-node pf-start" data-step="1">
+        <!-- ① 共用起点 · 信息卡（固定黄色 / 仅展示模板基础信息 / 不参与流转 / 不影响后续环节状态） -->
+        <div class="pf-node pf-start" data-step="1" data-readonly="info"
+             title="仅展示模板基础信息（ID / 名称 / 二级场景 / 创建人等），无编辑作用，不影响后续环节状态">
           <span class="pf-tag pf-tag-fork">🔀 起点</span>
-          <span class="step-no done">1</span>
+          <span class="step-no">1</span>
           <span class="step-name">模板创建</span>
         </div>
         <span class="pf-conn pf-conn-l1" data-idx="1"></span>
@@ -536,7 +537,19 @@
 
       /* ① 共用起点（缩成普通节点尺寸，去掉之前的虚线方框） */
       .pf-start { padding: 4px 6px; }
-      .pf-start .step-no { background: #23a567; color: #fff; border-color: #23a567; }
+      /* 信息卡：固定黄色，永不参与 done/current/todo 流转视觉 */
+      .pf-start[data-readonly="info"] .step-no,
+      .pf-start[data-readonly="info"].pf-current .step-no,
+      .pf-start[data-readonly="info"].pf-todo .step-no {
+        background: #fff7ec; color: #8a5a14; border-color: #f5c98a;
+        animation: none; box-shadow: none;
+      }
+      .pf-start[data-readonly="info"] .step-name,
+      .pf-start[data-readonly="info"].pf-todo .step-name { color: #8a5a14; }
+      .pf-start[data-readonly="info"] { cursor: pointer; }
+      .pf-start[data-readonly="info"]:hover .step-no { background: #ffeed1; }
+      /* 点击信息卡后的临时高亮（不与 pf-current 冲突，避免被误读为当前环节） */
+      .pf-start[data-readonly="info"].pf-active-info .step-no { box-shadow: 0 0 0 4px rgba(245, 201, 138, .45); }
 
       .pf-tag {
         position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
@@ -1153,6 +1166,25 @@
         }
         nodes.forEach(n => {
           n.addEventListener('click', (e) => {
+            // ① 共用起点（信息卡）：与流转完全解耦
+            //   · 不调 __activateStep（不会动 mainCursor / l2Cursor）
+            //   · 不会让已完成的环节置灰回退
+            //   · 仅切右侧 step-content（展示模板基础信息）+ 弹一次 toast 说明
+            if (n.classList.contains('pf-start') && n.dataset.readonly === 'info') {
+              e.preventDefault(); e.stopPropagation();
+              // 切右侧面板到 step-content[data-step-content="1"]，但不重渲染流水线状态
+              document.querySelectorAll('#pipelineDrawer .step-content').forEach(c => {
+                c.classList.toggle('active', c.dataset.stepContent === '1');
+              });
+              // 视觉上加个临时高亮（不依赖 pf-current，避免被状态机当成"当前环节"）
+              nodes.forEach(x => x.classList.remove('pf-active-info'));
+              n.classList.add('pf-active-info');
+              const toast = (typeof window.showToast === 'function')
+                ? window.showToast
+                : (msg) => { /* 静默兜底，避免 alert 打断 */ console.log(msg); };
+              toast('ℹ️ 模板基础信息（仅展示，不可编辑，不影响后续环节状态）');
+              return;
+            }
             const state = stepper.getAttribute('data-l2-state') || 'idle';
             const l1Archived = stepper.getAttribute('data-l1-archived') === 'true';
             const isL1 = n.dataset.track === 'L1';
