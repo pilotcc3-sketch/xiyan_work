@@ -1138,8 +1138,6 @@
           if (onlineBadge) { onlineBadge.textContent = '未提交'; onlineBadge.className = 'badge wait'; }
           const onlineSub = document.getElementById('onlineStatusSub');
           if (onlineSub) onlineSub.innerHTML = '当前模板：<b>开屏-夏日冰镇风（草稿版本）</b> · 状态：<span class="badge wait" id="onlineStatusBadge">未提交</span>';
-          const tip = document.getElementById('onlineStatusTip');
-          if (tip) tip.textContent = '点击后弹窗填写备注 → 下发 MyOA 审批（草稿覆盖主干）';
           if (typeof window.__resetSubmitOnlineBtn === 'function') window.__resetSubmitOnlineBtn();
           // L2 指针重置到 ②（推进 L2 不动主指针，⑤⑥⑦⑧ 进度保留）
           if (typeof window.__activateStep === 'function') {
@@ -1484,7 +1482,6 @@
           <div class="card-sub" style="margin-top:6px;" id="onlineStatusSub">当前模板：<b>开屏-夏日冰镇风 v1</b> · 状态：<span class="badge wait" id="onlineStatusBadge">未提交</span></div>
           <div style="margin-top:14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
             <button class="btn-primary sm" id="btnSubmitOnline">🚀 提交上线</button>
-            <span class="muted" id="onlineStatusTip">点击后弹窗填写备注 → 下发 MyOA 审批 → 此处展示审批单链接</span>
           </div>
 
           <!-- MyOA 审批单回填区（提交后显示） -->
@@ -1648,7 +1645,6 @@
           <div class="card-sub" style="margin-top:6px;">当前模板：<b>开屏-夏日冰镇风 v1</b> · 状态：<span class="badge wait" id="fullOnlineBadge">未提交</span></div>
           <div style="margin-top:14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
             <button class="btn-primary sm" id="btnSubmitFullOnline">🚀 提交全量上线</button>
-            <span class="muted" id="fullOnlineTip">点击后弹窗汇总实验数据 + 写备注 → 下发 MyOA 审批 → 此处展示审批单链接</span>
           </div>
 
           <!-- MyOA 审批单回填区（提交后显示） -->
