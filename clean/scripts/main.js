@@ -813,6 +813,11 @@
       if (tip) tip.textContent = '✅ 已全量上线 7 天 · 成绩单已生成 · 可点击 ⑧ 节点查看';
       btnMockLive7d.disabled = true;
       btnMockLive7d.textContent = '✓ 已满 7 天';
+      // 模板已全量上线 → 回看 ⑥/⑦ 时显示「再改 DSL 需重新提交审批」banner
+      const lb6 = document.getElementById('liveBanner6');
+      if (lb6) lb6.style.display = '';
+      const lb7 = document.getElementById('liveBanner7');
+      if (lb7) lb7.style.display = '';
       showToast('已积累 7 天真实曝光数据 · ⑧ 成绩单已解锁');
     });
   }
