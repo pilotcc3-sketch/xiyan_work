@@ -1335,12 +1335,13 @@
           setTimeout(() => { if (!infoTipEl.classList.contains('show')) infoTipEl.hidden = true; }, 220);
         }
 
-        // ② 模板编辑：「打开 iDOMO 编辑器」按钮点击后记录 flag，③ 模板测试节点解锁需此 flag
+        // ② 模板编辑：「打开 iDOMO 编辑器」/「模拟跳转」按钮点击后记录 flag，③ 模板测试节点解锁需此 flag
+        // 用事件委托（document 级），避免按钮在脚本之后的 DOM 中导致 getElementById 拿不到
         window.__idomoVisited = window.__idomoVisited || false;
-        const btnOpenIdomo = document.getElementById('btnOpenIdomo');
-        if (btnOpenIdomo) {
-          btnOpenIdomo.addEventListener('click', () => { window.__idomoVisited = true; });
-        }
+        document.addEventListener('click', (ev) => {
+          const t = ev.target.closest('#btnOpenIdomo, #btnSimIdomo');
+          if (t) { window.__idomoVisited = true; }
+        }, true);
 
         nodes.forEach(n => {
           n.addEventListener('click', (e) => {
@@ -1424,7 +1425,7 @@
               // L2 ③ 必须先点过「打开 iDOMO 编辑器」
               if (stepNum === 3 && !window.__idomoVisited) {
                 e.preventDefault(); e.stopPropagation();
-                alert('② 模板编辑尚未启动，③ 模板测试暂不可进入。\n\n请先点【② 模板编辑】中的「🎛 打开 iDOMO 编辑器」按钮进入画布编辑。');
+                alert('② 模板编辑尚未启动，③ 模板测试暂不可进入。\n\n请先编辑模板。');
                 return;
               }
               // L2 ④ 必须先完成 ③ 模板测试（l2Cursor >= 3）
@@ -1573,6 +1574,7 @@
           <div class="card-title">🛠 iDOMO 编辑器</div>
           <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
             <a class="btn-primary sm" id="btnOpenIdomo" style="display:inline-block; text-decoration:none;" href="https://tsa.woa.com/domo-admin/union-form-editor?id=1003638" target="_blank" rel="noopener">🎛 打开 iDOMO 编辑器</a>
+            <button class="btn-ghost sm" id="btnSimIdomo" type="button" style="margin-left:8px;">🧪 模拟跳转 iDOMO（演示用）</button>
             <span class="muted">最近编辑：6/6 11:42 · DSL 实时同步</span>
           </div>
         </div>
