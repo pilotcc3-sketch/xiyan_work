@@ -2149,9 +2149,8 @@
             return;
           }
           const versionLabel = line === 'L2' ? 'v2 草稿' : 'v1 首发';
-          const remark = prompt(`请填写本次提交上线的备注（${versionLabel}，演示用，可留空）：`, `6/10 提交：开屏夏日冰镇风 ${versionLabel}，已自测通过`);
-          if (remark === null) return; // 用户取消
-          if (ioaRemark) ioaRemark.textContent = remark || '—';
+          const remark = `6/10 提交：开屏夏日冰镇风 ${versionLabel}，已自测通过`;
+          if (ioaRemark) ioaRemark.textContent = remark;
           if (ioaCard) ioaCard.style.display = '';
           if (ioaStatus) {
             ioaStatus.textContent = '审批中';
