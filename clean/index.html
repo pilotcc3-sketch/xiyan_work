@@ -223,7 +223,12 @@
         L2 编辑    L1=archived(true)   L2=editing   → L1 仍灰，L2 ②③④ 高亮跑流程
         L2 ④发布   L1=archived(true)   L2=published → 1.2s 覆盖动画 → 回 idle，等下一次拉草稿
     -->
-    <div class="pipeline-fork" data-l2-state="idle" data-l1-archived="false">
+    <!-- data-exp-state: ⑥ 模板实验审批状态 ·
+           idle        = 未提交（默认，⑦ 不可进）
+           pending     = 审批中（实验审批 OR 跳过实验审批）
+           published   = 已发布-实验中（实验审批通过，⑦ 可进）
+           skipped     = 已批准跳过实验（跳过实验审批通过，⑦ 可进） -->
+    <div class="pipeline-fork" data-l2-state="idle" data-l1-archived="false" data-exp-state="idle">
 
       <!-- ===== 主行：①─②─③─④─⑤─⑥─⑦─⑧ 一横行（L1 主干 / 共用起点 / 共用尾段全部摊平） ===== -->
       <div class="pf-main-row">
@@ -1261,6 +1266,15 @@
               alert('④ 草稿发布审批尚未通过，⑤⑥⑦⑧ 暂不可进入。请先完成 ④ 草稿发布的 MyOA 审批。');
               return;
             }
+            // ⑦ 全量上线：必须 ⑥ 模板实验审批通过（published）或 跳过实验审批通过（skipped）才能进
+            if (stepNum === 7) {
+              const expState = stepper.getAttribute('data-exp-state') || 'idle';
+              if (expState !== 'published' && expState !== 'skipped') {
+                e.preventDefault(); e.stopPropagation();
+                alert('⑥ 模板实验尚未完成审批，⑦ 全量上线暂不可进入。\n\n两种解锁方式（二选一）：\n  · 提交「实验上线」MyOA 审批 → 产研两轮通过 → 状态「已发布-实验中」\n  · 申请「跳过实验」MyOA 审批 → 产研两轮通过');
+                return;
+              }
+            }
             // 主线节点（① / L1 / 共用尾段⑤⑥⑦⑧）：推进 mainCursor
             activateNode(n.dataset.step);
           });
@@ -1528,49 +1542,60 @@
 
       </div>
 
-      <!-- Step 6 · 模板实验（adata 在线数据 / 跳过需弹窗 + 产研审批） -->
+      <!-- Step 6 · 模板实验（a 实验上线审批 / b 跳转实验平台 / 备用：跳过实验申请） -->
       <div class="step-content" data-step-content="6">
         <div class="step-content-head with-actions">
           <h3>⑥ 模板实验</h3>
           <details class="step-more-menu">
             <summary class="step-more-trigger" title="更多操作">⋯</summary>
             <div class="step-more-pop">
-              <button class="step-more-item danger" id="btnSkipExp">↷ 跳过本步（需产研审批）</button>
-              <div class="step-more-hint muted">异常分支：跳过实验直接进入全量上线，需产品 + 研发审批。</div>
+              <button class="step-more-item danger" id="btnSkipExp">↷ 申请跳过本步（产研审批）</button>
+              <div class="step-more-hint muted">异常分支：跳过实验直接进入 ⑦ 全量上线，需产品 + 研发审批通过；与 a 实验上线审批二选一即可解锁 ⑦。</div>
             </div>
           </details>
         </div>
 
-        <!-- A. 跳转 TAB 实验平台 -->
+        <!-- A. 实验上线审批（主路径 · 仿 ⑦ 全量上线 · 产品 + 研发两轮） -->
         <div class="card">
-          <div class="card-title">🧪 A. 跳转 TAB 实验平台</div>
+          <div class="card-title">📨 A. 实验上线审批 <span class="muted">· 产品 + 研发两轮 MyOA 审批</span></div>
+          <div class="card-sub" style="margin-top:6px;">当前模板：<b>开屏-夏日冰镇风 v1</b> · 状态：<span class="badge wait" id="expOnlineBadge">未提交</span></div>
+          <div style="margin-top:14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <button class="btn-primary sm" id="btnSubmitExpOnline">🧪 提交实验上线</button>
+            <span class="muted" id="expOnlineTip" style="font-size:12px;">提交后下发 MyOA · 审批通过即可进入 ⑦ 全量上线（不自动跳转）</span>
+          </div>
+
+          <!-- MyOA 审批单回填区（提交后显示） -->
+          <div class="ioa-result" id="ioaResultExp" style="display:none;">
+            <div class="ioa-result-head">
+              <span class="ioa-result-icon">📨</span>
+              <span class="ioa-result-title">MyOA 审批单已下发（实验上线）</span>
+              <span class="badge wait" id="ioaResultStatusExp">审批中</span>
+            </div>
+            <div class="ioa-result-row">
+              <span class="muted">审批单：</span>
+              <a class="link" href="https://my.woa.com/p2/applyList.html" target="_blank" rel="noopener">https://my.woa.com/p2/applyList.html ↗</a>
+            </div>
+            <div class="ioa-result-row">
+              <span class="muted">审批节点：</span>
+              <span>ginjyu;minjchen;aaroncxu(产品审批) ━ vinsonliu;lulutian;nimomeng(研发审批)</span>
+            </div>
+            <div class="ioa-result-row">
+              <span class="muted">备注：</span>
+              <span id="ioaResultRemarkExp">—</span>
+            </div>
+            <div class="ioa-result-actions">
+              <button class="btn-ghost sm" id="btnUrgeExpMyOA">📣 发群内提醒</button>
+              <button class="btn-ghost sm" id="btnMockApproveExp">⚡ 模拟审批通过（Demo）</button>
+              <a class="btn-text sm" href="https://my.woa.com/p2/applyList.html" target="_blank" rel="noopener">前往 MyOA ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- B. 跳转 TAB 实验平台 -->
+        <div class="card mt-16">
+          <div class="card-title">🧪 B. 跳转 TAB 实验平台 <span class="muted">· 在外部平台配置和跑实验</span></div>
           <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
             <a class="btn-primary sm" style="display:inline-block; text-decoration:none;" href="https://tab.woa.com/tab/experiment/list?business=1888&trace_id=96bc672e-96c4-440f-8936-d31d7d53621e&appGroup=abtest" target="_blank" rel="noopener">🧪 跳转 TAB 实验系统</a>
-          </div>
-        </div>
-
-        <!-- B. 跳转 iDOMO 实验数据界面 -->
-        <div class="card mt-16">
-          <div class="card-title">📊 B. 跳转 iDOMO 实验数据界面</div>
-          <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-            <a class="btn-primary sm" style="display:inline-block; text-decoration:none;" href="https://tsa.woa.com/domo-admin/experiment-data?id=EXP-2026-0529-01" target="_blank" rel="noopener">📊 跳转 iDOMO 实验数据界面</a>
-          </div>
-        </div>
-
-        <!-- D. 模板在线 adata 数据 -->
-        <div class="card mt-16">
-          <div class="card-title">🟢 C. 模板在线 adata 数据 <span class="muted">· 当前模板真实在线数据（非实验平台数据）</span></div>
-          <div class="tab-group sub" role="tablist" id="adataTabs" style="margin-top:12px;">
-            <button class="subtab active" data-adata-tab="d1">昨天</button>
-            <button class="subtab" data-adata-tab="d3">前 3 天</button>
-            <button class="subtab" data-adata-tab="d7">前 7 天</button>
-          </div>
-          <div class="exp-kpi-grid" style="margin-top:12px;">
-            <div class="exp-kpi"><div class="ek-label">消耗</div><div class="ek-num" id="adataCost">¥18.4w</div></div>
-            <div class="exp-kpi"><div class="ek-label">CTR</div><div class="ek-num" id="adataCtr">9.62%</div></div>
-            <div class="exp-kpi"><div class="ek-label">CVR</div><div class="ek-num" id="adataCvr">20.18%</div></div>
-            <div class="exp-kpi"><div class="ek-label">曝光</div><div class="ek-num" id="adataImp">486w</div></div>
-            <div class="exp-kpi"><div class="ek-label">eCPM</div><div class="ek-num" id="adataEcpm">¥37.9</div></div>
           </div>
         </div>
 
@@ -1812,6 +1837,36 @@
     <div class="tpl-dialog-foot">
       <button class="btn-ghost sm" data-dlg-close="dlgDraftOnline">取消</button>
       <button class="btn-primary sm" id="dlgDraftSubmitBtn">下发 MyOA 审批 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 弹窗 · 实验上线（备注 + 产研两轮审批） ============ -->
+<div class="tpl-dialog" id="dlgExpOnline" aria-hidden="true">
+  <div class="tpl-dialog-mask" data-dlg-close="dlgExpOnline"></div>
+  <div class="tpl-dialog-panel">
+    <div class="tpl-dialog-head">
+      <div class="tpl-dialog-title">🧪 提交实验上线（MyOA 审批）</div>
+      <button class="tpl-dialog-close" data-dlg-close="dlgExpOnline">✕</button>
+    </div>
+    <div class="tpl-dialog-body">
+      <div class="dlg-row">
+        <div class="dlg-row-label"><span class="req">*</span>实验说明</div>
+        <textarea class="dlg-textarea" id="expRemarkInput" placeholder="例：测试 v1 vs 现网基线在激励场景下的 eCPM / CTR 表现，预期分流 5% 跑 7 天 ……"></textarea>
+      </div>
+      <div class="dlg-row">
+        <div class="dlg-row-label">审批节点</div>
+        <div class="dlg-approval-chain">
+          <span class="approval-seg">ginjyu;minjchen;aaroncxu<span class="approval-tag">产品审批</span></span>
+          <span class="approval-arrow">━</span>
+          <span class="approval-seg">vinsonliu;lulutian;nimomeng<span class="approval-tag">研发审批</span></span>
+        </div>
+      </div>
+      <div class="muted" style="margin-top:8px; font-size:12px;">通过后状态变为「已发布-实验中」，⑦ 全量上线节点将解锁（不会自动跳转，需手动进入 ⑦）</div>
+    </div>
+    <div class="tpl-dialog-foot">
+      <button class="btn-ghost sm" data-dlg-close="dlgExpOnline">取消</button>
+      <button class="btn-primary sm" id="dlgExpSubmitBtn">下发 MyOA 审批 →</button>
     </div>
   </div>
 </div>

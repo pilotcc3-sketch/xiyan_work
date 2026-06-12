@@ -796,10 +796,99 @@
       if (!reason) { showToast('请填写跳过原因'); return; }
       hideDialog('dlgSkipExp');
       showToast('已提交跳过申请 · 产品 + 研发审批中');
+      // 跳过申请也走 ⑥ 实验上线审批的回填卡（复用 UI），通过 data-exp-mode 区分
+      const fork = document.querySelector('#pipelineDrawer .pipeline-fork');
+      if (fork) {
+        fork.setAttribute('data-exp-state', 'pending');
+        fork.setAttribute('data-exp-mode', 'skip');
+      }
+      const ioa = document.getElementById('ioaResultExp');
+      if (ioa) ioa.style.display = 'block';
+      const title = ioa && ioa.querySelector('.ioa-result-title');
+      if (title) title.textContent = 'MyOA 审批单已下发（跳过实验申请）';
+      const r = document.getElementById('ioaResultRemarkExp');
+      if (r) r.textContent = '【跳过原因】' + reason;
+      const expBadge = document.getElementById('expOnlineBadge');
+      if (expBadge) { expBadge.textContent = '跳过审批中'; expBadge.className = 'badge wait'; }
+      const expTip = document.getElementById('expOnlineTip');
+      if (expTip) expTip.textContent = '已申请跳过实验 · 通过后 ⑦ 全量上线节点解锁（不会自动跳转）';
+      const btnSubmitExpOnline = document.getElementById('btnSubmitExpOnline');
+      if (btnSubmitExpOnline) {
+        btnSubmitExpOnline.disabled = true;
+        btnSubmitExpOnline.textContent = '⏸ 已申请跳过（实验上线不可再提交）';
+      }
       if (btnSkipExp) {
         btnSkipExp.disabled = true;
         btnSkipExp.textContent = '✓ 已申请跳过（审批中）';
       }
+    });
+  }
+
+  // ============ ⑥ 模板实验 · 实验上线审批（产品 + 研发两轮 MyOA） ============
+  const btnSubmitExpOnline = document.getElementById('btnSubmitExpOnline');
+  if (btnSubmitExpOnline) {
+    btnSubmitExpOnline.addEventListener('click', () => showDialog('dlgExpOnline'));
+  }
+  const dlgExpSubmitBtn = document.getElementById('dlgExpSubmitBtn');
+  if (dlgExpSubmitBtn) {
+    dlgExpSubmitBtn.addEventListener('click', () => {
+      const remark = (document.getElementById('expRemarkInput')?.value || '').trim();
+      if (!remark) { showToast('请填写实验说明'); return; }
+      hideDialog('dlgExpOnline');
+      showToast('MyOA 实验上线审批单已下发');
+      // 标记实验进入审批中（mode=online）
+      const fork = document.querySelector('#pipelineDrawer .pipeline-fork');
+      if (fork) {
+        fork.setAttribute('data-exp-state', 'pending');
+        fork.setAttribute('data-exp-mode', 'online');
+      }
+      const ioa = document.getElementById('ioaResultExp');
+      if (ioa) ioa.style.display = 'block';
+      const title = ioa && ioa.querySelector('.ioa-result-title');
+      if (title) title.textContent = 'MyOA 审批单已下发（实验上线）';
+      const r = document.getElementById('ioaResultRemarkExp');
+      if (r) r.textContent = remark;
+      const badge = document.getElementById('expOnlineBadge');
+      if (badge) { badge.textContent = '审批中'; badge.className = 'badge wait'; }
+      const tip = document.getElementById('expOnlineTip');
+      if (tip) tip.textContent = 'MyOA 审批已下发 · 通过后状态变为「已发布-实验中」，⑦ 全量上线节点解锁';
+      btnSubmitExpOnline.disabled = true;
+      btnSubmitExpOnline.textContent = '✓ 已提交（审批中）';
+      // 同步禁用"申请跳过实验"，避免双轨同时进行
+      const skipBtn = document.getElementById('btnSkipExp');
+      if (skipBtn) {
+        skipBtn.disabled = true;
+        skipBtn.textContent = '⏸ 已提交实验上线（跳过通道关闭）';
+      }
+    });
+  }
+  const btnUrgeExpMyOA = document.getElementById('btnUrgeExpMyOA');
+  if (btnUrgeExpMyOA) {
+    btnUrgeExpMyOA.addEventListener('click', () => showToast('已在协作群内 @ 相关人 · MyOA 当前节点审批人已收到提醒'));
+  }
+  // 模拟审批通过 · Demo 用 → 根据 data-exp-mode 决定通过后状态
+  const btnMockApproveExp = document.getElementById('btnMockApproveExp');
+  if (btnMockApproveExp) {
+    btnMockApproveExp.addEventListener('click', () => {
+      const fork = document.querySelector('#pipelineDrawer .pipeline-fork');
+      const mode = fork ? (fork.getAttribute('data-exp-mode') || 'online') : 'online';
+      const isSkip = mode === 'skip';
+      if (fork) fork.setAttribute('data-exp-state', isSkip ? 'skipped' : 'published');
+      const ioaStatus = document.getElementById('ioaResultStatusExp');
+      if (ioaStatus) { ioaStatus.textContent = '已通过'; ioaStatus.className = 'badge ok'; }
+      const badge = document.getElementById('expOnlineBadge');
+      if (badge) {
+        if (isSkip) { badge.textContent = '已批准跳过实验'; }
+        else { badge.textContent = '已发布-实验中'; }
+        badge.className = 'badge ok';
+      }
+      const tip = document.getElementById('expOnlineTip');
+      if (tip) {
+        tip.textContent = isSkip
+          ? '✅ 跳过实验审批已通过 · 可手动进入 ⑦ 全量上线（不会自动跳转）'
+          : '✅ 实验上线审批已通过 · 模板状态「已发布-实验中」· 可手动进入 ⑦ 全量上线';
+      }
+      showToast(isSkip ? '跳过实验审批已通过 · ⑦ 已解锁' : '实验上线审批已通过 · ⑦ 已解锁');
     });
   }
 
