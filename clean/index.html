@@ -1409,7 +1409,7 @@
             // L1 已归档 + L2 idle 状态下点 L2 → 直接拉起 v2 草稿 + toast 提示
             if (isL2 && l1Archived && state === 'idle') {
               e.preventDefault(); e.stopPropagation();
-              // 仅当点击的是 ②（其他 ③④ 节点保持原 confirm 兜底）
+              // 仅当点击的是 ②：直接拉起新一轮草稿
               if (n.id === 'l2Step2') {
                 const toast = (typeof window.showToast === 'function')
                   ? window.showToast
@@ -1418,11 +1418,8 @@
                 window.forkL2();
                 return;
               }
-              const ok = confirm('已发布版本已归档，是否基于它拉起新一轮草稿？');
-              if (ok) {
-                window.forkL2();
-                // forkL2 内已经把 l2Cursor 推到 2，这里不重复触发
-              }
+              // 点击的是 L2 的 ③ 或 ④：草稿版本还没拉起，必须先从 ② 开始
+              alert('草稿版本尚未拉起，③ 模板测试 / ④ 草稿发布暂不可进入。\n\n请先点【② 模板编辑】拉起新一轮草稿（V2）。');
               return;
             }
             // 推进 L2 指针（不动 mainCursor，保留 ⑤⑥⑦⑧ 进度）
