@@ -193,7 +193,6 @@
               </svg>
             </div>
           </div>
-          <a class="hd-vp-detail-link" href="https://tsa.woa.com/domo-admin/union-form-editor?id=1003638" target="_blank" rel="noopener">📄 模板详情页（已发布） ↗</a>
         </div>
 
         <!-- 草稿版本面板：idle 时显示空态，editing/published 时显示渲染 -->
@@ -258,7 +257,6 @@
               </svg>
             </div>
           </div>
-          <a class="hd-vp-detail-link" id="hdVpV2DetailLink" href="https://tsa.woa.com/domo-admin/union-form-editor?id=1003638&draft=1" target="_blank" rel="noopener" hidden>📄 模板详情页（草稿） ↗</a>
         </div>
       </div>
     </div>
@@ -874,7 +872,7 @@
         position: absolute;
         top: calc(100% + 8px);
         right: 0;
-        width: 640px;
+        width: 500px;
         max-width: calc(100vw - 80px);
         background: #fff;
         border: 1px solid #e0e4ec;
@@ -1055,10 +1053,9 @@
 
       /* ---- 渲染预览紧凑版（对标 ② 模板编辑：机型选择 + 渲染 + 预览码） ---- */
       .hd-vp-preview {
-        display: grid;
-        grid-template-columns: 1fr 168px;
+        display: flex;
+        flex-direction: column;
         gap: 12px;
-        align-items: start;
       }
       .hd-vp-canvas-wrap {
         background: #fff;
@@ -1121,31 +1118,15 @@
         background: #fff;
         border: 1px solid #e0e4ec;
         border-radius: 8px;
-        padding: 12px 10px;
+        padding: 10px 14px;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
-        gap: 8px;
-        align-self: start;
+        justify-content: center;
+        gap: 14px;
       }
       .hd-vp-qr-title { font-size: 12px; font-weight: 600; color: #1d2129; }
-      .hd-vp-qr { width: 130px; height: 130px; display: block; border-radius: 4px; }
-      .hd-vp-detail-link {
-        margin-top: 12px;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        padding: 6px 10px;
-        font-size: 12px;
-        color: #3370ff;
-        background: #f0f5ff;
-        border: 1px solid #b9d0ff;
-        border-radius: 4px;
-        text-decoration: none;
-        align-self: flex-start;
-        transition: all .15s;
-      }
-      .hd-vp-detail-link:hover { background: #3370ff; color: #fff; border-color: #3370ff; }
+      .hd-vp-qr { width: 96px; height: 96px; display: block; border-radius: 4px; }
     </style>
 
     <!-- L2 支线状态切换 -->
@@ -1466,7 +1447,6 @@
         var v2EmptyBlock = document.getElementById('hdVpV2EmptyBlock');   // 空态大块
         var v2MetaBlock  = document.getElementById('hdVpV2MetaBlock');    // 有草稿时的 meta 行
         var v2BodyBlock  = document.getElementById('hdVpV2BodyBlock');    // 有草稿时的渲染区
-        var v2DetailLink = document.getElementById('hdVpV2DetailLink');   // 草稿模板详情页链接
 
         function syncV2State() {
           if (!fork) return;
@@ -1476,7 +1456,6 @@
           if (v2EmptyBlock) v2EmptyBlock.hidden = hasDraft;
           if (v2MetaBlock)  v2MetaBlock.hidden  = !hasDraft;
           if (v2BodyBlock)  v2BodyBlock.hidden  = !hasDraft;
-          if (v2DetailLink) v2DetailLink.hidden = !hasDraft;
         }
 
         function openPop() {
