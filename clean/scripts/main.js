@@ -761,6 +761,9 @@
       if (!remark) { showToast('请填写备注'); return; }
       hideDialog('dlgFullOnline');
       showToast('MyOA 全量上线审批单已下发');
+      // 标记全量上线进入审批中
+      const fork = document.querySelector('#pipelineDrawer .pipeline-fork');
+      if (fork) fork.setAttribute('data-full-state', 'pending');
       const ioa = document.getElementById('ioaResultFull');
       if (ioa) ioa.style.display = 'block';
       const r = document.getElementById('ioaResultRemarkFull');
@@ -778,6 +781,40 @@
   const btnUrgeFullMyOA = document.getElementById('btnUrgeFullMyOA');
   if (btnUrgeFullMyOA) {
     btnUrgeFullMyOA.addEventListener('click', () => showToast('已在协作群内 @ 相关人 · MyOA 当前节点审批人已收到提醒'));
+  }
+  // 模拟审批通过 · Demo 用 → 状态变为 published（已全量上线，但还没满 7 天）
+  const btnMockApproveFull = document.getElementById('btnMockApproveFull');
+  if (btnMockApproveFull) {
+    btnMockApproveFull.addEventListener('click', () => {
+      const fork = document.querySelector('#pipelineDrawer .pipeline-fork');
+      if (fork) fork.setAttribute('data-full-state', 'published');
+      const ioaStatus = document.getElementById('ioaResultStatusFull');
+      if (ioaStatus) { ioaStatus.textContent = '已通过'; ioaStatus.className = 'badge ok'; }
+      const badge = document.getElementById('fullOnlineBadge');
+      if (badge) { badge.textContent = '已全量上线'; badge.className = 'badge ok'; }
+      const tip = document.getElementById('fullOnlineTip');
+      if (tip) tip.textContent = '✅ 全量上线审批已通过 · 模板已 100% 投放 · 满 7 天后 ⑧ 成绩单解锁';
+      btnMockApproveFull.disabled = true;
+      btnMockApproveFull.textContent = '✓ 已模拟审批通过';
+      const btnLive7d = document.getElementById('btnMockLive7d');
+      if (btnLive7d) btnLive7d.style.display = '';
+      showToast('全量上线审批已通过 · 等待 7 天数据积累');
+    });
+  }
+  // 模拟已全量 7 天 · Demo 用 → 状态变为 live7d，⑧ 成绩单解锁
+  const btnMockLive7d = document.getElementById('btnMockLive7d');
+  if (btnMockLive7d) {
+    btnMockLive7d.addEventListener('click', () => {
+      const fork = document.querySelector('#pipelineDrawer .pipeline-fork');
+      if (fork) fork.setAttribute('data-full-state', 'live7d');
+      const badge = document.getElementById('fullOnlineBadge');
+      if (badge) { badge.textContent = '已全量 7 天'; badge.className = 'badge ok'; }
+      const tip = document.getElementById('fullOnlineTip');
+      if (tip) tip.textContent = '✅ 已全量上线 7 天 · 成绩单已生成 · 可点击 ⑧ 节点查看';
+      btnMockLive7d.disabled = true;
+      btnMockLive7d.textContent = '✓ 已满 7 天';
+      showToast('已积累 7 天真实曝光数据 · ⑧ 成绩单已解锁');
+    });
   }
 
   // ============ ⑦ 模板实验 · 跳过按钮（弹窗 + 产研审批） ============

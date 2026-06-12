@@ -1459,6 +1459,20 @@
                 return;
               }
             }
+            // ⑧ 成绩单：必须 ⑦ 全量上线审批通过（published）且 已积累 7 天数据（live7d）
+            if (stepNum === 8) {
+              const fullState = stepper.getAttribute('data-full-state') || 'idle';
+              if (fullState === 'idle' || fullState === 'pending') {
+                e.preventDefault(); e.stopPropagation();
+                alert('⑦ 全量上线审批尚未通过，⑧ 成绩单暂不可查看。\n\n请先在【⑦ 全量上线】下发 MyOA 审批单，并等待审批通过。');
+                return;
+              }
+              if (fullState === 'published') {
+                e.preventDefault(); e.stopPropagation();
+                alert('全量上线尚未满 7 天，成绩单还未生成。\n\n模板需积累至少 7 天真实曝光数据后，系统才会自动出第一份成绩单。');
+                return;
+              }
+            }
             // 主线节点（① / L1 / 共用尾段⑤⑥⑦⑧）：推进 mainCursor
             activateNode(n.dataset.step);
           });
@@ -1839,6 +1853,8 @@
             <div class="ioa-result-actions">
               <button class="btn-ghost sm" id="btnUrgeFullMyOA">📣 发群内提醒</button>
               <a class="btn-text sm" href="https://my.woa.com/p2/applyList.html" target="_blank" rel="noopener">前往 MyOA ↗</a>
+              <button class="btn-ghost sm" id="btnMockApproveFull">⚡ 模拟审批通过（Demo）</button>
+              <button class="btn-ghost sm" id="btnMockLive7d" style="display:none;">⏱ 模拟已全量 7 天（Demo）</button>
             </div>
           </div>
         </div>
