@@ -1706,15 +1706,8 @@
 
       <!-- Step 6 · 模板实验（a 实验上线审批 / b 跳转实验平台 / c 在线 adata 数据 / 备用：跳过实验申请） -->
       <div class="step-content" data-step-content="6">
-        <div class="step-content-head with-actions">
+        <div class="step-content-head">
           <h3>⑥ 模板实验</h3>
-          <details class="step-more-menu">
-            <summary class="step-more-trigger" title="更多操作">⋯</summary>
-            <div class="step-more-pop">
-              <button class="step-more-item danger" id="btnSkipExp">↷ 申请跳过本步（产研审批）</button>
-              <div class="step-more-hint muted">异常分支：跳过实验直接进入 ⑦ 全量上线，需产品 + 研发审批通过；与 a 实验上线审批二选一即可解锁 ⑦。</div>
-            </div>
-          </details>
         </div>
 
         <!-- A. 实验上线审批（主路径 · 仿 ⑦ 全量上线 · 产品 + 研发两轮） -->
@@ -1775,6 +1768,16 @@
             <div class="exp-kpi"><div class="ek-label">CVR</div><div class="ek-num" id="adataCvr">20.18%</div></div>
             <div class="exp-kpi"><div class="ek-label">曝光</div><div class="ek-num" id="adataImp">486w</div></div>
             <div class="exp-kpi"><div class="ek-label">eCPM</div><div class="ek-num" id="adataEcpm">¥37.9</div></div>
+          </div>
+        </div>
+
+        <!-- D. 申请跳过实验（异常分支 · 备用通道） -->
+        <div class="card mt-16">
+          <div class="card-title">↷ D. 申请跳过实验 <span class="muted">· 异常分支 · 与 A 实验上线审批二选一</span></div>
+          <div class="card-sub" style="margin-top:6px;">紧急 hotfix / 已有同形态实验数据可复用 / 短期活动周期不足以支持 AB 等场景使用。</div>
+          <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <button class="btn-ghost sm" id="btnSkipExp" style="border-color:#f3a23a;color:#e8821a;">↷ 申请跳过实验（产研审批）</button>
+            <span class="muted" style="font-size:12px;">下发 MyOA · 产品 + 研发两轮通过后 ⑦ 全量上线节点解锁（不会自动跳转）</span>
           </div>
         </div>
 
