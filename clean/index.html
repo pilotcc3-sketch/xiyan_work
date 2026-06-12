@@ -1130,8 +1130,9 @@
           if (onlineSub) onlineSub.innerHTML = '当前模板：<b>开屏-夏日冰镇风（草稿版本）</b> · 状态：<span class="badge wait" id="onlineStatusBadge">未提交</span>';
           if (typeof window.__resetSubmitOnlineBtn === 'function') window.__resetSubmitOnlineBtn();
           // L2 指针重置到 ②（推进 L2 不动主指针，⑤⑥⑦⑧ 进度保留）
+          // reset:true 强制把 l2Cursor 设为 2，避免被"单调推进"逻辑卡在上一轮残留位置
           if (typeof window.__activateStep === 'function') {
-            window.__activateStep('2', { track: 'L2' });
+            window.__activateStep('2', { track: 'L2', reset: true });
           } else {
             apply();
           }

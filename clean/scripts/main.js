@@ -358,17 +358,26 @@
     const isReset = !!(opts && opts.reset);
     // 入口分流：
     //   __refresh === true → 不改任何指针，仅按当前 mainCursor / l2Cursor 重绘
-    //   reset === true     → 强制把 mainCursor 设为 requested（用于打开抽屉切换不同模板）
     //   track === 'L2'     → 只更新 l2Cursor，不动 mainCursor
+    //                        · reset:true → 强制把 l2Cursor 设为 requested（forkL2 新一轮草稿）
+    //                        · 默认       → 单调推进（max(l2Cursor, requested)）
+    //   reset === true     → 强制把 mainCursor 设为 requested（用于打开抽屉切换不同模板）
     //   track === 'main' / null（默认）→ 推进 mainCursor（单调递增，不回退）
     if (isRefresh) {
       // skip：不改指针
+    } else if (track === 'L2') {
+      // L2 节点：clamp 到 [2,4]
+      const clamped = Math.max(2, Math.min(4, requested));
+      if (isReset) {
+        // forkL2 新一轮：强制重置（避免被 max 卡在上一轮残留位置）
+        l2Cursor = clamped;
+      } else {
+        // 单调推进（避免点回 ② 时把 ③ 走过的进度拉回灰态）
+        l2Cursor = Math.max(l2Cursor, clamped);
+      }
     } else if (isReset) {
       mainCursor = Math.max(1, requested);
       l2Cursor = 0;
-    } else if (track === 'L2') {
-      // L2 节点：clamp 到 [2,4]
-      l2Cursor = Math.max(2, Math.min(4, requested));
     } else {
       // 主线节点：单调推进（避免回退导致 ⑤⑥⑦⑧ 进度被拉回）
       // 但允许显式回到 ① 复位（initial = 1）
