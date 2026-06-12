@@ -657,8 +657,8 @@
       showToast('已启动自动化测试 · AI 已生成 case');
       setTimeout(() => {
         btn.disabled = false;
-        btn.textContent = '✓ 测试完成 (24/24)';
-        showToast('测试完成 · 通过率 24/24 · 报告单已生成');
+        btn.textContent = '✓ 测试完成';
+        showToast('测试完成 · 报告单已生成');
       }, 2000);
     });
   }
