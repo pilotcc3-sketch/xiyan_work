@@ -658,6 +658,7 @@
       setTimeout(() => {
         btn.disabled = false;
         btn.textContent = '✓ 测试完成';
+        window.__testPassed = true; // ④ 草稿发布拦截依赖此 flag
         showToast('测试完成 · 报告单已生成');
       }, 2000);
     });

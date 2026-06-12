@@ -1385,13 +1385,11 @@
                 return;
               }
             }
-            // L1 未归档：L1 ④ 必须先完成 ③ 模板测试（mainCursor >= 3）
+            // L1 未归档：L1 ④ 必须先完成 ③ 模板测试（点过「▶ 开始自动化测试」按钮且跑完）
             if (isL1 && !l1Archived && stepNum === 4) {
-              const cursors = (typeof window.__getPipelineCursors === 'function')
-                ? window.__getPipelineCursors() : { mainCursor: 1 };
-              if ((cursors.mainCursor || 1) < 3) {
+              if (!window.__testPassed) {
                 e.preventDefault(); e.stopPropagation();
-                alert('③ 模板测试尚未完成，④ 草稿发布暂不可进入。\n\n请先点【③ 模板测试】跑通自测用例。');
+                alert('③ 模板测试尚未完成，④ 草稿发布暂不可进入。\n\n请先点【③ 模板测试】中的「▶ 开始自动化测试」按钮跑通用例。');
                 return;
               }
             }
@@ -1428,13 +1426,11 @@
                 alert('② 模板编辑尚未启动，③ 模板测试暂不可进入。\n\n请先编辑模板。');
                 return;
               }
-              // L2 ④ 必须先完成 ③ 模板测试（l2Cursor >= 3）
+              // L2 ④ 必须先完成 ③ 模板测试（点过「▶ 开始自动化测试」按钮且跑完）
               if (stepNum === 4) {
-                const cursors = (typeof window.__getPipelineCursors === 'function')
-                  ? window.__getPipelineCursors() : { l2Cursor: 0 };
-                if ((cursors.l2Cursor || 0) < 3) {
+                if (!window.__testPassed) {
                   e.preventDefault(); e.stopPropagation();
-                  alert('③ 模板测试尚未完成，④ 草稿发布暂不可进入。\n\n请先点【③ 模板测试】跑通自测用例。');
+                  alert('③ 模板测试尚未完成，④ 草稿发布暂不可进入。\n\n请先点【③ 模板测试】中的「▶ 开始自动化测试」按钮跑通用例。');
                   return;
                 }
               }
