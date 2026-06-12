@@ -1335,6 +1335,13 @@
           setTimeout(() => { if (!infoTipEl.classList.contains('show')) infoTipEl.hidden = true; }, 220);
         }
 
+        // ② 模板编辑：「打开 iDOMO 编辑器」按钮点击后记录 flag，③ 模板测试节点解锁需此 flag
+        window.__idomoVisited = window.__idomoVisited || false;
+        const btnOpenIdomo = document.getElementById('btnOpenIdomo');
+        if (btnOpenIdomo) {
+          btnOpenIdomo.addEventListener('click', () => { window.__idomoVisited = true; });
+        }
+
         nodes.forEach(n => {
           n.addEventListener('click', (e) => {
             // ① 共用起点（信息卡）：与流转完全解耦
@@ -1368,6 +1375,14 @@
               e.preventDefault(); e.stopPropagation();
               alert('已发布版本归档完成，②③④ 已沉淀。新一轮请走草稿版本（点 L2 行的 ② 模板编辑）。');
               return;
+            }
+            // L1 未归档：L1 ③ 必须先点过「打开 iDOMO 编辑器」
+            if (isL1 && !l1Archived && stepNum === 3) {
+              if (!window.__idomoVisited) {
+                e.preventDefault(); e.stopPropagation();
+                alert('② 模板编辑尚未启动，③ 模板测试暂不可进入。\n\n请先点【② 模板编辑】中的「🎛 打开 iDOMO 编辑器」按钮进入画布编辑。');
+                return;
+              }
             }
             // L1 未归档：L1 ④ 必须先完成 ③ 模板测试（mainCursor >= 3）
             if (isL1 && !l1Archived && stepNum === 4) {
@@ -1406,6 +1421,12 @@
             }
             // 推进 L2 指针（不动 mainCursor，保留 ⑤⑥⑦⑧ 进度）
             if (isL2 && state === 'editing') {
+              // L2 ③ 必须先点过「打开 iDOMO 编辑器」
+              if (stepNum === 3 && !window.__idomoVisited) {
+                e.preventDefault(); e.stopPropagation();
+                alert('② 模板编辑尚未启动，③ 模板测试暂不可进入。\n\n请先点【② 模板编辑】中的「🎛 打开 iDOMO 编辑器」按钮进入画布编辑。');
+                return;
+              }
               // L2 ④ 必须先完成 ③ 模板测试（l2Cursor >= 3）
               if (stepNum === 4) {
                 const cursors = (typeof window.__getPipelineCursors === 'function')
@@ -1551,7 +1572,7 @@
         <div class="card">
           <div class="card-title">🛠 iDOMO 编辑器</div>
           <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-            <a class="btn-primary sm" style="display:inline-block; text-decoration:none;" href="https://tsa.woa.com/domo-admin/union-form-editor?id=1003638" target="_blank" rel="noopener">🎛 打开 iDOMO 编辑器</a>
+            <a class="btn-primary sm" id="btnOpenIdomo" style="display:inline-block; text-decoration:none;" href="https://tsa.woa.com/domo-admin/union-form-editor?id=1003638" target="_blank" rel="noopener">🎛 打开 iDOMO 编辑器</a>
             <span class="muted">最近编辑：6/6 11:42 · DSL 实时同步</span>
           </div>
         </div>
