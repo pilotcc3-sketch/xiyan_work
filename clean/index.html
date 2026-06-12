@@ -1542,7 +1542,7 @@
 
       </div>
 
-      <!-- Step 6 · 模板实验（a 实验上线审批 / b 跳转实验平台 / 备用：跳过实验申请） -->
+      <!-- Step 6 · 模板实验（a 实验上线审批 / b 跳转实验平台 / c 在线 adata 数据 / 备用：跳过实验申请） -->
       <div class="step-content" data-step-content="6">
         <div class="step-content-head with-actions">
           <h3>⑥ 模板实验</h3>
@@ -1596,6 +1596,23 @@
           <div class="card-title">🧪 B. 跳转 TAB 实验平台 <span class="muted">· 在外部平台配置和跑实验</span></div>
           <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
             <a class="btn-primary sm" style="display:inline-block; text-decoration:none;" href="https://tab.woa.com/tab/experiment/list?business=1888&trace_id=96bc672e-96c4-440f-8936-d31d7d53621e&appGroup=abtest" target="_blank" rel="noopener">🧪 跳转 TAB 实验系统</a>
+          </div>
+        </div>
+
+        <!-- C. 模板在线 adata 数据 -->
+        <div class="card mt-16">
+          <div class="card-title">🟢 C. 模板在线 adata 数据 <span class="muted">· 当前模板真实在线数据（非实验平台数据）</span></div>
+          <div class="tab-group sub" role="tablist" id="adataTabs" style="margin-top:12px;">
+            <button class="subtab active" data-adata-tab="d1">昨天</button>
+            <button class="subtab" data-adata-tab="d3">前 3 天</button>
+            <button class="subtab" data-adata-tab="d7">前 7 天</button>
+          </div>
+          <div class="exp-kpi-grid" style="margin-top:12px;">
+            <div class="exp-kpi"><div class="ek-label">消耗</div><div class="ek-num" id="adataCost">¥18.4w</div></div>
+            <div class="exp-kpi"><div class="ek-label">CTR</div><div class="ek-num" id="adataCtr">9.62%</div></div>
+            <div class="exp-kpi"><div class="ek-label">CVR</div><div class="ek-num" id="adataCvr">20.18%</div></div>
+            <div class="exp-kpi"><div class="ek-label">曝光</div><div class="ek-num" id="adataImp">486w</div></div>
+            <div class="exp-kpi"><div class="ek-label">eCPM</div><div class="ek-num" id="adataEcpm">¥37.9</div></div>
           </div>
         </div>
 
