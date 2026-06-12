@@ -1407,12 +1407,13 @@
               alert('④ 草稿发布审批尚未通过，⑤⑥⑦⑧ 暂不可进入。请先完成 ④ 草稿发布的 MyOA 审批。');
               return;
             }
-            // ⑦ 全量上线：必须 ⑥ 模板实验审批通过（published）或 跳过实验审批通过（skipped）才能进
-            if (stepNum === 7) {
+            // ⑦ 全量上线 / ⑧ 成绩单：必须 ⑥ 模板实验审批通过（published）或 跳过实验审批通过（skipped）才能进
+            if (stepNum === 7 || stepNum === 8) {
               const expState = stepper.getAttribute('data-exp-state') || 'idle';
               if (expState !== 'published' && expState !== 'skipped') {
                 e.preventDefault(); e.stopPropagation();
-                alert('⑥ 模板实验尚未完成审批，⑦ 全量上线暂不可进入。\n\n两种解锁方式（二选一）：\n  · 提交「实验上线」MyOA 审批 → 产研两轮通过 → 状态「已发布-实验中」\n  · 申请「跳过实验」MyOA 审批 → 产研两轮通过');
+                const tail = stepNum === 7 ? '⑦ 全量上线' : '⑧ 成绩单';
+                alert('⑥ 模板实验尚未完成审批，' + tail + ' 暂不可进入。\n\n两种解锁方式（二选一）：\n  · 提交「实验上线」MyOA 审批 → 产研两轮通过 → 状态「已发布-实验中」\n  · 申请「跳过实验」MyOA 审批 → 产研两轮通过');
                 return;
               }
             }
