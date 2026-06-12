@@ -1396,6 +1396,16 @@
             }
             // 推进 L2 指针（不动 mainCursor，保留 ⑤⑥⑦⑧ 进度）
             if (isL2 && state === 'editing') {
+              // L2 ④ 必须先完成 ③ 模板测试（l2Cursor >= 3）
+              if (stepNum === 4) {
+                const cursors = (typeof window.__getPipelineCursors === 'function')
+                  ? window.__getPipelineCursors() : { l2Cursor: 0 };
+                if ((cursors.l2Cursor || 0) < 3) {
+                  e.preventDefault(); e.stopPropagation();
+                  alert('③ 模板测试尚未完成，④ 草稿发布暂不可进入。\n\n请先点【③ 模板测试】跑通自测用例。');
+                  return;
+                }
+              }
               activateNode(n.dataset.step, { track: 'L2' });
               return;
             }
