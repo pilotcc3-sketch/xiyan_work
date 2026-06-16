@@ -904,12 +904,6 @@ input { font-family: inherit; }
 .tpl-meta-cell { background: rgba(255,255,255,.6); border-radius: var(--radius-card); padding: var(--sp-2) var(--sp-3); }
 .tmc-label { font-size: var(--fs-cap); color: var(--color-text-2); margin-bottom: 2px; }
 .tmc-val { font-size: var(--fs-body); color: var(--color-text-1); font-weight: 500; }
-.tpl-meta-collab {
-  margin-top: var(--sp-3); padding-top: var(--sp-3);
-  border-top: 1px dashed var(--color-border-2);
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-}
-.tpl-meta-collab .tmc-label { margin-bottom: 0; font-weight: 500; }
 
 .badge.ok { background: var(--color-success-soft); color: var(--color-success); }
 

@@ -946,18 +946,6 @@
 
   // ============ 步骤内跳转 data-jump-step 已下线（环节流转改为达到条件自动推进 + 节点直接交互） ============
 
-  // ============ Step 1 · 一键拉协作群 ============
-  const btnInviteIM = document.getElementById('btnInviteIM');
-  if (btnInviteIM) {
-    btnInviteIM.addEventListener('click', () => {
-      btnInviteIM.disabled = true;
-      btnInviteIM.textContent = '✓ 协作群已建';
-      const tip = document.getElementById('imGroupTip');
-      if (tip) tip.innerHTML = '群名：<b>【模板1003638】夏日冰镇风开屏 · 协作群</b> · 已邀请 产品 / 设计 / 研发 / 测试 / 运营 5 位';
-      showToast('已创建协作群「【模板1003638】夏日冰镇风开屏 · 协作群」');
-    });
-  }
-
   // ============ Step 6 · adata Tab 切换（昨天 / 前 3 天 / 前 7 天）============
   const adataTabs = document.getElementById('adataTabs');
   if (adataTabs) {
