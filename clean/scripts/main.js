@@ -559,23 +559,6 @@
     });
   });
 
-  document.querySelectorAll('[data-report]').forEach(a => {
-    a.addEventListener('click', e => {
-      e.preventDefault();
-      const tplId = a.dataset.report;
-      const row = a.closest('tr');
-      const tplName = row?.querySelector('td:nth-child(2)')?.textContent?.trim() || '当前模板';
-      const stageText = inferStageText(row) || '已上线';
-      document.getElementById('pipelineDrawerTitle').textContent = `模板数据成绩单 · ${tplName}`;
-      document.getElementById('pipelineDrawerSub').textContent =
-        `模板ID：${tplId}`;
-      pipelineDrawer.dataset.stage = stageText;
-      renderReport(tplId, stageText);
-      activateStep('8', { reset: true });
-      showDrawer(pipelineDrawer);
-    });
-  });
-
   document.querySelectorAll('[data-edit]').forEach(a => {
     a.addEventListener('click', e => {
       e.preventDefault();
