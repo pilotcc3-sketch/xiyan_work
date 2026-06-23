@@ -288,11 +288,23 @@
       return;
     }
 
+    // 是否已满 7 天：抽屉 data-full-state 为 'live7d' 才算（默认按 reportData 自带的"已发布-全量"老数据视为已满 7 天）
+    const fork = document.querySelector('#pipelineDrawer .pipeline-fork');
+    const fullState = fork?.getAttribute('data-full-state') || '';
+    // 仅当抽屉处于 published（刚审批通过、还没满 7 天）时显示占位 —；其他场景（live7d / 老数据直接进入）显示真数据
+    const isNotYet7d = fullState === 'published';
+    const PH = '—'; // placeholder
+
     if (empty) empty.style.display = 'none';
     if (full) full.style.display = '';
     if (onlineBadge) {
-      onlineBadge.textContent = `已上线 ${data.onlineDays}`;
-      onlineBadge.className = 'badge ok';
+      if (isNotYet7d) {
+        onlineBadge.textContent = '已全量上线 · 未满 7 天';
+        onlineBadge.className = 'badge wait';
+      } else {
+        onlineBadge.textContent = `已上线 ${data.onlineDays}`;
+        onlineBadge.className = 'badge ok';
+      }
     }
 
     const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
@@ -301,14 +313,14 @@
     set('reportTplId', tplId);
     set('reportScene', data.scene || data.form || '—');
     set('reportOnlineDate', data.onlineDate);
-    set('reportOnlineDays', data.onlineDays);
+    set('reportOnlineDays', isNotYet7d ? '未满 7 天' : data.onlineDays);
 
-    set('rkCost', data.cost);
-    set('rkDailyCost', data.dailyCost || '—');
-    set('rkCtr', data.ctr);
-    set('rkCvr', data.cvr);
-    set('rkImp', data.imp);
-    set('rkEcpm', data.ecpm || '¥20');
+    set('rkCost', isNotYet7d ? PH : data.cost);
+    set('rkDailyCost', isNotYet7d ? PH : (data.dailyCost || '—'));
+    set('rkCtr', isNotYet7d ? PH : data.ctr);
+    set('rkCvr', isNotYet7d ? PH : data.cvr);
+    set('rkImp', isNotYet7d ? PH : data.imp);
+    set('rkEcpm', isNotYet7d ? PH : (data.ecpm || '¥20'));
 
     set('reportSubMeta', `${data.name} · 上线 ${data.onlineDate}`);
 
@@ -326,15 +338,15 @@
       }
     }
 
-    set('reportAnomaly', data.anomaly);
-    set('reportSuggest', data.suggest);
+    set('reportAnomaly', isNotYet7d ? '满 7 天后由系统自动归因输出' : data.anomaly);
+    set('reportSuggest', isNotYet7d ? '满 7 天后由系统自动归因输出' : data.suggest);
 
     set('wecomTplName', data.name);
-    set('wecomCtr', data.ctr);
-    set('wecomCost', data.cost);
-    set('wecomAnomaly', data.anomaly);
-    set('wecomSuggest', data.suggest);
-    set('wecomFoot', `点击查看 · ${data.readers}`);
+    set('wecomCtr', isNotYet7d ? PH : data.ctr);
+    set('wecomCost', isNotYet7d ? PH : data.cost);
+    set('wecomAnomaly', isNotYet7d ? '满 7 天后由系统自动归因输出' : data.anomaly);
+    set('wecomSuggest', isNotYet7d ? '满 7 天后由系统自动归因输出' : data.suggest);
+    set('wecomFoot', isNotYet7d ? '满 7 天后生成成绩单' : `点击查看 · ${data.readers}`);
   }
 
   // ============ 双指针流水线状态机 ============
@@ -553,6 +565,12 @@
       document.getElementById('pipelineDrawerSub').textContent =
         `模板ID：${tplId}`;
       pipelineDrawer.dataset.stage = stageText || '';
+      // 同步抽屉的 data-full-state：已发布-全量 视为已上线满 7 天（live7d）；其它状态保持 idle（无 reportData 走空态）
+      const fork = document.querySelector('#pipelineDrawer .pipeline-fork');
+      if (fork) {
+        if (stageText === '已发布-全量') fork.setAttribute('data-full-state', 'live7d');
+        else fork.setAttribute('data-full-state', 'idle');
+      }
       renderReport(tplId, stageText);
       activateStep(stepNo, { reset: true });
       showDrawer(pipelineDrawer);
@@ -765,7 +783,7 @@
   if (btnUrgeFullMyOA) {
     btnUrgeFullMyOA.addEventListener('click', () => showToast('已在协作群内 @ 相关人 · MyOA 当前节点审批人已收到提醒'));
   }
-  // 模拟审批通过 · Demo 用 → 状态变为 published（已全量上线，但还没满 7 天）
+  // 模拟审批通过 · Demo 用 → 状态变为 published（全量上线审批已通过 · ⑧ 成绩单即可查看；数值列在满 7 天后自动填充）
   const btnMockApproveFull = document.getElementById('btnMockApproveFull');
   if (btnMockApproveFull) {
     btnMockApproveFull.addEventListener('click', () => {
@@ -776,32 +794,15 @@
       const badge = document.getElementById('fullOnlineBadge');
       if (badge) { badge.textContent = '已全量上线'; badge.className = 'badge ok'; }
       const tip = document.getElementById('fullOnlineTip');
-      if (tip) tip.textContent = '✅ 全量上线审批已通过 · 模板已 100% 投放 · 满 7 天后 ⑧ 成绩单解锁';
+      if (tip) tip.textContent = '✅ 全量上线审批已通过 · 模板已 100% 投放 · ⑧ 成绩单已可查看（数值列在满 7 天后自动填充）';
       btnMockApproveFull.disabled = true;
       btnMockApproveFull.textContent = '✓ 已模拟审批通过';
-      const btnLive7d = document.getElementById('btnMockLive7d');
-      if (btnLive7d) btnLive7d.style.display = '';
-      showToast('全量上线审批已通过 · 等待 7 天数据积累');
-    });
-  }
-  // 模拟已全量 7 天 · Demo 用 → 状态变为 live7d，⑧ 成绩单解锁
-  const btnMockLive7d = document.getElementById('btnMockLive7d');
-  if (btnMockLive7d) {
-    btnMockLive7d.addEventListener('click', () => {
-      const fork = document.querySelector('#pipelineDrawer .pipeline-fork');
-      if (fork) fork.setAttribute('data-full-state', 'live7d');
-      const badge = document.getElementById('fullOnlineBadge');
-      if (badge) { badge.textContent = '已全量 7 天'; badge.className = 'badge ok'; }
-      const tip = document.getElementById('fullOnlineTip');
-      if (tip) tip.textContent = '✅ 已全量上线 7 天 · 成绩单已生成 · 可点击 ⑧ 节点查看';
-      btnMockLive7d.disabled = true;
-      btnMockLive7d.textContent = '✓ 已满 7 天';
       // 模板已全量上线 → 回看 ⑥/⑦ 时显示「再改 DSL 需重新提交审批」banner
       const lb6 = document.getElementById('liveBanner6');
       if (lb6) lb6.style.display = '';
       const lb7 = document.getElementById('liveBanner7');
       if (lb7) lb7.style.display = '';
-      showToast('已积累 7 天真实曝光数据 · ⑧ 成绩单已解锁');
+      showToast('全量上线审批已通过 · ⑧ 成绩单已可查看');
     });
   }
 
