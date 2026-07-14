@@ -18,17 +18,23 @@
 |---|---|---|---|
 | 1 | **TAPD 主需求** | https://tapd.woa.com/tapd_fe/20423795/story/detail/1020423795134889990 | 唯一权威的业务背景、痛点、方案、边界。**任何业务问题先看它。** |
 | 2 | **Demo 代码** | `clean/index.html`（单 HTML 文件，内联 JS/CSS） | 所有 UI/交互改动只改这一个文件 |
-| 3 | **Demo 在线演示** | https://pilotcc3-sketch.github.io/xiyan_work/ | 部署后 1-2 分钟自动生效，用于路演、评审、对齐 |
+| 3 | **Demo 在线演示（只读参考）** | https://pilotcc3-sketch.github.io/xiyan_work/ | 前任产品的仓库部署，**仅供查看参考**，你无权 push 到这个仓库 |
 
 **除此之外的一切**（其他 .md、其他 .html、`.codebuddy/`、`legacy*`）都可以先不看。真需要时用户会指路。
+
+# ⚠️ 关于代码仓库（重要）
+
+- 上面第 3 项的演示地址属于**前任产品同学的个人 GitHub 仓库**（`pilotcc3-sketch/xiyan_work`），已经离职移交。
+- **你和当前用户都没有这个仓库的写入权限**。它只作为"当前 demo 长什么样"的**只读参考**。
+- **第一次上手时，先提醒用户：如需持续迭代 demo，请自己 fork 或新建一个 GitHub 仓库**（开启 GitHub Pages），然后把本地代码 push 上去，把远程 `origin` 指向新仓库。**在用户完成这一步之前，任何 `git push` 都不要执行**。
+- 用户建好新仓库后，请他把新的仓库地址和演示链接告诉你，然后**更新本 Prompt 里的"Demo 在线演示"链接**。
 
 # 工作规范
 
 ## Git
 
-- 远程：`github/main`（`git@github.com:pilotcc3-sketch/xiyan_work.git`）
-- 部署：push 到 `main` 即自动通过 GitHub Pages 部署
-- **默认工作方式：demo 改动直接 `git add + commit + push`，不需要问用户"要不要 push"**
+- **默认工作方式（仓库已切换到用户自己的之后）**：demo 改动直接 `git add + commit + push`，不需要问用户"要不要 push"
+- **仓库尚未切换时**：只做本地 `git add + commit`，**不要 push**，push 之前先问用户新仓库地址
 - Commit message 用中文，格式：`feat/fix/chore/docs(模块): 一句话说清改了什么`
   - 例：`feat(设计来源): 表格列从"对应版本"改为"上传时间"`
 
@@ -57,10 +63,11 @@ python3 -m http.server 5180
 
 # 第一次会话该做的事
 
-1. 用 `list_dir` 看一下项目根目录结构，找到 `clean/index.html`
-2. **不要**去读 TAPD 链接（你没有网络工具的话读不了）——**等用户告诉你业务上下文**，或者用户会在具体需求里贴 TAPD 里的片段
-3. 用 `grep` / `read_file` 熟悉 `clean/index.html` 的骨架（可以搜 `step-content` 定位 8 步流水线的 DOM）
-4. 回复用户「已加载上下文，请告诉我要改什么」即可开始
+1. **先确认仓库归属**：告诉用户"当前代码来自前任产品的个人仓库，我不会 push 到那里。请你新建一个 GitHub 仓库（或 fork 原仓库），并把新的仓库地址和 Pages 演示地址告诉我，我再帮你把远程指过去"。
+2. 用 `list_dir` 看一下项目根目录结构，找到 `clean/index.html`
+3. **不要**去读 TAPD 链接（你没有网络工具的话读不了）——**等用户告诉你业务上下文**，或者用户会在具体需求里贴 TAPD 里的片段
+4. 用 `grep` / `read_file` 熟悉 `clean/index.html` 的骨架（可以搜 `step-content` 定位 8 步流水线的 DOM）
+5. 之后就可以正常接需求，按"工作规范"里的分支处理 push（新仓库确认前只 commit 不 push）
 
 # 你不需要做的事
 
