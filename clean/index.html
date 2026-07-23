@@ -1941,35 +1941,43 @@
               ⓘ 口径说明：此处的「流量范围 × 预算范围」为<b>规则圈定的场景画像</b>（用于横向对比的统计口径），<b>非线上当前生效的实际流量×预算</b>。
             </div>
 
-            <!-- 对比表：三列 · 场景 / 二级场景 / 可出流量×可出预算 -->
+            <!-- 对比表：四列 · 对比维度 / 本模板(基准) / 二级场景 / 可出流量×可出预算 -->
+            <div class="muted" style="margin-top:8px; font-size:12px;">
+              说明：以「本模板」为基准，后两列若<span style="color:#00A870; font-weight:600;">高于基准标绿</span>、<span style="color:#F53F3F; font-weight:600;">低于基准标红</span>、持平灰色。
+            </div>
             <table class="form-table" style="margin-top:12px;">
               <thead>
                 <tr>
-                  <th style="width:160px;">场景</th>
-                  <th style="width:180px;">二级场景</th>
+                  <th style="width:160px;">对比维度</th>
+                  <th style="width:170px;">本模板（基准）</th>
+                  <th style="width:170px;">二级场景</th>
                   <th>可出流量 × 可出预算</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><b>本模板</b><div class="muted" style="font-size:12px;">开屏-夏日冰镇风 v1</div></td>
-                  <td>开屏广告</td>
-                  <td>日均曝光 8,000w~1.2亿 × 日预算 30w~50w</td>
+                  <td><b>CTR</b><div class="muted" style="font-size:12px;">点击率</div></td>
+                  <td>9.85%</td>
+                  <td><span style="color:#00A870; font-weight:600;">10.42% ▲</span></td>
+                  <td><span style="color:#F53F3F; font-weight:600;">9.31% ▼</span></td>
                 </tr>
                 <tr>
-                  <td>同场景对照 A</td>
-                  <td>开屏广告</td>
-                  <td>日均曝光 8,000w~1.2亿 × 日预算 30w~50w</td>
+                  <td><b>CVR</b><div class="muted" style="font-size:12px;">转化率</div></td>
+                  <td>20.44%</td>
+                  <td><span style="color:#F53F3F; font-weight:600;">19.10% ▼</span></td>
+                  <td><span style="color:#00A870; font-weight:600;">21.65% ▲</span></td>
                 </tr>
                 <tr>
-                  <td>同场景对照 B</td>
-                  <td>开屏广告</td>
-                  <td>日均曝光 8,000w~1.2亿 × 日预算 30w~50w</td>
+                  <td><b>eCPM</b><div class="muted" style="font-size:12px;">千次曝光收益</div></td>
+                  <td>¥38.6</td>
+                  <td><span style="color:#00A870; font-weight:600;">¥42.1 ▲</span></td>
+                  <td><span style="color:#00A870; font-weight:600;">¥40.3 ▲</span></td>
                 </tr>
                 <tr>
-                  <td>同场景对照 C</td>
-                  <td>开屏广告</td>
-                  <td>日均曝光 8,000w~1.2亿 × 日预算 30w~50w</td>
+                  <td><b>ARPU</b><div class="muted" style="font-size:12px;">人均收入</div></td>
+                  <td>¥2.85</td>
+                  <td><span style="color:#F53F3F; font-weight:600;">¥2.60 ▼</span></td>
+                  <td style="color:var(--color-text-3);">¥2.85 —</td>
                 </tr>
               </tbody>
             </table>
