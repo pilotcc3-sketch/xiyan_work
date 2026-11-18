@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#121419" />
+  <title>留在房间里的东西 — 她妈妈要来</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="landscape-guard" aria-hidden="true">
+    <div class="guard-box">
+      <p class="guard-title">请竖屏握持手机</p>
+      <p class="guard-sub">这是一段站在卧室门口的第一人称夜里片段。</p>
+    </div>
+  </div>
+
+  <main id="app-shell">
+    <section id="phone-stage" aria-label="留在房间里的东西">
+      <header id="top-bar">
+        <div class="clock-cluster">
+          <span id="room-clock" class="clock-time">21:40</span>
+          <span id="arrival-note" class="clock-sub">她妈妈那班高铁快到站了</span>
+        </div>
+        <div class="top-actions">
+          <button id="btn-endings-drawer" class="icon-pill" type="button" title="留下的记录">
+            <span id="endings-count-dot">记录</span>
+          </button>
+          <button id="btn-mute" class="icon-pill" type="button" aria-pressed="false" title="声音开关">
+            <span id="mute-label">有声</span>
+          </button>
+          <button id="btn-haptic" class="icon-pill" type="button" aria-pressed="true" title="触感开关">
+            <span id="haptic-label">触感</span>
+          </button>
+          <button id="btn-restart" class="icon-pill" type="button" title="重新开始本章">重来</button>
+        </div>
+      </header>
+
+      <div id="viewport" tabindex="0">
+        <div id="scene-world" data-zone="desk" data-proximity="normal">
+          <div id="room-bg-layer">
+            <img id="room-bg-img" src="./assets/room-clean-plate-v2.png" alt="合租房间夜景" draggable="false" />
+            <div id="window-light-overlay"></div>
+            <div id="lamp-warm-overlay"></div>
+            <div id="alan-presence-layer" aria-live="polite">
+              <div id="alan-aura"></div>
+              <div id="alan-prop-indicator"></div>
+            </div>
+          </div>
+
+          <div id="drop-zones-layer" aria-hidden="true">
+            <div class="drop-zone" data-drop="keep_place">
+              <span class="drop-title">留回明面</span>
+              <span class="drop-sub">桌面 / 原处</span>
+            </div>
+            <div class="drop-zone" data-drop="put_away">
+              <span class="drop-title">收进暗处</span>
+              <span class="drop-sub">抽屉 / 柜里</span>
+            </div>
+            <div class="drop-zone" data-drop="pack_box">
+              <span class="drop-title">装进纸箱</span>
+              <span class="drop-sub">带走 / 封存</span>
+            </div>
+            <div class="drop-zone" data-drop="to_alan">
+              <span class="drop-title">递向阿岚</span>
+              <span class="drop-sub">茶几 / 她手边</span>
+            </div>
+          </div>
+
+          <button id="alan-zone-btn" type="button" aria-label="观察或靠近阿岚">
+            <span id="alan-state-tag">阿岚正在折毛衣</span>
+          </button>
+
+          <button id="door-threshold-btn" type="button" aria-label="走到门边">
+            <span class="door-tag-title">玄关门边</span>
+            <span id="door-tag-sub" class="door-tag-sub">收拾得差不多了</span>
+          </button>
+
+          <div id="hotspots-layer"></div>
+        </div>
+
+        <div id="opening-line-card" class="spoken-float" role="status" aria-live="polite">
+          <p id="spoken-text">“我妈要来住几天，你那些东西……能不能先收一下？”</p>
+        </div>
+
+        <div id="gesture-coach" class="gesture-coach hidden" aria-hidden="true">
+          <span>轻点拿起 · 长按进入回忆 · 拖动放到位置</span>
+        </div>
+
+        <div id="reaction-strip" aria-live="polite">
+          <p id="reaction-text">客厅只开着落地灯，冰箱在背后低低地响。</p>
+          <button id="btn-undo" class="undo-pill hidden" type="button">撤销刚才的动作</button>
+        </div>
+
+        <nav id="spatial-bar" aria-label="视角与距离">
+          <div class="zone-switch" role="group" aria-label="环视区域">
+            <button id="btn-zone-desk" class="nav-chip active" type="button" data-zone-btn="desk">卧室门边</button>
+            <button id="btn-zone-living" class="nav-chip" type="button" data-zone-btn="living">客厅茶几</button>
+          </div>
+          <div class="proximity-switch">
+            <button id="btn-proximity" class="nav-chip subtle" type="button">走近半步</button>
+            <button id="btn-finish-pack" class="nav-chip accent hidden" type="button">走到门边</button>
+          </div>
+        </nav>
+      </div>
+
+      <section id="inspect-sheet" class="overlay-sheet hidden" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="sheet-backdrop" data-close-inspect="true"></div>
+        <div class="sheet-card">
+          <div class="sheet-top">
+            <div>
+              <p id="inspect-title" class="inspect-title">物品名称</p>
+              <p id="inspect-place" class="inspect-place">所在位置</p>
+            </div>
+            <button id="btn-close-inspect" class="icon-pill" type="button">放回</button>
+          </div>
+
+          <div id="inspect-stage" class="inspect-stage">
+            <div id="inspect-visual" class="inspect-visual"></div>
+            <div id="memory-hold-ring" class="memory-hold-ring" aria-hidden="true">
+              <svg viewBox="0 0 88 88">
+                <circle class="ring-bg" cx="44" cy="44" r="38"></circle>
+                <circle id="ring-progress" class="ring-fg" cx="44" cy="44" r="38"></circle>
+              </svg>
+              <span>触碰旧日</span>
+            </div>
+          </div>
+
+          <div class="inspect-controls-row">
+            <button id="btn-flip-detail" class="secondary-pill" type="button">翻转 / 查看细节</button>
+            <button id="btn-enter-memory" class="memory-pill" type="button">
+              <span id="memory-btn-text">长按或点此进入回忆</span>
+            </button>
+          </div>
+
+          <div id="inspect-detail-box" class="inspect-detail-box">
+            <p id="inspect-detail-text"></p>
+            <p id="inspect-echo-text" class="inspect-echo-text hidden"></p>
+          </div>
+
+          <div class="disposition-block">
+            <p class="disposition-heading">放到哪里（也可直接拖到上方房间）</p>
+            <div id="disposition-list" class="disposition-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="memory-overlay" class="overlay-full hidden" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="memory-vignette"></div>
+        <header class="memory-header">
+          <span id="memory-stamp" class="memory-stamp">旧日片段</span>
+          <button id="btn-skip-memory" class="icon-pill" type="button">跳过回忆</button>
+        </header>
+        <div id="memory-stage" class="memory-stage">
+          <div id="memory-canvas-box" class="memory-canvas-box"></div>
+          <p id="memory-Prompt-hint" class="memory-prompt-hint"></p>
+          <p id="memory-spoken-line" class="memory-spoken-line"></p>
+        </div>
+      </section>
+
+      <section id="threshold-overlay" class="overlay-sheet hidden" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="sheet-backdrop" data-close-threshold="true"></div>
+        <div class="sheet-card threshold-card">
+          <div class="sheet-top">
+            <div>
+              <p class="inspect-title">门边的停顿</p>
+              <p class="inspect-place">电梯在楼下停了一次，房间里安静下来</p>
+            </div>
+            <button id="btn-close-threshold" class="icon-pill" type="button">再看一眼房间</button>
+          </div>
+          <p class="threshold-lead">阿岚把最后一件毛衣叠好，抬头看向你站在的位置。</p>
+          <div id="threshold-actions" class="threshold-actions"></div>
+        </div>
+      </section>
+
+      <section id="ending-overlay" class="overlay-full hidden" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="ending-scroll">
+          <p class="ending-kicker">本章落点 · 《她妈妈要来》</p>
+          <h2 id="ending-title" class="ending-title">《留下》</h2>
+          <div id="ending-scene-box" class="ending-scene-box"></div>
+          <div id="ending-lines" class="ending-lines"></div>
+          <p id="ending-last-action" class="ending-last-action"></p>
+
+          <div class="left-items-section">
+            <p class="left-items-heading">被留下的三样东西</p>
+            <div id="left-items-grid" class="left-items-grid"></div>
+          </div>
+
+          <div class="ending-footer-actions">
+            <button id="btn-play-again" class="primary-pill" type="button">再过一遍这一晚</button>
+            <button id="btn-clear-storage" class="secondary-pill" type="button">清除全部记录</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="archive-overlay" class="overlay-sheet hidden" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="sheet-backdrop" data-close-archive="true"></div>
+        <div class="sheet-card archive-card">
+          <div class="sheet-top">
+            <div>
+              <p class="inspect-title">房间里的痕迹</p>
+              <p class="inspect-place">本地自动保存当前进度、结局与触碰过的旧日</p>
+            </div>
+            <button id="btn-close-archive" class="icon-pill" type="button">关闭</button>
+          </div>
+          <div id="archive-endings-list" class="archive-list"></div>
+          <div class="archive-footer">
+            <button id="btn-archive-reset-run" class="secondary-pill" type="button">重新开始本局</button>
+            <button id="btn-archive-clear-all" class="secondary-pill danger" type="button">清空本地存档</button>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="./js/scene-items.js"></script>
+  <script src="./js/data.js"></script>
+  <script src="./js/audio.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>
