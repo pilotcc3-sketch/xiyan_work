@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e7d8b6">
+  <title>阿斑拆家 · 拆解日常</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="parts.js" defer></script>
+  <script src="furniture.js" defer></script>
+  <script src="targets.js" defer></script>
+  <script src="detail-data.js" defer></script>
+  <script src="game.js" defer></script>
+</head>
+<body>
+  <main class="game">
+    <header class="topbar">
+      <div><p class="eyebrow">A LITTLE CAT'S BIG CURIOSITY</p><h1>阿斑拆家 <span>✳</span></h1></div>
+      <div class="topbar-actions">
+        <button class="text-button" id="archiveButton" type="button">▤ 档案 <span id="progress">0/25</span></button>
+        <button class="text-button" id="nestBackButton" type="button" hidden>返回</button>
+      </div>
+    </header>
+
+    <section class="game-panel" aria-label="小屋游戏">
+      <div class="room-heading">
+        <div><span class="room-number" id="roomNumber">ROOM 01</span><h2 id="roomTitle">厨房与餐桌</h2></div>
+        <span class="room-status" id="roomStatus">午后 · 无人在家</span>
+      </div>
+
+      <div class="room-frame">
+        <div class="room" id="room" aria-label="厨房与餐桌">
+          <svg class="background" viewBox="0 0 400 350" preserveAspectRatio="none" shape-rendering="crispEdges" aria-hidden="true">
+            <rect width="400" height="270" fill="#e8d6ad"/>
+            <path d="M0 0h400v14H0z M0 80h400v3H0z M0 158h400v3H0z M0 236h400v3H0z" fill="#d8c39a"/>
+            <path d="M0 270h400v80H0z" fill="#b67d50"/>
+            <path d="M0 270h400v8H0z M0 303h400v3H0z M0 331h400v3H0z M75 278v25 M255 278v25 M160 306v25 M340 306v25" fill="#945e3e"/>
+            <g id="windowFrame">
+              <path d="M142 26h116v106H142z" fill="#684b36"/>
+              <path d="M149 33h102v92H149z" fill="#b8d4cd"/>
+              <path d="M149 99h102v26H149z" fill="#83a477"/>
+              <path d="M149 108l25-22 18 15 22-24 37 31v17H149z" fill="#648b65"/>
+              <path d="M196 33h8v92h-8z M149 76h102v7H149z" fill="#f7ead1"/>
+              <path d="M130 126h140v8H130z" fill="#79543a"/>
+            </g>
+            <path id="windowCurtains" d="M134 24h16v111h-16z M250 24h16v111h-16z" fill="#bd6d54"/>
+            <g id="kitchenBackground">
+              <g data-fixture="wall_cabinet"><path d="M10 38h106v68H10z" fill="#85583b"/>
+              <path d="M16 44h45v56H16z M65 44h45v56H65z" fill="#c89a68"/>
+              <path d="M53 69h4v8h-4z M69 69h4v8h-4z" fill="#5c422f"/></g>
+              <path d="M10 126h104v54H10z" fill="#f5e5c8"/>
+              <path d="M10 143h104v2H10z M10 161h104v2H10z M36 126v54h-2v-54z M78 126v54h-2v-54z" fill="#dbc5a5"/>
+              <path data-fixture="counter" d="M8 176h110v9H8z" fill="#875c3e"/>
+              <g data-fixture="base_cabinet"><path d="M10 185h106v85H10z" fill="#875c3e"/>
+              <path d="M15 190h45v75H15z M65 190h46v75H65z" fill="#c99d6e"/>
+              <path d="M47 206h6v5h-6z M72 206h6v5h-6z" fill="#694733"/></g>
+              <path d="M285 151h97v7h-97z M292 158h8v112h-8z M367 158h8v112h-8z" fill="#79543a"/>
+              <g data-fixture="jars"><path d="M302 129h17v22h-17z" fill="#78977b"/>
+              <path d="M303 124h15v5h-15z" fill="#d9a653"/>
+              <path d="M347 136h20v15h-20z M351 132h12v4h-12z" fill="#dcbb7d"/></g>
+              <path data-fixture="dining_table" d="M150 231h101v7H150z M162 238h7v42h-7z M233 238h7v42h-7z" fill="#79543a"/>
+              <path d="M174 218h22v13h-22z" fill="#d0a45f"/>
+              <path d="M183 213h8v5h-8z" fill="#759577"/>
+              <g data-fixture="dish"><path d="M212 222h20v9h-20z" fill="#eee2ca"/>
+              <path d="M214 219h17v3h-17z" fill="#ad7654"/></g>
+            </g>
+            <g id="livingBackground" hidden>
+              <g data-fixture="picture"><path d="M14 52h70v64H14z M20 58h58v52H20z" fill="#80573a"/>
+              <path d="M25 63h48v42H25z" fill="#c7d2ae"/>
+              <path d="M27 99l14-14 9 8 9-14 12 20z" fill="#8aa47a"/></g>
+              <path data-fixture="shelf" d="M276 85h108v8H276z M284 93h8v11h-8z M368 93h8v11h-8z" fill="#79543a"/>
+              <g data-fixture="books"><path d="M280 72h12v13h-12z" fill="#bf6d53"/>
+              <path d="M294 66h12v19h-12z" fill="#d3a64f"/></g>
+              <g data-fixture="sofa"><path d="M107 192h186v65H107z" fill="#63846b"/>
+              <path d="M116 184h168v45H116z" fill="#8aaa83"/>
+              <path d="M120 190h77v35h-77z M203 190h77v35h-77z" fill="#a0bb91"/>
+              <path d="M101 215h19v49h-19z M280 215h19v49h-19z" fill="#718e6f"/>
+              <path d="M120 232h75v20h-75z M205 232h75v20h-75z" fill="#94b18a"/>
+              <path d="M127 258h8v15h-8z M265 258h8v15h-8z" fill="#735039"/>
+              <path d="M128 200h24v22h-24z" fill="#dca857"/></g>
+              <g data-fixture="plant"><path d="M353 218h22v52h-22z" fill="#b86951"/>
+              <path d="M361 183h6v37h-6z M345 193h6v24h-6z M375 190h6v28h-6z" fill="#5c8062"/>
+              <path d="M339 183h16v12h-16z M356 171h17v14h-17z M373 180h15v13h-15z" fill="#7c9b6f"/></g>
+              <path data-fixture="side_table" d="M44 228h46v7H44z M50 235h6v35h-6z M79 235h6v35h-6z" fill="#79543a"/>
+            </g>
+            <g data-fixture="rug"><path d="M110 313h180v21H110z M128 306h144v35H128z" fill="#d8a95e"/>
+            <path d="M139 310h122v3H139z M139 332h122v3H139z" fill="#bd8650"/></g>
+          </svg>
+          <div id="objects" class="objects"></div>
+          <div class="cat" id="cat" aria-hidden="true">
+            <svg viewBox="0 0 56 48" shape-rendering="crispEdges">
+              <path d="M8 38H3V24h5v9h4v5z" fill="#63442f"/>
+              <path d="M11 19h5v-5h23v5h5v19h-5v5H15v-5h-4z" fill="#b7824e"/>
+              <path d="M17 17h5v6h-5z M28 15h5v7h-5z M38 20h5v6h-5z M14 29h5v6h-5z M25 26h5v7h-5z M36 30h5v6h-5z" fill="#63442f"/>
+              <path d="M29 5h5V1h6v7h5V1h6v13h3v13H27V13h2z" fill="#bd8b57"/>
+              <path d="M32 5h4v6h-4z M45 5h4v6h-4z M38 8h5v5h-5z" fill="#664430"/>
+              <path d="M32 15h5v4h-5z M45 15h5v4h-5z" fill="#58744d"/>
+              <path d="M38 22h5v3h-5z M36 25h9v3h-9z" fill="#f2dec0"/>
+              <path d="M37 21h4v2h-4z" fill="#b7675a"/>
+              <path d="M15 38h9v5h-9z M33 38h9v5h-9z" fill="#f2dec0"/>
+              <path d="M28 28h20v4H28z" fill="#b95040"/>
+            </svg>
+          </div>
+          <div class="reaction" id="reaction" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="room-tabs" role="group" aria-label="切换房间">
+          <button class="room-tab active" type="button" data-room="kitchen" aria-pressed="true">01 厨房</button>
+          <button class="room-tab" type="button" data-room="living" aria-pressed="false">02 客厅</button>
+        </div>
+        <p id="hint">点击闪烁的物品，阿斑会去拆开它。</p>
+      </div>
+    </section>
+    <footer>一间有人生活的小屋 · 从家具到日用品 <span>🐾</span></footer>
+  </main>
+
+  <div class="overlay intro-overlay" id="intro">
+    <section class="intro-card" aria-labelledby="introTitle">
+      <div class="intro-art">
+        <svg class="cottage" viewBox="0 0 120 100" shape-rendering="crispEdges" aria-label="森林里的黑色独栋小屋">
+          <path fill="#85a584" d="M0 72h120v28H0z"/>
+          <path fill="#405d4b" d="M4 25h12v55H4z M0 38h20v30H0z M98 18h12v60H98z M92 30h25v35H92z"/>
+          <path fill="#393e36" d="M16 52h88v34H16z"/>
+          <path fill="#694e3d" d="M10 53h100v-7h-8v-7h-9v-7h-9v-7h-9v-7H59v7h-9v7h-9v7h-9v7h-9v7z"/>
+          <path fill="#f2ead7" d="M17 51h86v4H17z M64 57h17v29H64z M31 58h18v17H31z"/>
+          <path fill="#86aaa1" d="M34 61h12v11H34z"/>
+          <path fill="#7d674e" d="M68 61h9v25h-9z M19 86h84v5H19z"/>
+        </svg>
+        <div class="photo"><img src="assets/cat.png" alt="狸花猫阿斑"></div><span>THIS IS 阿斑 ↗</span>
+      </div>
+      <p class="eyebrow">A CAT'S GUIDE TO EVERYDAY THINGS</p>
+      <h2 id="introTitle">拆开看看，<br><em>日常的里面。</em></h2>
+      <p class="intro-copy">阿斑拆完小屋，主人回家了。<br>一起寻找零件，修好这些日常用品吧。</p>
+      <ol class="instructions"><li>点击黄色发光点，拆解或查看物品</li><li>查看拆装零件和只能观察的结构</li><li>拖动零件拼回原样；缺件可去猫窝找</li></ol>
+      <button class="primary" id="startButton" type="button">进入小屋 <span>→</span></button>
+      <p class="fine">图解为简化示意，不同产品结构可能不同。</p>
+    </section>
+  </div>
+
+  <div class="overlay" id="detailOverlay" hidden>
+    <section class="detail" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+      <div class="detail-heading">
+        <div><p class="eyebrow" id="detailNumber"></p><h2 id="detailTitle"></h2></div>
+        <button class="close" id="closeDetail" type="button" aria-label="关闭拆解图">×</button>
+      </div>
+      <p class="detail-intro" id="detailIntro"></p>
+      <div class="blueprint">
+        <div class="blueprint-head"><span>EXPLODED VIEW</span><span>零件分解示意</span></div>
+        <div class="exploded" id="exploded" aria-label="零件图，可左右滑动翻页"></div>
+        <div class="exploded-pages" id="diagramPagination" hidden><button type="button" id="diagramPrevious" aria-label="上一组零件">←</button><span id="diagramPage"></span><button type="button" id="diagramNext" aria-label="下一组零件">→</button></div>
+      </div>
+      <div class="part-view">
+        <div class="part-navigation">
+          <button class="part-arrow" id="previousPart" type="button" aria-label="上一个零件">←</button>
+          <span id="partCounter"></span>
+          <button class="part-arrow" id="nextPart" type="button" aria-label="下一个零件">→</button>
+        </div>
+        <div id="parts" class="parts" aria-live="polite"></div>
+      </div>
+      <div class="principle"><b>工作原理</b><p id="principle"></p></div>
+      <div class="detail-actions">
+        <button class="secondary" id="assembleButton" type="button">动手组装 ↗</button>
+        <button class="primary" id="continueButton" type="button">回到小屋 →</button>
+      </div>
+    </section>
+    <section class="assembly" role="dialog" aria-modal="true" aria-labelledby="assemblyTitle" hidden>
+      <div class="detail-heading"><div><p class="eyebrow">REBUILD / 动手组装</p><h2 id="assemblyTitle"></h2></div><button class="close" id="closeAssembly" type="button" aria-label="返回解构图">×</button></div>
+      <p class="assembly-instruction" id="assemblyMessage" aria-live="polite">主人回家了，把零件拖到对应轮廓附近。</p>
+      <div class="assembly-board">
+        <div class="assembly-caption">主人修理工作台 <span id="assemblyCount">0 / 4</span></div>
+        <div class="assembly-canvas" id="assemblyCanvas" aria-label="自由拼装工作台">
+          <div class="assembly-guide" id="assemblyGuide" aria-hidden="true"></div>
+          <span class="canvas-hint">拖到对应的虚线轮廓附近，自动吸附</span>
+        </div>
+        <div class="assembly-quick-actions">
+          <button type="button" id="installPiece">吸附到位</button>
+          <button type="button" id="removePiece">移回零件区</button>
+          <button type="button" id="assemblyToolsToggle" aria-expanded="false" aria-controls="assemblyTools">调整工具 ▾</button>
+        </div>
+        <div class="assembly-tools-anchor">
+          <div class="assembly-tools" id="assemblyTools" hidden>
+            <div class="layer-controls">
+              <button type="button" id="moveLeft" aria-label="左移零件">←</button>
+              <button type="button" id="moveUp" aria-label="上移零件">↑</button>
+              <button type="button" id="moveDown" aria-label="下移零件">↓</button>
+              <button type="button" id="moveRight" aria-label="右移零件">→</button>
+              <button type="button" id="layerDown">下移一层</button>
+              <button type="button" id="layerUp">上移一层</button>
+            </div>
+            <div class="layer-controls transform-controls">
+              <button type="button" id="scaleDown">缩小 −</button>
+              <button type="button" id="scaleUp">放大 +</button>
+              <button type="button" id="rotateLeft">左转 ↶</button>
+              <button type="button" id="rotateRight">右转 ↷</button>
+            </div>
+          </div>
+        </div>
+        <div class="assembly-caption">可安装零件 <span id="assemblyPageLabel">拖动或点击选择</span></div>
+        <div class="assembly-pieces" id="assemblyPieces"></div>
+        <div class="assembly-pages"><button type="button" id="assemblyPrevious">← 上一组</button><span id="assemblyPage"></span><button type="button" id="assemblyNext">下一组 →</button></div>
+      </div>
+      <div class="repair-result" id="repairResult" role="status" hidden>✦ 全部零件已安装，物品已修好！</div>
+      <button class="nest-shortcut" id="assemblyNest" type="button" hidden>缺少零件，去猫窝找找 →</button>
+      <div class="detail-actions"><button class="secondary" id="resetAssembly" type="button">清空工作台</button><button class="primary" id="backToDetail" type="button">保存并返回 →</button></div>
+    </section>
+  </div>
+
+  <div class="overlay" id="archiveOverlay" hidden>
+    <section class="archive" role="dialog" aria-modal="true" aria-labelledby="archiveTitle">
+      <div class="detail-heading"><div><p class="eyebrow">FIELD NOTES</p><h2 id="archiveTitle">阿斑的拆解档案</h2></div><button class="close" id="closeArchive" type="button" aria-label="关闭档案">×</button></div>
+      <p class="detail-intro" id="archiveIntro"></p>
+      <div class="archive-grid" id="archiveGrid"></div>
+      <div class="archive-pages"><button type="button" id="archivePrevious">← 上一页</button><span id="archivePage"></span><button type="button" id="archiveNext">下一页 →</button></div>
+      <button class="secondary full" id="resetButton" type="button">重置所有进度</button>
+    </section>
+  </div>
+
+  <div class="overlay" id="nestOverlay" hidden>
+    <section class="nest-panel" role="dialog" aria-modal="true" aria-labelledby="nestTitle">
+      <div class="detail-heading"><div><p class="eyebrow">A BAN'S SECRET STASH</p><h2 id="nestTitle">阿斑的小窝</h2></div><button class="close" id="closeNest" type="button" aria-label="关闭猫窝">×</button></div>
+      <p class="nest-intro">阿斑把喜欢的小零件藏在垫子底下。点击“取回”送回对应物品。</p>
+      <div class="nest-illustration" aria-hidden="true"><span>🐾</span><span>✦</span><span>🐟</span><span>✧</span></div>
+      <div class="nest-list" id="nestList"></div>
+      <div class="archive-pages"><button type="button" id="nestPrevious">← 上一页</button><span id="nestPage"></span><button type="button" id="nestNext">下一页 →</button></div>
+      <button class="primary full" id="nestDone" type="button">回去继续修理 →</button>
+    </section>
+  </div>
+
+  <div class="overlay" id="resetOverlay" hidden>
+    <section class="reset-panel" role="alertdialog" aria-modal="true" aria-labelledby="resetTitle" aria-describedby="resetDescription">
+      <p class="eyebrow">START OVER</p><h2 id="resetTitle">重置所有进度？</h2>
+      <p id="resetDescription">将清除拆解档案、修复和组装进度、猫窝里的零件及相关存档。小屋会恢复初始状态，此操作无法撤销。</p>
+      <div class="detail-actions"><button class="secondary" id="cancelReset" type="button">取消</button><button class="primary" id="confirmReset" type="button">确认重置</button></div>
+    </section>
+  </div>
+
+  <div class="overlay" id="endingOverlay" hidden>
+    <section class="ending" role="dialog" aria-modal="true" aria-labelledby="endingTitle">
+      <p class="eyebrow">ARCHIVE COMPLETE</p><div class="ending-paw">✳</div>
+      <h2 id="endingTitle">小屋又完整啦。</h2>
+      <p>从一地零件到熟悉的家，主人和阿斑一起找回了日常。</p>
+      <p class="ending-note">阿斑：下次……我会轻一点的。</p>
+      <button class="primary full" id="endingButton" type="button">回到小屋 →</button>
+    </section>
+  </div>
+</body>
+</html>
