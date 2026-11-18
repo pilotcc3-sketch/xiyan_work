@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f1f0e8">
+  <title>信号之外｜移动版</title>
+  <style>
+    :root{--ink:#202927;--muted:#7c8983;--paper:#f1f0e8;--card:#fffefa;--line:#dedfd5;--moss:#8da778;--deep:#182522;--rose:#d77c75;--mono:ui-monospace,SFMono-Regular,Menlo,monospace;--sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Helvetica Neue",sans-serif;--serif:Georgia,"Noto Serif SC",serif}
+    *{box-sizing:border-box}html{background:#dfe2da}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);min-height:100vh}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #86a2d5;outline-offset:2px}
+    .masthead{max-width:1250px;margin:auto;padding:22px 28px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.1em}.brand-mark{width:28px;height:28px;display:grid;place-items:center;border:1px solid #8ba17c;border-radius:50%;color:#718865;font:10px var(--mono)}.safety-tag{font:9px var(--mono);letter-spacing:.04em;color:#78847e}
+    .intro{max-width:1250px;margin:0 auto;padding:0 28px 22px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:20px}.intro .eyebrow{font:9px var(--mono);letter-spacing:.18em;color:#71816f}.intro h1{font:500 clamp(28px,4vw,44px)/1.15 var(--serif);letter-spacing:-.05em;margin:7px 0}.intro p{max-width:650px;color:#596660;font-size:12px;line-height:1.75;margin:0}.case-code{align-self:center;border:1px solid #d6d9cf;border-radius:8px;padding:9px 11px;color:#77847a;font:9px var(--mono);white-space:nowrap}
+    .game-layout{max-width:1250px;margin:0 auto;padding:0 28px 50px;display:grid;grid-template-columns:minmax(220px,1fr) minmax(330px,390px) minmax(230px,1fr);align-items:start;gap:22px}.panel{background:#faf9f4;border:1px solid #dedfd6;border-radius:15px;padding:16px;box-shadow:0 7px 24px #26342b08}.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}.panel-head h2{font:500 17px var(--serif);margin:0}.eyebrow{font:9px var(--mono);letter-spacing:.12em;color:#849087}.brief-card{font-size:11px;line-height:1.85;color:#59655e}.brief-card strong{color:#2c3933}.people-list{display:grid;gap:8px;margin-top:13px}.person-card{border:1px solid #e2e3da;border-radius:10px;background:#fffefa;padding:10px}.person-card strong{font-size:11px}.person-card span{display:block;color:#839087;font-size:9px;margin-top:3px}.case-note{margin-top:12px;border-left:2px solid #d5a99b;padding:3px 0 3px 9px;color:#7f726a;font-size:9px;line-height:1.6}
+    .phone-stage{display:flex;justify-content:center}.phone{width:min(100%,385px);height:714px;position:relative;border:6px solid #252c2a;border-radius:38px;padding:0 5px 7px;background:#111715;box-shadow:0 18px 48px #18252228,inset 0 0 0 1px #ffffff26}.phone:before{content:"";position:absolute;left:-9px;top:90px;width:3px;height:48px;border-radius:3px 0 0 3px;background:#69726d;box-shadow:0 62px #69726d}.phone:after{content:"";position:absolute;right:-9px;top:120px;width:3px;height:72px;border-radius:0 3px 3px 0;background:#69726d}.dynamic-island{position:absolute;z-index:5;left:50%;top:7px;transform:translateX(-50%);width:84px;height:20px;border-radius:99px;background:#070908}.statusbar{height:31px;position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:0 15px;color:#29322d;font-size:9px;font-weight:700}.status-icons{font-size:9px;letter-spacing:.08em}.phone-screen{height:664px;overflow:hidden;border-radius:0 0 29px 29px;background:#f6f7f2;position:relative}.home-screen{height:100%;padding:8px 13px 25px;display:flex;flex-direction:column;overflow:hidden;background:linear-gradient(155deg,#d7e0d1,#e7dfc9 56%,#b8c7bd);position:relative}.home-screen:before,.home-screen:after{content:"";position:absolute;border:1px solid #ffffff66;border-radius:50%;pointer-events:none}.home-screen:before{width:370px;height:370px;right:-230px;top:100px}.home-screen:after{width:270px;height:270px;right:-190px;top:145px}.home-date{position:relative;z-index:1;text-align:center;color:#fbfcf7;text-shadow:0 1px 8px #3144374d;margin:4px 0 10px}.home-date strong{display:block;font:300 38px/1 var(--sans);letter-spacing:-.06em}.home-date span{font-size:10px}.notice{position:relative;z-index:1;border:1px solid #ffffff9c;border-radius:13px;background:#f8f9f2dc;backdrop-filter:blur(14px);padding:8px 10px;margin:0 0 8px;text-align:left;box-shadow:0 5px 12px #26352b10}.notice small{color:#7f8b82;font:8px var(--mono)}.notice strong{display:block;font-size:10px;margin:3px 0 1px}.notice span{font-size:9px;color:#68736c;line-height:1.45}.app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 4px;align-content:start;position:relative;z-index:1;margin-top:4px}.app-icon{min-width:0;min-height:55px;border:0;padding:0;background:none;color:#28322e;display:flex;flex-direction:column;align-items:center;gap:3px}.app-tile{position:relative;width:43px;height:43px;border-radius:13px;display:grid;place-items:center;font-size:20px;box-shadow:inset 0 1px #ffffff88,0 3px 8px #1b2b2014}.app-icon:active .app-tile{transform:scale(.94)}.app-label{font-size:8px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;max-width:64px}.lock-mark{position:absolute;right:-3px;bottom:-3px;width:15px;height:15px;border:1px solid #d9ddd5;border-radius:50%;display:grid;place-items:center;background:#fff;color:#58665d;font:9px var(--sans)}.dock{position:absolute;left:12px;right:12px;bottom:28px;z-index:2;display:flex;justify-content:space-around;padding:7px 0;border:1px solid #ffffff80;border-radius:18px;background:#eef2e8a8;backdrop-filter:blur(12px)}.dock .app-tile{width:36px;height:36px;border-radius:11px}.home-bar{position:absolute;z-index:7;bottom:3px;left:50%;transform:translateX(-50%);width:74px;height:4px;border-radius:4px;background:#1f2925;border:0;padding:0}
+    .app-page{position:absolute;inset:0;display:none;background:#f7f8f4;z-index:4}.app-page.open{display:flex;flex-direction:column;animation:open-app .16s ease-out}@keyframes open-app{from{opacity:.7;transform:scale(.985)}to{opacity:1;transform:scale(1)}}.app-head{height:45px;flex:none;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:4px 14px;border-bottom:1px solid #e5e8e0;background:#f7f8f4ee}.app-back,.app-action{border:0;background:transparent;color:#4381b8;font-size:10px;padding:5px 0}.app-action{text-align:right}.app-title{font-size:12px;font-weight:650;text-align:center}.app-content{min-height:0;flex:1;overflow:auto;padding:11px 14px 12px;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#c5cdc4 transparent}.app-tabs{display:flex;gap:14px;overflow:auto;white-space:nowrap;padding:0 0 8px;margin-bottom:9px;border-bottom:1px solid #e6e8e1}.app-tab{flex:none;border:0;background:transparent;color:#87928a;padding:0;font-size:9px}.app-tab.active{color:#3478b8;font-weight:700}.section-title{font-size:9px;color:#8b958f;letter-spacing:.08em;margin:12px 0 5px}.row{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;border:0;border-bottom:1px solid #e8ebe5;background:transparent;color:#35413a;padding:10px 2px;font-size:10px}.row small{display:block;color:#89938d;font-size:8px;margin-top:3px}.row b{font-size:10px}.chevron{font-size:15px;color:#adb6ae}.message-card,.soft-card,.timeline-card{background:#fff;border:1px solid #e6e9e2;border-radius:11px;padding:10px;margin:7px 0;color:#4b5950;font-size:10px;line-height:1.65}.message-meta{font:8px var(--mono);color:#8b968e;margin-bottom:4px}.bubble{max-width:88%;padding:8px 9px;margin:6px 0;border:1px solid #e8ebe5;border-radius:10px;background:#fff;font-size:9px;line-height:1.6;color:#46534b}.bubble.mine{margin-left:auto;background:#e1efd4;border-color:#e1efd4}.hint{color:#87938a;font-size:8px;line-height:1.6}.app-button{width:100%;min-height:38px;margin-top:8px;border:1px solid #dce4d5;border-radius:9px;background:#edf4e5;color:#4b6542;font-size:10px;font-weight:600}.app-button.secondary{background:#fff;color:#55716e;border-color:#e3e8e1}.search-field{width:100%;border:0;border-radius:9px;background:#e9ece8;padding:9px 11px;font-size:10px;outline:none}.search-field:focus{box-shadow:0 0 0 2px #8ba8cf}.pin-panel{text-align:center;padding:24px 12px}.pin-icon{width:55px;height:55px;border-radius:17px;margin:0 auto 12px;display:grid;place-items:center;background:#e9eee4;font-size:22px}.pin-panel h3{font:500 16px var(--serif);margin:5px}.pin-panel p{font-size:9px;color:#76827a;line-height:1.7}.pin-input{width:150px;border:1px solid #dce2d9;background:#fff;border-radius:9px;padding:10px;text-align:center;letter-spacing:.35em;font:14px var(--mono)}.pin-error{height:16px;color:#c86155;font-size:9px}.mini-map{height:100px;border:1px solid #d8e2d6;border-radius:10px;margin:9px 0;background-color:#e4eadf;background-image:linear-gradient(35deg,transparent 47%,#fff 48%,#fff 51%,transparent 52%),linear-gradient(145deg,transparent 38%,#c8d8c7 39%,#c8d8c7 44%,transparent 45%);position:relative;overflow:hidden}.mini-map:after{content:"●";position:absolute;left:57%;top:38%;color:#cc6655;font-size:17px}.transfer-amount{font:500 24px var(--serif);color:#34443a;text-align:center;margin:8px}.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:8px 0}.photo-thumb{min-height:70px;border-radius:6px;background:linear-gradient(145deg,#829684,#d0c4a8 52%,#60746b);display:grid;place-items:center;color:#ffffffe0;font-size:8px;border:0}.proof-list{display:grid;gap:7px}.proof-card{padding:9px;border:1px solid #e2e5dc;border-radius:9px;background:#fff}.proof-card strong{display:block;font-size:10px}.proof-card p{margin:4px 0 0;font-size:8px;line-height:1.55;color:#738078}.evidence-panel h2,.answer-panel h2{font:500 17px var(--serif);margin:0}.evidence-count{font:9px var(--mono);color:#7d8980}.evidence-empty{border:1px dashed #ccd2c7;border-radius:10px;padding:12px;color:#87928a;font-size:9px;line-height:1.6}.evidence-item{background:#fffefa;border:1px solid #e4e6dd;border-radius:10px;padding:9px}.evidence-item small{color:#859187;font:8px var(--mono)}.evidence-item strong{display:block;margin:4px 0;font-size:10px}.evidence-item p{margin:0;color:#66726a;font-size:8px;line-height:1.55}.candidate{width:100%;display:flex;align-items:center;gap:8px;text-align:left;border:1px solid #e2e5dc;border-radius:9px;background:#fffefa;color:#49574f;padding:9px;margin:6px 0;font-size:10px}.candidate.selected{background:#e8f0df;border-color:#8fa57a;box-shadow:inset 0 0 0 1px #8fa57a}.candidate .radio{width:14px;height:14px;border:1px solid #a6b0a7;border-radius:50%;flex:none}.candidate.selected .radio{border:4px solid #668451}.report{width:100%;min-height:42px;border:0;border-radius:9px;background:#1d2b26;color:#edf3e4;font-weight:650;font-size:10px;margin-top:7px}.result-modal{position:fixed;inset:0;z-index:50;display:none;place-items:center;padding:16px;background:#0d1715eF}.result-modal.show{display:grid}.result-card{width:min(460px,100%);padding:22px;border:1px solid #ffffff30;border-radius:14px;background:var(--paper)}.result-card h2{font:500 25px var(--serif);margin:9px 0}.result-card p{font-size:11px;line-height:1.8;color:#5c6961}.result-card button{border:0;background:#1d2b26;color:#eff4e9;border-radius:8px;padding:10px 14px;font-size:10px}
+    .side-panel{display:grid;gap:14px}.toast{position:fixed;z-index:60;left:50%;bottom:20px;transform:translate(-50%,14px);opacity:0;pointer-events:none;padding:9px 13px;border-radius:99px;background:#20302a;color:#f1f3eb;font-size:9px;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}.welcome{position:fixed;z-index:100;inset:0;background:radial-gradient(ellipse at 50% 40%,#344a40,#172522 65%,#101a18);display:grid;place-items:center;padding:20px}.welcome.hidden{display:none}.welcome-card{width:min(480px,100%);text-align:center;color:#eff2e9}.welcome-mark{width:38px;height:38px;margin:0 auto 14px;border:1px solid #b9d19c;border-radius:50%;display:grid;place-items:center;color:#cce4a4;font:11px var(--mono)}.welcome-kicker{font:9px var(--mono);letter-spacing:.16em;color:#bfd99d}.welcome h1{font:500 clamp(31px,7vw,44px)/1.28 var(--serif);margin:12px 0;letter-spacing:-.04em}.welcome p{max-width:360px;margin:0 auto;color:#c1ccc2;font-size:11px;line-height:1.8}.welcome-warning{margin:14px auto 0!important;color:#9eaaa0!important;font-size:8px!important}.welcome-actions{display:grid;gap:8px;margin:21px auto 0;max-width:300px}.welcome-actions button{min-height:43px;border-radius:10px;font-size:10px;font-weight:650}.welcome-start{border:0;background:#d5e9ad;color:#24342c}.welcome-skip{border:1px solid #ffffff35;background:#ffffff08;color:#e7ede3}
+    @media(max-width:1040px){.game-layout{grid-template-columns:minmax(0,1fr) minmax(330px,390px);max-width:850px}.side-panel{grid-column:1/-1;grid-template-columns:1fr 1fr}.case-panel{grid-column:1/-1}}
+    @media(max-width:720px){.masthead{padding:14px 15px 8px}.safety-tag{font-size:7px}.intro{display:block;padding:0 15px 15px}.intro h1{font-size:27px}.intro p{font-size:10px}.case-code{display:none}.game-layout{display:flex;flex-direction:column;gap:12px;padding:0 12px 30px}.case-panel{order:0;width:100%;padding:12px}.phone-stage{order:1;width:100%}.side-panel{order:2;width:100%;display:grid;grid-template-columns:1fr}.phone{width:min(100%,390px);height:714px}.phone-screen{height:664px}.panel{padding:13px}.evidence-panel h2,.answer-panel h2{font-size:15px}}
+    @media(min-width:1200px){.game-layout{grid-template-columns:minmax(230px,1fr) 390px minmax(260px,1.05fr)}.case-panel{position:sticky;top:14px}.side-panel{position:sticky;top:14px}}
+    html{background:#17211e}
+    body.mobile-only{width:100%;max-width:430px;min-height:100dvh;margin:0 auto;position:relative;overflow-x:hidden;background:var(--paper);box-shadow:0 0 0 1px #ffffff12,0 0 48px #0008}
+    body.mobile-only .masthead{max-width:430px;padding:14px 15px 8px}
+    body.mobile-only .safety-tag{font-size:7px}
+    body.mobile-only .intro{display:block;padding:0 15px 15px}
+    body.mobile-only .intro h1{font-size:27px}
+    body.mobile-only .intro p{font-size:10px;line-height:1.7}
+    body.mobile-only .case-code{display:none}
+    body.mobile-only .game-layout{display:flex;flex-direction:column;gap:12px;padding:0 12px 30px}
+    body.mobile-only .case-panel{order:0;width:100%;padding:12px}
+    body.mobile-only .phone-stage{order:1;width:100%}
+    body.mobile-only .side-panel{order:2;width:100%;display:grid;grid-template-columns:1fr}
+    body.mobile-only .phone{width:min(100%,393px);height:auto;aspect-ratio:393 / 852;display:flex;flex-direction:column}
+    body.mobile-only .phone-screen{height:664px}
+    body.mobile-only .panel{padding:13px}
+    body.mobile-only .evidence-panel h2,body.mobile-only .answer-panel h2{font-size:15px}
+    body.mobile-only .welcome{left:50%;right:auto;width:min(100vw,430px);height:100dvh;transform:translateX(-50%);border-left:1px solid #ffffff12;border-right:1px solid #ffffff12}
+    body.mobile-only .welcome-card{width:min(390px,100%)}
+    body.mobile-only .result-modal{padding:12px}
+    body.mobile-only .result-card{width:100%;max-width:430px}
+    body.mobile-only .phone{overflow:hidden;border:6px solid #1a211f;border-radius:42px;background:#101412;padding:0 5px 7px;box-shadow:0 22px 55px #15221c35,inset 0 0 0 1px #ffffff24}
+    body.mobile-only .phone:before{left:-9px;top:105px;height:42px;box-shadow:0 55px #69726d,0 95px #69726d}
+    body.mobile-only .phone:after{right:-9px;top:132px;height:68px}
+    body.mobile-only .dynamic-island{width:108px;height:27px;top:6px;box-shadow:inset 0 0 0 1px #151a18}
+    body.mobile-only .dynamic-island i{position:absolute;right:8px;top:8px;width:8px;height:8px;border-radius:50%;background:#172019;box-shadow:inset 0 0 0 1px #26372c}
+    body.mobile-only .statusbar{height:34px;padding:0 15px 0 17px;display:grid;grid-template-columns:1fr 108px 1fr;align-items:center;font-size:10px;font-weight:700;color:#202a25}
+    body.mobile-only .statusbar>span:first-child{justify-self:start}
+    body.mobile-only .island-space{height:1px}
+    body.mobile-only .status-icons{justify-self:end;display:flex;align-items:center;gap:4px;font:600 9px var(--sans);letter-spacing:0}
+    body.mobile-only .status-icons svg{width:15px;height:13px}
+    body.mobile-only .status-battery{width:19px;height:10px;border:1px solid currentColor;border-radius:3px;padding:1px;position:relative;margin-left:1px}
+    body.mobile-only .status-battery:before{content:"";position:absolute;right:-3px;top:2px;width:2px;height:4px;background:currentColor;border-radius:0 2px 2px 0}
+    body.mobile-only .status-battery i{display:block;width:75%;height:100%;border-radius:1px;background:currentColor}
+    body.mobile-only .phone-screen{height:auto;min-height:0;flex:1;overflow:hidden;border-radius:0 0 29px 29px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+    body.mobile-only .lock-screen{position:absolute;inset:0;z-index:6;display:flex;flex-direction:column;align-items:center;overflow:hidden;background:linear-gradient(155deg,#9eb4a2 0%,#c5c3aa 47%,#8c9f95 100%);color:#fff}
+    body.mobile-only .lock-screen:before,body.mobile-only .lock-screen:after{content:"";position:absolute;border:1px solid #ffffff55;border-radius:50%;pointer-events:none}
+    body.mobile-only .lock-screen:before{width:460px;height:460px;right:-250px;top:220px}
+    body.mobile-only .lock-screen:after{width:350px;height:350px;right:-180px;top:270px}
+    body.mobile-only .lock-wallpaper{width:100%;height:100%;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;padding:63px 15px 15px}
+    body.mobile-only .lock-date{font-size:11px;font-weight:550;color:#fff;text-shadow:0 1px 8px #344b3d77}
+    body.mobile-only .lock-time{font:300 72px/.98 var(--sans);letter-spacing:-.08em;margin:10px 0 4px;text-shadow:0 1px 12px #344b3d55}
+    body.mobile-only .face-icon{width:25px;height:25px;border:1px solid #ffffffa8;border-radius:50%;display:grid;place-items:center;font-size:13px;margin:7px 0 10px;color:white}
+    body.mobile-only .lock-notifications{width:100%;display:grid;gap:6px;margin-top:3px}
+    body.mobile-only .lock-notice{width:100%;min-height:56px;border:1px solid #ffffff88;border-radius:14px;background:#f6f7f0d9;backdrop-filter:blur(18px);display:grid;grid-template-columns:22px 1fr auto;align-items:start;gap:8px;text-align:left;padding:8px 9px;color:#303b34;box-shadow:0 4px 12px #23332910}
+    body.mobile-only .notice-app{width:21px;height:21px;border-radius:6px;display:grid;place-items:center;background:#637c62;color:white;font-size:11px}
+    body.mobile-only .wechat-app{background:#55b96e}
+    body.mobile-only .food-app{background:#ee8c51}
+    body.mobile-only .lock-notice small{display:block;color:#78837b;font:7px var(--mono);margin-bottom:3px}
+    body.mobile-only .lock-notice b{display:block;font:650 9px var(--sans);margin-bottom:2px}
+    body.mobile-only .lock-notice em{display:block;font:8px/1.4 var(--sans);font-style:normal;color:#657168}
+    body.mobile-only .lock-notice>i{font:7px var(--mono);font-style:normal;color:#95a097}
+    body.mobile-only .lock-shortcuts{display:flex;justify-content:space-between;width:100%;margin-top:auto;padding:0 10px 7px}
+    body.mobile-only .lock-shortcuts button{width:38px;height:38px;border:1px solid #ffffff54;border-radius:50%;background:#14201e55;color:#fff;font-size:16px;backdrop-filter:blur(12px)}
+    body.mobile-only .lock-shortcuts button.on{background:#f8f8f1;color:#26332c}
+    body.mobile-only .face-unlock{border:0;background:transparent;color:#ffffffd9;font-size:8px;padding:4px 12px 17px;text-shadow:0 1px 5px #263c2f}
+    body.mobile-only .home-screen{position:absolute;inset:0;height:100%;min-height:100%;padding:8px 13px 25px;display:flex;flex-direction:column;overflow:hidden}
+    body.mobile-only .home-widgets{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:1px 0 7px}
+    body.mobile-only .home-widget{height:69px;padding:7px 8px;text-align:left;border:1px solid #ffffff83;border-radius:12px;background:#f6f7f0c9;backdrop-filter:blur(12px);color:#354138;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+    body.mobile-only .home-widget small{font:7px var(--mono);color:#738077}
+    body.mobile-only .home-widget strong{font:500 20px var(--sans);line-height:1}
+    body.mobile-only .home-widget span{font:7px/1.3 var(--sans);color:#69756d;white-space:nowrap}
+    body.mobile-only .calendar-widget strong{font:500 19px var(--serif);color:#445b40}
+    body.mobile-only .home-pages{position:relative;z-index:1;flex:1;min-height:0}
+    body.mobile-only .home-page{display:none;height:100%;overflow:hidden}
+    body.mobile-only .home-page.active{display:block}
+    body.mobile-only .home-page .app-grid{margin-top:4px;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 4px}
+    body.mobile-only .page-dots{position:relative;z-index:2;display:flex;justify-content:center;gap:5px;margin:4px 0 3px}
+    body.mobile-only .page-dots button{width:5px;height:5px;border:0;border-radius:50%;padding:0;background:#ffffff85}
+    body.mobile-only .page-dots button.selected{background:#fff}
+    body.mobile-only .dock{position:absolute;left:12px;right:12px;bottom:28px;z-index:3;display:flex;justify-content:space-around;padding:7px 0;border:1px solid #ffffff80;border-radius:18px;background:#eef2e8a8;backdrop-filter:blur(12px)}
+    body.mobile-only .dock .app-tile{width:36px;height:36px;border-radius:11px}
+    body.mobile-only .app-page{position:absolute;inset:0;z-index:7;overflow:hidden;display:none;background:#f7f8f4}
+    body.mobile-only .app-page.open{display:flex;flex-direction:column}
+    body.mobile-only .app-head{height:49px;flex:none;padding:4px 13px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;background:#f7f8f4f2;backdrop-filter:blur(18px);border-bottom:1px solid #e5e8e0}
+    body.mobile-only .app-back{font-size:10px;color:#287bc1}
+    body.mobile-only .app-back span{font-size:20px;vertical-align:-2px}
+    body.mobile-only .app-title{font-size:12px;font-weight:650}
+    body.mobile-only .app-action{font-size:12px;color:#287bc1}
+    body.mobile-only .app-content{flex:1;min-height:0;overflow-y:auto;padding:12px 14px 14px;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#c5cdc4 transparent}
+    body.mobile-only .app-tabbar{height:52px;flex:none;display:flex;align-items:center;justify-content:space-around;gap:2px;padding:3px 4px 5px;border-top:1px solid #e3e6df;background:#f7f8f4}
+    body.mobile-only .app-tabbar button{flex:1;min-height:38px;border:0;background:transparent;color:#88948c;font:8px var(--sans);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+    body.mobile-only .app-tabbar button i{font:13px var(--sans);font-style:normal}
+    body.mobile-only .app-tabbar button.active{color:#3680bf}
+    body.mobile-only .system-overlay{position:absolute;inset:0;z-index:12;display:none;overflow:auto;padding:47px 14px 22px;background:#dce4e0ef;color:#24302a;backdrop-filter:blur(24px)}
+    body.mobile-only .system-overlay.open{display:block}
+    body.mobile-only .overlay-grabber{position:absolute;top:7px;left:50%;transform:translateX(-50%);width:37px;height:4px;border-radius:4px;background:#58675e66}
+    body.mobile-only .cc-title{font:650 13px var(--sans);margin:0 0 12px}
+    body.mobile-only .cc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    body.mobile-only .cc-toggle{height:64px;border:1px solid #ffffffa0;border-radius:13px;background:#eff2ef;color:#39463e;text-align:left;padding:8px 10px;box-shadow:0 3px 8px #26342b0b}
+    body.mobile-only .cc-toggle i{display:grid;place-items:center;width:25px;height:25px;border-radius:50%;margin-bottom:3px;background:#dfe5e0;font-style:normal;font-size:13px}
+    body.mobile-only .cc-toggle span{font-size:8px}
+    body.mobile-only .cc-toggle.on{background:#5185c2;color:#fff}
+    body.mobile-only .cc-toggle.on i{background:#ffffff33;color:#fff}
+    body.mobile-only .cc-slider{height:65px;display:flex;align-items:center;gap:8px;border:1px solid #ffffffb0;border-radius:13px;background:#f2f4f1;margin-top:8px;padding:0 10px;font-size:12px}
+    body.mobile-only .cc-slider input{flex:1;accent-color:#7895b9}
+    body.mobile-only .cc-slider b{font-size:8px;color:#708078}
+    body.mobile-only .cc-foot{text-align:center;margin-top:13px;color:#738077;font-size:8px}
+    body.mobile-only .notification-center{background:#dce3deed}
+    body.mobile-only .nc-time{font:300 41px/1 var(--sans);letter-spacing:-.06em;margin:4px 0 15px}
+    body.mobile-only .nc-time small{display:block;font:10px var(--sans);letter-spacing:0;margin:6px 0 0}
+    body.mobile-only .nc-group{background:#f2f4f0b8;border:1px solid #ffffffaa;border-radius:15px;padding:10px}
+    body.mobile-only .nc-group-title{display:flex;justify-content:space-between;align-items:center;font:600 9px var(--sans);margin-bottom:7px}
+    body.mobile-only .nc-group-title button{border:0;background:transparent;color:#3478b8;font-size:8px}
+    body.mobile-only .phone-screen.system-control-open,body.mobile-only .phone-screen.system-notification-open{touch-action:none}
+    body.mobile-only .home-date{display:flex;align-items:center;justify-content:space-between;text-align:left;margin:5px 3px 8px;color:#f9fbf6;text-shadow:0 1px 7px #31443766;font-size:9px}
+    body.mobile-only .home-date strong{display:none}
+    body.mobile-only .home-date span{font-size:10px;font-weight:600}
+    body.mobile-only .home-date small{font:7px var(--mono);opacity:.9}
+    body.mobile-only .home-widgets{gap:7px;margin:0 0 5px}
+    body.mobile-only .home-widget{height:61px;padding:6px 8px}
+    body.mobile-only .home-widget strong{font-size:19px}
+    body.mobile-only .home-screen>.app-grid{flex:1;min-height:0;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));grid-auto-rows:unset;gap:0 3px;align-content:stretch;margin:1px 0 0}
+    body.mobile-only .home-screen>.app-grid .app-icon{height:100%;min-height:0;justify-content:center;gap:4px}
+    body.mobile-only .home-screen>.app-grid .app-tile{width:clamp(28px,8.85vw,35px);height:clamp(28px,8.85vw,35px);border-radius:10px;font-size:16px}
+    body.mobile-only .home-screen>.app-grid .app-label{font-size:8px;max-width:68px}
+    body.mobile-only .home-screen{padding-bottom:108px}
+    body.mobile-only .dock .app-tile{width:clamp(27px,8.1vw,33px);height:clamp(27px,8.1vw,33px);border-radius:9px;font-size:14px}
+    body.mobile-only .dock .app-label{font-size:7px}
+    body.mobile-only .lock-mark{width:11px;height:11px;right:-2px;bottom:-2px;font-size:7px}
+    body.mobile-only .lock-shortcuts button{font-size:12px}
+    body.mobile-only .app-tabbar button i{font-size:10px}
+    .phone.locked .home-bar{background:#fff;box-shadow:0 1px 4px #0004}
+    .dynamic-island{width:108px;height:27px;top:6px;box-shadow:inset 0 0 0 1px #151a18}
+    .dynamic-island i{position:absolute;right:8px;top:8px;width:8px;height:8px;border-radius:50%;background:#172019;box-shadow:inset 0 0 0 1px #26372c}
+    .statusbar{height:34px;padding:0 15px 0 17px;display:grid;grid-template-columns:1fr 108px 1fr;align-items:center;font-size:10px;font-weight:700;color:#202a25}
+    .statusbar>span:first-child{justify-self:start}.island-space{height:1px}.status-icons{justify-self:end;display:flex;align-items:center;gap:4px;font:600 9px var(--sans);letter-spacing:0}.status-icons svg{width:15px;height:13px}.status-battery{width:19px;height:10px;border:1px solid currentColor;border-radius:3px;padding:1px;position:relative;margin-left:1px}.status-battery:before{content:"";position:absolute;right:-3px;top:2px;width:2px;height:4px;background:currentColor;border-radius:0 2px 2px 0}.status-battery i{display:block;width:75%;height:100%;border-radius:1px;background:currentColor}
+    .phone-screen{height:661px;overflow:hidden;border-radius:0 0 29px 29px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+    .lock-screen{position:absolute;inset:0;z-index:6;display:flex;flex-direction:column;align-items:center;overflow:hidden;background:linear-gradient(155deg,#9eb4a2 0%,#c5c3aa 47%,#8c9f95 100%);color:#fff}
+    .lock-screen:before,.lock-screen:after{content:"";position:absolute;border:1px solid #ffffff55;border-radius:50%;pointer-events:none}.lock-screen:before{width:460px;height:460px;right:-250px;top:220px}.lock-screen:after{width:350px;height:350px;right:-180px;top:270px}
+    .lock-wallpaper{width:100%;height:100%;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;padding:70px 15px 18px}.lock-date{font-size:11px;font-weight:550;color:#fff;text-shadow:0 1px 8px #344b3d77}.lock-time{font:300 74px/.98 var(--sans);letter-spacing:-.08em;margin:10px 0 4px;text-shadow:0 1px 12px #344b3d55}.face-icon{width:25px;height:25px;border:1px solid #ffffffa8;border-radius:50%;display:grid;place-items:center;font-size:13px;margin:7px 0 10px;color:white}
+    .lock-notifications{width:100%;display:grid;gap:6px;margin-top:3px}.lock-notice{width:100%;min-height:56px;border:1px solid #ffffff88;border-radius:14px;background:#f6f7f0d9;backdrop-filter:blur(18px);display:grid;grid-template-columns:22px 1fr auto;align-items:start;gap:8px;text-align:left;padding:8px 9px;color:#303b34;box-shadow:0 4px 12px #23332910}.notice-app{width:21px;height:21px;border-radius:6px;display:grid;place-items:center;background:#637c62;color:white;font-size:11px}.notice-app.wechat-app{background:#55b96e}.notice-app.food-app{background:#ee8c51}.lock-notice small{display:block;color:#78837b;font:7px var(--mono);margin-bottom:3px}.lock-notice b{display:block;font:650 9px var(--sans);margin-bottom:2px}.lock-notice em{display:block;font:8px/1.4 var(--sans);font-style:normal;color:#657168}.lock-notice>i{font:7px var(--mono);font-style:normal;color:#95a097}
+    .lock-shortcuts{display:flex;justify-content:space-between;width:100%;margin-top:auto;padding:0 10px 7px}.lock-shortcuts button{width:38px;height:38px;border:1px solid #ffffff54;border-radius:50%;background:#14201e55;color:#fff;font-size:16px;backdrop-filter:blur(12px)}.face-unlock{border:0;background:transparent;color:#ffffffd9;font-size:8px;padding:4px 12px 17px;text-shadow:0 1px 5px #263c2f}
+    .home-widgets{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:1px 0 7px}.home-widget{height:69px;padding:7px 8px;text-align:left;border:1px solid #ffffff83;border-radius:12px;background:#f6f7f0c9;backdrop-filter:blur(12px);color:#354138;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}.home-widget small{font:7px var(--mono);color:#738077}.home-widget strong{font:500 20px var(--sans);line-height:1}.home-widget span{font:7px/1.3 var(--sans);color:#69756d;white-space:nowrap}.calendar-widget strong{font:500 19px var(--serif);color:#445b40}
+    .page-dots{position:relative;z-index:1;display:flex;justify-content:center;gap:5px;margin:4px 0 3px}.page-dots i{width:4px;height:4px;border-radius:50%;background:#ffffff85}.page-dots i.selected{background:#fff}
+    .home-screen{position:absolute;inset:0;height:100%;min-height:100%;padding:8px 13px 25px}
+    .app-page{inset:0;z-index:7;overflow:hidden}.app-head{height:49px;padding:4px 13px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;background:#f7f8f4f2;backdrop-filter:blur(18px);border-bottom:1px solid #e5e8e0}.app-back{font-size:10px;color:#287bc1}.app-back span{font-size:20px;vertical-align:-2px}.app-title{font-size:12px;font-weight:650}.app-action{font-size:12px;color:#287bc1}.app-content{flex:1;min-height:0;overflow-y:auto;padding:12px 14px 14px;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#c5cdc4 transparent}.app-tabbar{height:52px;flex:none;display:flex;align-items:center;justify-content:space-around;gap:2px;padding:3px 4px 5px;border-top:1px solid #e3e6df;background:#f7f8f4}.app-tabbar button{flex:1;min-height:38px;border:0;background:transparent;color:#88948c;font:8px var(--sans);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.app-tabbar button i{font:13px var(--sans);font-style:normal}.app-tabbar button.active{color:#3680bf}
+    .system-overlay{position:absolute;inset:0;z-index:12;display:none;overflow:auto;padding:47px 14px 22px;background:#dce4e0eF;color:#24302a;backdrop-filter:blur(24px);animation:system-sheet .18s ease-out}.system-overlay.open{display:block}@keyframes system-sheet{from{opacity:.5;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}.overlay-grabber{position:absolute;top:7px;left:50%;transform:translateX(-50%);width:37px;height:4px;border-radius:4px;background:#58675e66}.cc-title{font:650 13px var(--sans);margin:0 0 12px}.cc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.cc-toggle{height:64px;border:1px solid #ffffffa0;border-radius:13px;background:#eff2ef;color:#39463e;text-align:left;padding:8px 10px;box-shadow:0 3px 8px #26342b0b}.cc-toggle i{display:grid;place-items:center;width:25px;height:25px;border-radius:50%;margin-bottom:3px;background:#dfe5e0;font-style:normal;font-size:13px}.cc-toggle span{font-size:8px}.cc-toggle.on{background:#5185c2;color:#fff}.cc-toggle.on i{background:#ffffff33;color:#fff}.cc-slider{height:65px;display:flex;align-items:center;gap:8px;border:1px solid #ffffffb0;border-radius:13px;background:#f2f4f1;margin-top:8px;padding:0 10px;font-size:12px}.cc-slider input{flex:1;accent-color:#7895b9}.cc-slider b{font-size:8px;color:#708078}.cc-foot{text-align:center;margin-top:13px;color:#738077;font-size:8px}.notification-center{background:#dce3deed}.nc-time{font:300 41px/1 var(--sans);letter-spacing:-.06em;margin:4px 0 15px}.nc-time small{display:block;font:10px var(--sans);letter-spacing:0;margin:6px 0 0}.nc-group{background:#f2f4f0b8;border:1px solid #ffffffaa;border-radius:15px;padding:10px}.nc-group-title{display:flex;justify-content:space-between;align-items:center;font:600 9px var(--sans);margin-bottom:7px}.nc-group-title button{border:0;background:transparent;color:#3478b8;font-size:8px}
+    .phone-screen.system-control-open,.phone-screen.system-notification-open{touch-action:none}
+    body.mobile-only .intro{padding:0 15px 8px}
+    body.mobile-only .intro h1{font-size:24px;line-height:1.18;margin:5px 0}
+    body.mobile-only .intro p{font-size:9px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+    body.mobile-only .case-info-toggle{display:inline-flex;align-items:center;gap:5px;margin-top:5px;padding:4px 0;border:0;background:transparent;color:#638052;font-size:8px}
+    body.mobile-only .game-layout{gap:0;padding:0 12px 20px}
+    body.mobile-only .phone-stage{order:0;width:100%;margin:0 auto}
+    body.mobile-only .case-panel{display:none;order:1;width:100%;margin-top:12px}
+    body.mobile-only .case-panel.open{display:block}
+    body.mobile-only .side-panel{order:2;margin-top:12px}
+    body.mobile-only .phone{width:min(100%,393px,35.8vh);width:min(100%,393px,35.8svh);height:auto;aspect-ratio:393 / 852}
+    @media(max-height:720px){body.mobile-only .phone{width:min(100%,393px,35.8vh);width:min(100%,393px,35.8svh)}body.mobile-only .home-widgets{display:none}body.mobile-only .home-date{margin-bottom:3px}body.mobile-only .home-screen{padding-bottom:92px}body.mobile-only .home-screen>.app-grid .app-tile{width:clamp(26px,7.9vw,30px);height:clamp(26px,7.9vw,30px);border-radius:8px;font-size:14px}body.mobile-only .home-screen>.app-grid .app-label{font-size:7px}body.mobile-only .lock-wallpaper{padding-top:38px}body.mobile-only .lock-time{font-size:60px}}
+    body.mobile-only{height:100dvh;max-height:100dvh;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+    body.mobile-only .masthead{height:38px;min-height:38px;flex:none;padding:0 13px}
+    body.mobile-only .intro{height:72px;max-height:72px;flex:none;padding:4px 13px 5px;overflow:hidden}
+    body.mobile-only .intro h1{font-size:17px;line-height:1.12;margin:3px 0}
+    body.mobile-only .intro p{font-size:8px;line-height:1.35;-webkit-line-clamp:2;margin:2px 0}
+    body.mobile-only .intro .eyebrow{font-size:7px}
+    body.mobile-only .case-info-toggle{display:none}
+    body.mobile-only .game-layout{display:block;flex:1;min-height:0;width:100%;max-width:430px;margin:0 auto;overflow:hidden;padding:0 8px}
+    body.mobile-only .game-layout>.phone-stage{display:none;height:100%;width:100%;align-items:center;justify-content:center;margin:0}
+    body.mobile-only[data-mobile-view="phone"] .game-layout>.phone-stage{display:flex}
+    body.mobile-only .phone{width:auto;height:100%;max-width:100%;min-height:0;aspect-ratio:393 / 852}
+    body.mobile-only .phone-screen{height:auto;min-height:0;flex:1;container-type:inline-size}
+    body.mobile-only .game-layout>.case-panel{display:none;height:100%;max-height:100%;overflow-y:auto;position:relative;top:auto;margin:0;padding:12px}
+    body.mobile-only[data-mobile-view="case"] .game-layout>.case-panel{display:block}
+    body.mobile-only .game-layout>.side-panel{display:none;height:100%;max-height:100%;overflow-y:auto;position:relative;top:auto;grid-template-columns:1fr;gap:10px}
+    body.mobile-only[data-mobile-view="evidence"] .game-layout>.side-panel,body.mobile-only[data-mobile-view="answer"] .game-layout>.side-panel{display:block}
+    body.mobile-only[data-mobile-view="evidence"] .side-panel>.answer-panel{display:none}
+    body.mobile-only[data-mobile-view="answer"] .side-panel>.evidence-panel{display:none}
+    body.mobile-only .side-panel>.panel{margin:4px 0}
+    body.mobile-only .mobile-game-tabs{height:calc(54px + env(safe-area-inset-bottom));min-height:54px;flex:none;display:flex;justify-content:space-around;align-items:center;padding:4px 8px calc(4px + env(safe-area-inset-bottom));border-top:1px solid #dfe2d8;background:#fbfaf5;box-shadow:0 -5px 16px #2029270c}
+    body.mobile-only .mobile-game-tabs button{flex:1;height:43px;border:0;border-radius:9px;background:transparent;color:#829087;font:8px var(--sans);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+    body.mobile-only .mobile-game-tabs button i{font:14px var(--sans);font-style:normal}
+    body.mobile-only .mobile-game-tabs button.active{color:#4d7545;background:#edf3e7}
+    body.mobile-only .result-modal{left:50%;right:auto;width:min(100vw,430px);height:100dvh;transform:translateX(-50%);padding:12px}
+    body.mobile-only .result-card{max-height:90%;overflow:auto}
+    body.mobile-only .welcome{height:100dvh}
+    body.mobile-only .game-layout>.phone-stage{align-items:center}
+    body.mobile-only .phone{height:100%;max-height:100%;width:auto;max-width:100%;aspect-ratio:393 / 852;flex:none;transform:scale(.9);transform-origin:center center}
+    body.mobile-only .phone-screen{height:auto;min-height:0;flex:1}
+    body.mobile-only .app-content{font-size:11px;line-height:1.8;padding:14px 15px 16px}
+    body.mobile-only .app-content .soft-card,body.mobile-only .app-content .timeline-card,body.mobile-only .app-content .message-card{font-size:11px;line-height:1.8;padding:12px}
+    body.mobile-only .app-content .bubble{font-size:10px;line-height:1.8;padding:9px 10px}
+    body.mobile-only .app-content .message-meta{font-size:9px;margin-bottom:6px}
+    body.mobile-only .app-content .row{font-size:11px;padding:12px 3px}
+    body.mobile-only .app-content .row b{font-size:11px}
+    body.mobile-only .app-content .row small,body.mobile-only .app-content .hint{font-size:9px;line-height:1.65}
+    body.mobile-only .app-content .section-title{font-size:10px;margin:14px 0 7px}
+    body.mobile-only .app-content .app-button{min-height:42px;font-size:11px}
+    body.mobile-only .evidence-item{padding:12px}
+    body.mobile-only .evidence-item strong{font-size:11px}
+    body.mobile-only .evidence-item p{font-size:9px;line-height:1.7}
+    body.mobile-only .toast{bottom:calc(62px + env(safe-area-inset-bottom));}
+    @supports(width:1cqi){body.mobile-only .home-screen>.app-grid .app-tile{width:clamp(22px,12.5cqi,35px);height:clamp(22px,12.5cqi,35px);font-size:clamp(12px,5.4cqi,19px)}body.mobile-only .dock .app-tile{width:clamp(20px,11cqi,30px);height:clamp(20px,11cqi,30px);font-size:clamp(11px,4.8cqi,16px)}}
+    @media(max-height:720px){body.mobile-only .home-screen>.app-grid .app-tile{width:clamp(26px,7.9vw,30px);height:clamp(26px,7.9vw,30px);border-radius:8px;font-size:14px}body.mobile-only .home-screen>.app-grid .app-label{font-size:7px}.dock .app-tile{width:clamp(24px,7.3vw,28px);height:clamp(24px,7.3vw,28px)}}
+    body.mobile-only .intro h1{font-size:18px}
+    body.mobile-only .intro p{font-size:9px;line-height:1.5}
+    body.mobile-only .person-card strong{font-size:12px}
+    body.mobile-only .person-card span,body.mobile-only .person-card p,body.mobile-only .case-note{font-size:10px;line-height:1.7}
+    body.mobile-only .story-event{font-size:9px;line-height:1.65}
+    body.mobile-only .evidence-item strong{font-size:11px}
+    body.mobile-only .evidence-item p{font-size:9px;line-height:1.7}
+    body.mobile-only .home-screen{padding-bottom:82px}
+    body.mobile-only .dock{padding:5px 0}
+    body.mobile-only .dock .app-icon{min-height:0;gap:2px}
+    @supports(width:1cqi){body.mobile-only .home-screen>.app-grid .app-tile{width:clamp(19px,12.5cqi,35px);height:clamp(19px,12.5cqi,35px);font-size:clamp(10px,5.4cqi,19px)}body.mobile-only .dock .app-tile{width:clamp(18px,11cqi,30px);height:clamp(18px,11cqi,30px);font-size:clamp(9px,4.8cqi,16px)}}
+    @media(max-height:720px){body.mobile-only .home-screen{padding-bottom:80px}body.mobile-only .home-screen>.app-grid .app-label{font-size:6px}body.mobile-only .dock .app-icon{min-height:0}}
+    .person-card p{font-size:9px;line-height:1.6;color:#66736b;margin:7px 0 0}
+    .case-timeline{margin-top:12px;padding:11px;border:1px solid #e1e4db;border-radius:10px;background:#fffefa}
+    .case-timeline h3{font:500 13px var(--serif);margin:0 0 7px}
+    .story-event{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:start;column-gap:10px;padding:6px 0;border-top:1px solid #edf0e9;font-size:8px;line-height:1.5;color:#657168}
+    .story-event time{display:block;white-space:nowrap;font:8px/1.5 var(--mono);color:#8c978e}
+    .story-event span{min-width:0;overflow-wrap:anywhere}
+    .chapter-choices{display:grid;gap:6px;margin:9px 0 10px}.chapter-choice{display:grid;grid-template-columns:32px 1fr;align-items:center;gap:8px;width:100%;border:1px solid #e0e4da;border-radius:9px;background:#fffefa;color:#445149;text-align:left;padding:8px}.chapter-choice.active{border-color:#8aa475;background:#edf3e6}.chapter-number{font:9px var(--mono);color:#84917f}.chapter-choice strong{display:block;font:600 10px var(--sans)}.chapter-choice small{display:block;font:8px/1.4 var(--sans);color:#849087;margin-top:2px}.chapter-summary{font-size:10px;line-height:1.8;color:#56645b}
+    body.mobile-only .app-content button.soft-card{display:block;width:100%;font-family:var(--sans);text-align:left;cursor:pointer}
+    .mobile-game-tabs .tab-label{position:relative;display:inline-flex;align-items:center;gap:3px}
+    body.mobile-only .app-back{height:32px;display:inline-flex;align-items:center;justify-self:start;gap:4px;line-height:1;white-space:nowrap;padding:0;text-align:left}
+    body.mobile-only .app-back svg{display:block;width:10px;height:14px;flex:none;overflow:visible}
+    body.mobile-only .app-back svg path{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+    body.mobile-only .app-back span{display:block;font-size:10px;line-height:1;vertical-align:baseline}
+    body.mobile-only .app-content button.timeline-card{display:block;width:100%;font-family:var(--sans);text-align:left;cursor:pointer}
+    .record-glyph{display:grid;place-items:center;float:right;width:35px;height:35px;margin:0 0 5px 9px;border-radius:9px;background:linear-gradient(145deg,#829684,#d0c4a8 52%,#60746b);color:#fff;font-size:16px}
+    .detail-meta{display:grid;gap:5px;margin-top:11px;padding-top:9px;border-top:1px solid #e8ebe5;color:#7c8980;font-size:9px}
+    .mobile-game-tabs .tab-count{display:none;min-width:14px;height:14px;padding:0 4px;border-radius:99px;background:#d76b5f;color:white;font:7px/14px var(--mono)}
+    .mobile-game-tabs .tab-count.visible{display:inline-block}
+    .mobile-only .toast{display:flex;align-items:center;gap:8px}
+    .mobile-only .toast button{border:0;border-radius:99px;background:#dce9cb;color:#33462c;padding:5px 8px;font-size:8px;font-weight:650}
+    body.mobile-only .person-card p{font-size:9px;line-height:1.6}
+    body.mobile-only .intro{height:auto;max-height:none;padding:5px 13px 8px;overflow:visible}
+    body.mobile-only .intro h1{font-size:19px;line-height:1.28;margin:4px 0}
+    body.mobile-only .intro p{display:block;font-size:10px;line-height:1.65;-webkit-line-clamp:unset;-webkit-box-orient:initial;overflow:visible;margin:3px 0}
+    body.mobile-only .app-head{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
+    body.mobile-only .app-back{justify-self:start;display:inline-flex;align-items:center;gap:2px;width:max-content;text-align:left;padding:5px 0}
+    body.mobile-only .app-action{justify-self:end;text-align:right}
+    body.mobile-only .app-content{font-size:11px;line-height:1.9;padding:14px 15px 16px}
+    body.mobile-only .app-content p{font-size:11px;line-height:1.9;margin:9px 0}
+    body.mobile-only .app-content .soft-card,body.mobile-only .app-content .timeline-card,body.mobile-only .app-content .message-card{font-size:11px;line-height:1.85;padding:12px}
+    body.mobile-only .app-content .bubble{font-size:10px;line-height:1.85;padding:9px 10px}
+    body.mobile-only .app-content .row{font-size:11px;line-height:1.7;padding:12px 3px}
+    body.mobile-only .app-content .row b{font-size:11px}
+    body.mobile-only .app-content .row small,body.mobile-only .app-content .hint{font-size:9px;line-height:1.75}
+    body.mobile-only .app-content .message-meta{font-size:9px;margin-bottom:6px}
+    body.mobile-only .brief-card{font-size:11px;line-height:1.95}
+    body.mobile-only .app-head{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
+    body.mobile-only .app-back{justify-self:start;display:inline-flex;align-items:center;gap:2px;width:max-content;text-align:left;padding:5px 0;white-space:nowrap}
+    body.mobile-only .app-action{justify-self:end;text-align:right}
+    body.mobile-only .evidence-context{position:absolute;z-index:20;left:13px;right:13px;bottom:12px;display:none;padding:12px;border:1px solid #ffffffb0;border-radius:16px;background:#fbfcf7f2;backdrop-filter:blur(22px);box-shadow:0 12px 35px #101a1855;color:#2e3932}
+    body.mobile-only .evidence-context.open{display:block;animation:context-up .15s ease-out}
+    @keyframes context-up{from{opacity:.6;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    body.mobile-only .context-grabber{width:32px;height:3px;border-radius:3px;background:#aeb8b0;margin:0 auto 8px}
+    body.mobile-only .context-source{font:8px var(--mono);color:#829087}
+    body.mobile-only .context-title{font-size:11px;font-weight:650;margin:5px 0}
+    body.mobile-only .context-preview{font-size:9px;line-height:1.65;color:#68756c;max-height:45px;overflow:hidden;margin:0 0 8px}
+    body.mobile-only .context-actions{display:grid;grid-template-columns:1fr auto;gap:8px}
+    body.mobile-only .context-pin{min-height:38px;border:0;border-radius:9px;background:#dceacb;color:#3d5633;font-size:10px;font-weight:650;padding:0 12px}
+    body.mobile-only .context-cancel{min-height:38px;border:1px solid #dfe4dc;border-radius:9px;background:#fff;color:#68756c;font-size:9px;padding:0 12px}
+    body.mobile-only .app-content .soft-card,body.mobile-only .app-content .timeline-card,body.mobile-only .app-content .row,body.mobile-only .app-content .bubble,body.mobile-only .app-content p,body.mobile-only .app-content .photo-thumb,body.mobile-only .app-content .message-meta{user-select:none;-webkit-user-select:none}
+    body.mobile-only .app-back{height:32px;gap:4px;padding:0;line-height:1}
+    body.mobile-only .app-back span{font-size:10px;line-height:1;vertical-align:baseline}
+    body.mobile-only .app-back svg{width:10px;height:14px;display:block;flex:none}
+    body.mobile-only .app-back svg path{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</head>
+<body class="mobile-only" data-mobile-view="phone">
+  <div class="welcome" id="welcome"><div class="welcome-card"><div class="welcome-mark">N°</div><div class="welcome-kicker">虚构手机调查 / 互动推理</div><h1>信号之外</h1><p>五宗相连的案件沿着一部虚构手机备份展开。跟随相同的人物、账号和地点，拼出江屿、林遥与许知遥的完整过往。</p><p class="welcome-warning">本游戏只使用虚构的游戏内数据，不连接真实设备、账号、聊天、定位或支付记录。</p><div class="welcome-actions"><button class="welcome-start" id="start-game">打开模拟手机　↗</button><button class="welcome-skip" id="skip-intro">查看调查档案</button></div></div></div>
+  <header class="masthead"><div class="brand"><span class="brand-mark">N°</span> SIGNALS BEYOND / <span>异地恋手机调查</span></div><span class="safety-tag">完全虚构　·　不访问现实数据</span></header>
+  <section class="intro"><div><div class="eyebrow" id="case-kicker">CASE 01 · 旧手机备份</div><h1 id="case-heading">信号之外：周五夜里，谁去了海棠里？</h1><p id="case-description">手机主人江屿说自己每周五都在加班。你受托整理一份虚构的旧手机备份，发现聊天记录、出行路线、外卖地址和隐藏相册之间，似乎指向同一个人。请自行判断：江屿是否隐瞒了一段关系？对象是谁？</p><button class="case-info-toggle" id="toggle-case-info">查看调查档案　⌄</button></div><span class="case-code" id="case-code">DEVICE OWNER　JIANG YU<br>BACKUP DATE　2025.10.24</span></section>
+  <main class="game-layout">
+    <aside class="panel case-panel"><div class="panel-head"><h2>连续案件 / 档案库</h2><span class="eyebrow">5 CHAPTERS</span></div><div id="chapter-current" class="case-note">第一案 · 周五夜里</div><div id="chapter-choices" class="chapter-choices"></div><div id="chapter-summary" class="brief-card"></div><button class="app-button secondary" id="reset-chapter" type="button">重置本案调查</button><div id="case-panel-story"></div></aside>
+    <section class="phone-stage" aria-label="虚构 iPhone 模拟器"><div class="phone locked" id="sim-phone"><div class="dynamic-island" aria-hidden="true"><i></i></div><div class="statusbar"><span id="phone-time">17:46</span><span class="island-space"></span><span class="status-icons"><svg viewBox="0 0 18 14" aria-hidden="true"><path d="M1 13h2V9H1zm4 0h2V6H5zm4 0h2V3H9zm4 0h2V1h-2z" fill="currentColor"/></svg><span>5G</span><span class="status-battery"><i></i></span></span></div><div class="phone-screen" id="phone-screen">
+      <section class="lock-screen" id="lock-screen"><div class="lock-wallpaper"><div class="lock-date">周五 · 10月24日</div><div class="lock-time">17:46</div><div class="face-icon">⌖</div><div class="lock-notifications"><button class="lock-notice" data-lock-open="calendar"><span class="notice-app">▦</span><span><small>日历　·　刚刚</small><b>今晚 22:30　项目复盘</b><em>临时改为线上 · 点击查看详情</em></span><i>1m</i></button><button class="lock-notice" data-lock-open="wechat"><span class="notice-app wechat-app">◉</span><span><small>微信　·　今天</small><b>江屿</b><em>这周五临时要加班，晚点回你。</em></span><i>2h</i></button><button class="lock-notice" data-lock-open="meituan"><span class="notice-app food-app">袋</span><span><small>美团　·　昨天</small><b>订单已送达</b><em>海棠里附近的订单评价提醒。</em></span><i>1d</i></button></div><div class="lock-shortcuts"><button type="button" data-lock-flash aria-label="手电筒">◉</button><button type="button" data-lock-camera aria-label="相机">▣</button></div><button class="face-unlock" id="face-unlock">⌖　Face ID　·　轻点解锁</button></div></section>
+      <div class="home-screen" id="home-screen" style="display:none"><div class="home-date"><span class="home-date-label">周五，10月24日</span><small>海棠里　·　多云　18°</small></div><div class="home-widgets"><button class="home-widget weather-widget" data-launch="weather"><small>海棠里　·　天气</small><strong>18°</strong><span>体感 17°　最高 21°</span></button><button class="home-widget calendar-widget" data-launch="calendar"><small>FRI　·　10月24日</small><strong>1</strong><span>今晚 22:30　项目复盘已取消</span></button></div><div class="app-grid" id="app-grid"></div><div class="dock" id="app-dock"></div></div>
+      <section class="app-page" id="app-page"><header class="app-head"><button class="app-back" id="back-home"><svg viewBox="0 0 12 16" aria-hidden="true"><path d="M9 2 3 8l6 6"/></svg><span>返回</span></button><strong class="app-title" id="app-title">应用</strong><button class="app-action" id="app-menu">•••</button></header><main class="app-content" id="app-content"></main><nav class="app-tabbar" id="app-tabbar" aria-label="应用导航"></nav></section>
+      <section class="evidence-context" id="evidence-context" role="dialog" aria-label="固定手机内容"><div class="context-grabber"></div><div class="context-source" id="context-source">快速取证</div><strong class="context-title" id="context-title">线索摘要</strong><p class="context-preview" id="context-preview"></p><div class="context-actions"><button class="context-pin" id="context-pin" data-context-pin>固定这条记录</button><button class="context-cancel" data-close-context>取消</button></div></section>
+      <section class="system-overlay control-center" id="control-center"><div class="overlay-grabber"></div><div class="cc-title">控制中心</div><div class="cc-grid"><button class="cc-toggle on" data-control="wifi"><i>⌁</i><span>Wi‑Fi</span></button><button class="cc-toggle on" data-control="cellular"><i>▂▄▆</i><span>蜂窝网络</span></button><button class="cc-toggle" data-control="bluetooth"><i>ᛒ</i><span>蓝牙</span></button><button class="cc-toggle" data-control="focus"><i>☾</i><span>专注模式</span></button></div><label class="cc-slider"><span>☀</span><input aria-label="屏幕亮度" type="range" min="25" max="100" value="82"><b>亮度</b></label><label class="cc-slider"><span>♫</span><input aria-label="音量" type="range" min="0" max="100" value="46"><b>音量</b></label><div class="cc-foot">向上轻扫关闭</div></section>
+      <section class="system-overlay notification-center" id="notification-center"><div class="overlay-grabber"></div><div class="nc-time">17:46 <small>周五，10月24日</small></div><div class="nc-group"><div class="nc-group-title">通知中心 <button type="button" data-clear-notifications>清除</button></div><button class="lock-notice" data-lock-open="calendar"><span class="notice-app">▦</span><span><small>日历　·　刚刚</small><b>今晚 22:30　项目复盘</b><em>临时改为线上 · 点击查看详情</em></span></button><button class="lock-notice" data-lock-open="wechat"><span class="notice-app wechat-app">◉</span><span><small>微信　·　今天</small><b>江屿</b><em>这周五临时要加班，晚点回你。</em></span></button></div></section>
+    </div><button class="home-bar" id="home-bar" aria-label="返回主屏幕或上滑解锁"></button></div></section>
+    <aside class="side-panel"><section class="panel evidence-panel"><div class="panel-head"><h2>证据板</h2><span class="evidence-count" id="evidence-count">0 条</span></div><div class="proof-list" id="evidence-list"><div class="evidence-empty">打开应用，固定你认为重要的线索。日常信息也可能只是干扰。</div></div></section><section class="panel answer-panel"><div class="panel-head"><h2>提交推理</h2><span class="eyebrow" id="answer-case-label">CASE 01 / 05</span></div><div class="brief-card" id="answer-question">你认为江屿隐瞒的对象是谁？请选择最能被多条记录支持的人。</div><div id="candidate-list"></div><button class="report" id="submit-answer">提交判断</button><p class="hint">手机内的每条记录都是虚构线索。建议至少找到行程、真实身份与私密记录的相互印证。</p></section></aside>
+  </main>
+  <nav class="mobile-game-tabs" id="mobile-game-tabs" aria-label="游戏导航"><button class="active" data-mobile-screen="phone"><i>◉</i><span class="tab-label">手机</span></button><button data-mobile-screen="case"><i>▤</i><span class="tab-label">案情</span></button><button data-mobile-screen="evidence"><i>⌕</i><span class="tab-label">证据<span class="tab-count" id="evidence-tab-count">0</span></span></button><button data-mobile-screen="answer"><i>✓</i><span class="tab-label">判断</span></button></nav>
+  <div class="result-modal" id="result-modal"><div class="result-card" id="result-card"></div></div><div class="toast" id="toast"><span id="toast-message"></span><button type="button" data-mobile-screen="evidence" id="toast-evidence" hidden>查看证据</button></div>
+  <script>
+    const apps=[
+      {id:"wechat",name:"微信",icon:"◉",color:"#b8d98b"},{id:"contacts",name:"通讯录",icon:"♧",color:"#d6d9db"},{id:"moments",name:"朋友圈",icon:"◉",color:"#acd28e"},{id:"douyin",name:"抖音",icon:"♪",color:"#d2c2df"},
+      {id:"didi",name:"滴滴出行",icon:"⌖",color:"#d7dce4"},{id:"meituan",name:"美团",icon:"袋",color:"#f0c1a4"},{id:"qq",name:"QQ",icon:"Q",color:"#9bc9e2"},{id:"game",name:"游戏中心",icon:"♢",color:"#bbb9e2"},
+      {id:"redbook",name:"小红书",icon:"书",color:"#ebaaa4"},{id:"photos",name:"照片",icon:"▧",color:"#b3cadf"},{id:"private",name:"隐私空间",icon:"⌑",color:"#c9c8ca",locked:true},{id:"alipay",name:"支付宝",icon:"支",color:"#9ec8df"},
+      {id:"shopping",name:"购物",icon:"▣",color:"#dfc891"},{id:"notes",name:"备忘录",icon:"▤",color:"#f1df93"},{id:"calendar",name:"日历",icon:"▦",color:"#f3f1e9"},{id:"browser",name:"浏览器",icon:"◉",color:"#b9d1e5"},
+      {id:"health",name:"健康",icon:"♡",color:"#efb6b2"},{id:"music",name:"音乐",icon:"♫",color:"#edb5c4"},{id:"settings",name:"设置",icon:"⚙",color:"#c9d0ca"},{id:"files",name:"文件",icon:"▣",color:"#a9cbe6"},
+      {id:"weather",name:"天气",icon:"☀",color:"#a9cbe6"},{id:"reminders",name:"提醒事项",icon:"☷",color:"#f0e6cf"},{id:"voiceMemos",name:"语音备忘录",icon:"◖",color:"#e5a293"},{id:"maps",name:"地图",icon:"⌖",color:"#a9d4b2"}
+    ];
+    const clueData={
+      wechat:{title:"小号里的周五约定",detail:"备用账号「yu_1024」与备注为「海盐」的联系人反复确认：每周五 22:30 在海棠里东门见。主号里没有这段聊天。",app:"微信小号"},
+      contacts:{title:"联系人备注与真实身份",detail:"主号联系人“海盐”的特殊备注是 X.Y.（旧称“许遥”）；通讯录里的实名为许知遥。多个平台使用相同头像和缩写。",app:"通讯录"},
+      moments:{title:"朋友圈评论里的旧地名",detail:"海盐在江屿三条旧动态下都评论「还是那家靠窗的位置」。评论时间分别是 10月3日、10月10日、10月17日 23:04。",app:"朋友圈消息"},
+      douyin:{title:"抖音小号的周五评论",detail:"互关账号“海盐”与小号 yu_1024 在周五夜间高频互动；评论“东门见，到了发我”出现在滴滴行程开始前。",app:"抖音"},
+      didi:{title:"周五夜间的重复行程",detail:"三个周五都从公司附近前往海棠里东门。10月17日 22:12出发、22:29抵达，停留到次日 00:01叫回程车、00:14到家；10月3日与10日也有同路线记录。",app:"滴滴出行"},
+      meituan:{title:"两人份晚餐与同一收货点",detail:"三张周五订单都包含两份主食，收货地址是海棠里 6 栋 1204，收件备注为「知遥」。10月17日 22:35送达，比滴滴 22:29 抵达晚6分钟。",app:"美团"},
+      qq:{title:"QQ 小号的身份线索",detail:"小号「晚潮_1024」的个人签名写着「知遥」。群聊中有人说「东门见，别用大号」，并提到海棠里 6 栋。",app:"QQ"},
+      game:{title:"固定双排的周五夜",detail:"游戏记录显示江屿和队友「晚潮_1024」连续四个周五在 22:30—00:10 双排；该账号绑定昵称与 QQ 小号一致。",app:"游戏中心"},
+      redbook:{title:"小红书私信确认真实姓名",detail:"账号「海盐的周末」私信里写着「上次转给你的停车费收到了」。主页收藏里有海棠里咖啡店；订单收货人显示许知遥。",app:"小红书"},
+      photos:{title:"隐藏相册里的合照",detail:"照片信息显示 10月17日 23:21，海棠里咖啡店。画面中江屿与一名女性并肩，桌上有两杯饮料；相册地点与出行记录一致。",app:"照片"},
+      alipay:{title:"转账收款人是许知遥",detail:"支付宝账单显示近三个月每月 17 日向「许知遥」转账 680 元，备注「停车/水电」。金额与私信提到的停车费相吻合。",app:"支付宝"},
+      shopping:{title:"购物平台的固定收货地址",detail:"最近购买的两份情侣款手机壳寄往海棠里 6 栋 1204，收件人许知遥；这不是江屿主地址，也不是公司地址。",app:"购物平台"}
+    };
+    const evidence=new Map();let currentApp="";let currentAppTabLabel="";let privateUnlocked=false;let selectedCandidate="";let previousContent="";let toastTimer;let pendingEvidence=null;let longPressTimer=null;let longPressFired=false;let suppressContextClickUntil=0;
+    const $=selector=>document.querySelector(selector);const appGrid=$("#app-grid");const dock=$("#app-dock");let gestureStart=null;
+    function iconMarkup(app){return `<button class="app-icon" data-app="${app.id}" aria-label="打开${app.name}"><span class="app-tile" style="background:${app.color}">${app.icon}${app.locked?'<i class="lock-mark">•</i>':''}</span><span class="app-label">${app.name}</span></button>`}
+    appGrid.innerHTML=apps.map(iconMarkup).join("");dock.innerHTML=["wechat","contacts","photos","alipay"].map(id=>iconMarkup(apps.find(app=>app.id===id))).join("");
+    const appTabsById={wechat:[["◉","聊天"],["♧","联系人"],["◎","发现"],["◯","我"]],wechatAlt:[["◉","聊天"],["♧","联系人"],["◯","我"]],contacts:[["★","个人收藏"],["◷","最近"],["♧","通讯录"]],moments:[["◎","朋友圈"],["♡","消息"],["◯","我"]],douyin:[["⌂","首页"],["◎","互关"],["▣","消息"],["◯","我"]],douyinAlt:[["◎","互关"],["▤","评论"],["◯","我"]],didi:[["⌖","打车"],["◷","行程"],["◯","我的"]],meituan:[["⌂","首页"],["袋","订单"],["◯","我的"]],qq:[["◉","消息"],["♧","联系人"],["◎","动态"]],game:[["♢","游戏"],["◷","战绩"],["♧","好友"]],redbook:[["⌂","发现"],["＋","发布"],["◉","消息"],["◯","我"]],photos:[["▧","图库"],["♡","为你推荐"],["⌕","搜索"]],private:[["▧","隐藏照片"],["◷","最近删除"],["⚙","设置"]],alipay:[["⌂","首页"],["◷","账单"],["◯","我的"]],shopping:[["⌂","首页"],["▣","订单"],["◯","我的"]],notes:[["▤","文件夹"],["⌕","搜索"],["◷","最近删除"]],calendar:[["▦","日历"],["▤","收件箱"],["⌕","搜索"]],browser:[["‹","上一页"],["›","下一页"],["□","标签页"]],health:[["♡","摘要"],["◷","共享"],["⌕","浏览"]],music:[["◉","现在收听"],["⌕","浏览"],["▤","资料库"]],settings:[["⚙","设置"],["⌕","搜索"],["◯","账户"]],files:[["◷","最近项目"],["▤","共享"],["⌕","浏览"]],weather:[["☀","天气"],["▤","地图"],["＋","城市"]],reminders:[["▦","今天"],["◷","计划"],["▤","全部"]],voiceMemos:[["◖","录音"],["▤","文件夹"],["◷","最近"]],maps:[["⌖","探索"],["➤","路线"],["♡","已保存"]]};
+    function renderNativeTabs(id){const locked=id==="private"&&!privateUnlocked;const bar=$("#app-tabbar");const menu=$("#app-menu");bar.style.display=locked?"none":"";bar.setAttribute("aria-hidden",String(locked));menu.disabled=locked;menu.style.display=locked?"none":"";menu.setAttribute("aria-hidden",String(locked));if(locked){bar.innerHTML="";return}const pages=appTabsById[id]||[["⌂","首页"],["◷","最近"],["◯","我的"]];bar.innerHTML=pages.map((tab,index)=>`<button type="button" class="${tab[1]===currentAppTabLabel||(!currentAppTabLabel&&index===0)?"active":""}" data-native-tab="${tab[1]}"><i>${tab[0]}</i>${tab[1]}</button>`).join("")}
+    const appPageDescriptions={
+      wechat:"主号会话保留江屿与林遥的日常、项目群消息和最近通话，消息时间可以与日历及行程相互对照。",
+      wechatAlt:"备用账号 yu_1024 只保留摄影社旧友、海盐私信和少量同步记录，聊天对象需要结合联系人资料确认。",
+      contacts:"联系人档案包含姓名、关系、特殊备注和最近联系背景；点开卡片可查看个人资料。",
+      moments:"朋友圈页面保留江屿发布的照片、好友评论通知和可见范围变化，消息列表与旧动态时间相连。",
+      douyin:"抖音主页展示互关、评论、消息和发布动态；互动时间可与滴滴和游戏记录交叉核对。",
+      douyinAlt:"抖音备用账号 yu_1024 的互关、评论草稿和登录设备与微信备用账号使用同一昵称体系。",
+      didi:"滴滴页面记录常用通勤路线、夜间行程、上下车地点、费用和回程时间。",
+      meituan:"美团页面按外卖订单、堂食消费和浏览记录整理，收货地址与付款时间保留在订单详情。",
+      qq:"QQ页面包含旧社团群、联系人、账号恢复资料和动态；账号历史可用于核实晚潮的实际使用者。",
+      game:"游戏中心保存星港组队、战绩、登录设备和好友备注，不同账号的在线时段可以彼此比对。",
+      redbook:"小红书页面包含私信、收藏夹和浏览笔记，昵称与真实联系人是否一致需要继续核查。",
+      photos:"照片页面按图库、相簿和隐藏项目整理，每张记录可查看拍摄时间、位置与原始文件信息。",
+      private:"隐私空间保存离线照片、恢复文件和解锁记录；解锁后显示本案新增的设备资料。",
+      alipay:"支付宝账单展示转账对象、金额、时间和备注，并保留普通消费作为对照。",
+      shopping:"购物订单包含商品、收件人、收货地址、物流时间和付款账号。",
+      notes:"备忘录按文件夹、置顶内容和最近删除分类，可核对日期提示与当事人的私人计划。",
+      calendar:"日历显示工作会议、私人约定、取消记录和提醒变更，可对照实际出行时间。",
+      browser:"浏览器保留搜索历史、书签和阅读列表，查询时间可与订单、照片整理记录核对。",
+      health:"健康摘要记录步数、睡眠和活动时段，只能提供地点与时间的辅助线索。",
+      music:"音乐页面记录通勤歌单、车载播放和最近收听时间，可作为行程的旁证。",
+      settings:"设置页面显示账号切换、同步状态、设备连接和隐私选项。",
+      files:"文件页面提供云盘、下载和分享记录，可核查照片原件、收据与备份版本。",
+      weather:"天气页记录常驻城市和指定日期天气，可用于核对出行与户外安排。",
+      reminders:"提醒事项展示购物、工作、家庭和出行待办，并保留完成状态。",
+      voiceMemos:"语音备忘录包含录音标题、创建时间、转写片段和关联地点。",
+      maps:"地图页面提供收藏地点、搜索历史和路线停留记录；位置需与其他应用共同验证。"
+    };
+    const tabSources={wechat:{聊天:"wechat",联系人:"contacts",发现:"moments",我:"settings"},wechatAlt:{聊天:"wechatAlt",联系人:"contacts",我:"settings"},contacts:{个人收藏:"contacts",最近:"contacts",通讯录:"contacts"},moments:{朋友圈:"moments",消息:"moments",消息列表:"moments",相册:"photos",我:"moments"},douyin:{首页:"douyin",互关:"douyin",消息:"douyin",我:"settings",评论:"douyin"},douyinAlt:{互关:"douyinAlt",评论:"douyinAlt",私信:"wechatAlt"},didi:{打车:"didi",行程:"didi",我的:"settings"},meituan:{首页:"meituan",外卖:"meituan",订单:"meituan",我的:"settings"},qq:{消息:"qq",联系人:"contacts",动态:"moments",设置:"settings"},game:{游戏:"game",战绩:"game",好友:"contacts"},redbook:{发现:"redbook",发布:"redbook",消息:"redbook",我:"settings",购物:"shopping"},photos:{图库:"photos",相簿:"photos",已隐藏:"private",隐藏照片:"private",为你推荐:"photos",搜索:"photos"},private:{隐藏照片:"private",最近删除:"private",设置:"settings"},alipay:{首页:"alipay",账单:"alipay",我的:"settings"},shopping:{首页:"shopping",订单:"shopping",我的:"settings"},notes:{所有备忘录:"notes",文件夹:"notes",置顶:"notes",搜索:"notes",最近删除:"notes"},calendar:{日历:"calendar",收件箱:"calendar",搜索:"calendar"},browser:{起始页:"browser",书签:"browser",阅读列表:"browser",上一页:"browser",下一页:"browser",标签页:"browser"},health:{摘要:"health",共享:"health",浏览:"health"},music:{现在收听:"music",浏览:"music",资料库:"music"},settings:{设置:"settings",账户:"settings",搜索:"settings"},files:{最近项目:"files",共享:"files",浏览:"files"},weather:{天气:"weather",地图:"maps",城市:"weather"},reminders:{今天:"reminders",计划:"reminders",全部:"reminders"},voiceMemos:{录音:"voiceMemos",文件夹:"voiceMemos",最近:"voiceMemos"},maps:{探索:"maps",路线:"maps",已保存:"maps"}};
+    const tabPurposes={聊天:"显示按最近消息排序的会话，卡片含发送人、日期和上下文。",联系人:"显示联系人姓名、备注、关系背景与最近联系记录。",发现:"显示互动动态、评论通知或相关内容入口。",我:"显示账号资料、设备同步和个人使用记录。",互关:"显示相互关注对象及最近互动时间。",消息:"显示消息通知、评论回复和会话摘要。",评论:"显示评论正文、发布时间和对应账号。",私信:"显示双方完整的私信上下文和时间。",订单:"显示订单状态、付款金额、收件地址和物流时间。",账单:"显示付款对象、金额、时间和备注。",行程:"显示起终点、出发与到达时间及费用。",战绩:"显示组队成员、登录设备和对局时间。",好友:"显示好友备注、账号关系和最近联系情况。",已隐藏:"显示加密相册索引、照片来源及可核对的拍摄信息。",隐藏照片:"显示加密照片、恢复时间和原始文件信息。",最近删除:"显示删除时间、文件类型和是否仍有备份。",搜索:"可搜索本应用当前展示的记录标题和正文。",文件夹:"显示备忘或文件分类及最近修改内容。",置顶:"显示置顶记录和置顶原因。",日历:"显示约会、工作安排和修改/取消时间。",收件箱:"显示日程邀请、提醒来源和处理状态。",摘要:"显示按日期汇总的活动、睡眠或使用数据。",路线:"显示保存地点之间的路线及经过时间。",已保存:"显示收藏地点及添加日期。",首页:"显示该应用最近更新的真实记录。",游戏:"显示游戏账号、好友和近期活动。",设置:"显示账号、安全和同步状态。",我的:"显示个人档案、账号与设备信息。",通讯录:"按姓名和备注浏览手机中保存的联系人。",相册:"显示照片分组与拍摄日期。",图库:"显示照片缩略图、拍摄时间和地点。",全部:"显示完整提醒清单及完成状态。",今天:"显示今天需要处理的具体事项。",计划:"显示未来几天的日程与提醒。",最近:"显示最近打开或修改的记录。",动态:"显示联系人发布的内容和互动。",探索:"显示搜索过和收藏的地点。",打车:"显示当前常用叫车方式及历史路线。",外卖:"显示最近点餐、地址和评价记录。",分享:"显示文件分享对象、时间及文件名。",浏览:"显示最近浏览的本机记录。",发布:"显示草稿、已发布内容和发布时间。",资料库:"显示收藏歌单、下载曲目和最近播放。",现在收听:"显示当前曲目、设备和播放时间。",个人收藏:"显示收藏联系人或常用号码。",上一页:"显示上一条访问记录及返回来源。",下一页:"显示浏览器历史中下一条已访问记录。",标签页:"显示已打开的本地模拟网页和最近访问时间。",城市:"显示已添加城市和对应天气信息。"};
+    function closeSystemOverlays(){["control-center","notification-center"].forEach(id=>$("#"+id).classList.remove("open"));$("#phone-screen").classList.remove("system-control-open","system-notification-open")}
+    function openSystemOverlay(id){closeSystemOverlays();$("#"+id).classList.add("open");$("#phone-screen").classList.add(id==="control-center"?"system-control-open":"system-notification-open")}
+    function unlockToHome(){$("#lock-screen").style.display="none";$("#sim-phone").classList.remove("locked");$("#home-screen").style.display="flex";closeSystemOverlays();showToast("iPhone 已解锁")}
+    function row(title,sub,action){return `<button class="row" data-page="${action||title}"><span><b>${title}</b><small>${sub}</small></span><span class="chevron">›</span></button>`}
+    function tabs(labels,activeLabel=labels[0]){return `<div class="app-tabs">${labels.map(label=>`<button class="app-tab ${label===activeLabel?'active':''}" data-page="${label}">${label}</button>`).join("")}</div>`}
+    function buildManualEvidence(target){
+      const detail=(target.innerText||target.textContent||"").replace(/\s+/g," ").trim();if(!detail)return null;
+      const tagged=target.closest("[data-evidence-id]");const taggedId=tagged?.dataset.evidenceId;const taggedClue=taggedId?chapterClue(taggedId):null;
+      if(taggedClue)return{id:taggedId,item:taggedClue};
+      const sourceId=target.closest("[data-record-app]")?.dataset.recordApp||currentApp;const sourceName=sourceId?appTitleForId(sourceId):"iPhone 系统记录";
+      const heading=target.querySelector("strong,b,h3,.section-title,.message-meta")?.textContent.trim();let hash=2166136261;
+      for(let index=0;index<detail.length;index++)hash=Math.imul(hash^detail.charCodeAt(index),16777619);
+      const id=`manual:${activeChapterIndex}:${sourceId}:${(hash>>>0).toString(36)}`;
+      return{id,item:{app:sourceName+" · 手动固定",title:heading||detail.slice(0,32),detail}};
+    }
+    function openEvidenceContext(target){
+      const selection=buildManualEvidence(target);if(!selection)return;pendingEvidence=selection;const fixed=evidence.has(selection.id);
+      $("#context-source").textContent=selection.item.app+"　·　快速取证";
+      $("#context-title").textContent=selection.item.title;$("#context-preview").textContent=selection.item.detail;
+      $("#context-pin").textContent=fixed?"撤回这条证据":"固定这条记录";$("#evidence-context").classList.add("open");
+    }
+    function pinManualEvidence(){
+      if(!pendingEvidence)return;const {id,item}=pendingEvidence;const fixed=evidence.has(id);if(fixed)evidence.delete(id);else evidence.set(id,item);
+      pendingEvidence=null;$("#evidence-context").classList.remove("open");renderEvidence();showToast(fixed?`已撤回线索 · 证据板 ${evidence.size} 条`:`线索已固定 · 证据板 ${evidence.size} 条`,fixed?null:"evidence");
+    }
+    function appRecord(time,title,text,evidenceId){return{time,title,text,evidenceId}}
+    function chapterRecords(appId,chapter){
+      const records=[...(chapter.records?.[appId]||[])];
+      if(chapter.id==="01"&&appId==="private"&&clueData.photos){const clue=clueData.photos;records.unshift(appRecord("10/17 23:21",clue.title,clue.detail,"photos"));}
+      if(chapter.id==="01"&&clueData[appId]){
+        const clue=clueData[appId];
+        records.unshift(appRecord("10/17 22:00",clue.title,clue.detail,appId));
+      }
+      const routine=routineRecords[appId]||[appRecord("最近","设备记录","本机同步正常；没有与本案相关的操作。")];
+      let fallbackIndex=0;
+      while(records.length<3){
+        const base=routine[fallbackIndex%routine.length];
+        const detail=fallbackIndex===0&&chapter.daily?.[0]?`${base.text} ${chapter.daily[0]}`:base.text;
+        records.push(appRecord(base.time,base.title,detail));
+        fallbackIndex++;
+      }
+      return records.slice(0,4);
+    }
+    function appTitleForId(id){return apps.find(item=>item.id===id)?.name||({wechatAlt:"微信小号",douyinAlt:"抖音小号"}[id]||"应用")}
+    function appAccountLinks(appId){
+      if(appId==="wechat")return '<button type="button" class="app-button secondary" data-open-app="wechatAlt">切换到微信备用账号　·　yu_1024</button>';
+      if(appId==="wechatAlt")return '<button type="button" class="app-button secondary" data-open-app="wechat">切回微信主账号</button>';
+      if(appId==="douyin")return '<button type="button" class="app-button secondary" data-open-app="douyinAlt">切换抖音账号　·　江屿日常 / yu_1024</button>';
+      if(appId==="douyinAlt")return '<button type="button" class="app-button secondary" data-open-app="douyin">切回抖音主账号</button>';
+      if(appId==="photos")return '<button type="button" class="app-button secondary" data-open-app="private">打开已加密的隐藏相册</button>';
+      if(appId==="settings")return '<button type="button" class="app-button secondary" data-open-app="wechatAlt">查看微信备用账号</button><button type="button" class="app-button secondary" data-open-app="douyinAlt">查看抖音备用账号</button><button type="button" class="app-button secondary" data-open-app="private">管理隐私空间</button>';
+      return "";
+    }
+    function renderContactRecords(chapter,sourceId){
+      const records=Object.entries(chapter.records||{}).flatMap(([appId,items])=>items.map(record=>({appId,record})));const people=chapter.people||[];
+      return people.map(([name,detail],index)=>{
+        const firstName=name.split(/[，,·/]/)[0].trim();const linked=records.find(({record})=>record.title.includes(firstName)||record.text.includes(firstName))||records.find(({record})=>record.text.includes(name.split(" · ")[0]))||null;
+        const event=chapter.events?.[index];const related=linked?`${appTitleForId(linked.appId)} · ${linked.record.time} · ${linked.record.title}：${linked.record.text}`:`${event?.[0]||"人物档案"} · ${event?.[1]||chapter.name}`;
+        const summary=`${detail} 可交叉核对：${related}`;const time=linked?.record.time||event?.[0]||"本案档案";const relatedName=linked?appTitleForId(linked.appId):"关系时间线";
+        const evidence=linked?.record.evidenceId?` data-evidence-id="${escapeMarkup(linked.record.evidenceId)}"`:"";
+        return `<button type="button" class="soft-card episode-record" data-page="${escapeMarkup(name)}" data-record-app="contacts" data-record-time="${escapeMarkup(time)}" data-record-summary="${escapeMarkup(summary)}"${evidence}><div class="message-meta">通讯录　·　${escapeMarkup(time)}　·　${escapeMarkup(relatedName)}</div><strong>${escapeMarkup(name)}</strong><p>${escapeMarkup(detail)}</p><small class="hint">可核对资料：${escapeMarkup(related)}　·　轻点查看联系人档案</small></button>`;
+      }).join("");
+    }
+    function renderRecordCard(sourceId,record){
+      const name=appTitleForId(sourceId);const title=escapeMarkup(record.title);const time=escapeMarkup(record.time);const text=escapeMarkup(record.text);
+      const cardClass=["wechat","wechatAlt","contacts","moments","douyin","douyinAlt","qq","redbook"].includes(sourceId)?"soft-card":"timeline-card";
+      const visual=["photos","private","files"].includes(sourceId)?`<span class="record-glyph" aria-hidden="true">▧</span>`:"";const evidence=record.evidenceId?` data-evidence-id="${escapeMarkup(record.evidenceId)}"`:"";
+      return `<button type="button" class="${cardClass} episode-record" data-page="${title}" data-record-app="${escapeMarkup(sourceId)}" data-record-time="${time}" data-record-summary="${text}"${evidence}>${visual}<div class="message-meta">${time}　·　${escapeMarkup(name)}</div><strong>${title}</strong><p>${text}</p><small class="hint">轻点打开完整记录</small></button>`;
+    }
+    function renderAppSectionBody(appId,label,chapter){
+      const sourceId=tabSources[appId]?.[label]||appId;const records=chapterRecords(sourceId,chapter);
+      const appName=appTitleForId(appId);const sourceName=appTitleForId(sourceId);
+      const appDescription=appPageDescriptions[appId]||`${appName}保存了近期使用、账号操作和本机生活记录。`;
+      const purpose=tabPurposes[label]||`「${label}」页展示${sourceName}中与本案相关的近期记录、操作时间和上下文。`;
+      const profileLabels=["我","我的","账户","设置","我的"];
+      const profile=profileLabels.includes(label)?`<div class="soft-card profile-card"><div class="message-meta">设备主人　·　个人资料</div><strong>江屿　·　云台科技园</strong><p>常用住址在城西，通勤路线约24分钟；账户备注、最近同步时间和工作日安排保存在此设备备份中。</p></div>`:"";
+      const recordsHtml=(appId==="contacts"||sourceId==="contacts")?renderContactRecords(chapter,sourceId):records.map(record=>renderRecordCard(sourceId,record)).join("");
+      let additional="";
+      if(appId==="maps"||sourceId==="maps")additional='<div class="mini-map" role="img" aria-label="虚构地点路线示意图"></div>';
+      if(appId==="photos"||appId==="private"||sourceId==="photos"||sourceId==="private")additional='<div class="photo-grid" aria-label="照片记录"><span class="photo-thumb">书展长廊</span><span class="photo-thumb">海棠夜景</span><span class="photo-thumb">日常相册</span></div>';
+      const special=appAccountLinks(appId);
+      return `<div class="section-title">${escapeMarkup(chapter.name)}　·　${escapeMarkup(appName)} / ${escapeMarkup(label)}</div><div class="soft-card app-page-overview"><div class="message-meta">${escapeMarkup(appName)}　·　${escapeMarkup(label)}</div><strong>${escapeMarkup(label)}记录</strong><p>${escapeMarkup(appDescription)} ${escapeMarkup(purpose)}</p></div>${profile}${additional}${special}${recordsHtml}<p class="hint">本页记录来自虚构备份。点击记录查看来源、完整内容和可交叉核对的时间线。</p>`;
+    }
+    function episodeAppHtml(appId,chapter,selectedTab){
+      const appName=appTitleForId(appId);const pageTabs=appTabsById[appId]||[["⌂","概览"],["◷","记录"],["◯","我的"]];
+      const labels=pageTabs.map(tab=>tab[1]);const label=selectedTab||labels[0];currentAppTabLabel=label;
+      const search=`<input class="search-field record-search" type="search" placeholder="搜索${escapeMarkup(appName)}记录" aria-label="搜索${escapeMarkup(appName)}记录">`;
+      return search+'<div class="evidence-empty" id="record-search-empty" hidden>没有找到匹配记录。调整关键词后继续搜索本应用的备份。</div>'+tabs(labels,label)+renderAppSectionBody(appId,label,chapter);
+    }
+    function renderAppSection(appId,label){
+      if(appId==="private"&&!privateUnlocked){renderApp("private");showToast("隐私空间仍处于锁定状态，请先输入 PIN");return}
+      const chapter=chapters[activeChapterIndex];currentAppTabLabel=label;previousContent="";const backButton=$("#back-home");delete backButton.dataset.subpageBack;backButton.innerHTML=appBackMarkup("返回");
+      $("#app-content").innerHTML=episodeAppHtml(appId,chapter,label);renderNativeTabs(appId);$("#app-content").scrollTop=0;
+    }
+    const chapters=[
+      {id:"01",name:"周五夜里",kicker:"CASE 01 · 周五夜里",heading:"信号之外：周五夜里，谁去了海棠里？",description:"江屿说每周五都在加班。聊天、行程、订单和隐藏相册之间，似乎指向同一个人。",summary:"先还原三次周五夜间的行程，再确认“海盐”究竟是谁。",question:"江屿每周五夜里真正去见的人是谁？",answerId:"xu",choices:[{id:"xu",name:"许知遥",hint:"大学旧友，备注“海盐”"},{id:"lin",name:"林晚",hint:"同事，周五仍有工作消息"},{id:"tang",name:"唐芮",hint:"游戏好友，固定组队"}],required:["didi","alipay","photos"],pin:"1024",pinHint:"日历写着：第一次看海的月日就是隐私空间 PIN。",deviceDate:"2025.10.24",daily:["林遥昨晚发来周末视频邀请，江屿尚未回复。","家人群提醒周日回家吃饭；江屿点了已读。"],people:[["许知遥，28岁 · 海盐 / X.Y.","大学摄影社旧友，2025年3月21日书展重逢后恢复联系；住海棠里。她说自己只帮江屿找租房。"],["林晚，27岁 · 项目同事","周五夜里确实常发工作消息，但部署工单显示版本在21:03完成，她随后从公司离开。"],["唐芮，26岁 · 游戏好友","摄影社旧账号“晚潮_1024”的创建者；她说已把账号交还旧友，关键夜晚的直播记录待核对。"],["林遥，29岁 · 江屿的伴侣","与江屿异地恋一年，约定每周五视频；她仍相信那些取消通话的理由是加班。"]],events:[["2024/11","江屿与林遥开始异地恋，约定每周五视频。"],["2025/03/21","江屿在校友书展重逢许知遥，通讯录备注后来改为“海盐”。"],["2025/10/03—10/17","三个周五的加班日程被取消，滴滴记录却反复出现海棠里。"],["2025/10/24","备份生成。订单、付款、备用账号和照片仍留有互相矛盾的说法。"]],records:{contacts:[appRecord("10/17 18:10","三位常用联系人","许知遥备注“海盐 / X.Y.”；林晚属于发布组；唐芮仍挂在摄影社旧群。"),appRecord("10/17 21:03","林晚 · 项目群","版本回滚完成后离开公司，后续没有与江屿的私聊。"),appRecord("10/17 22:30","唐芮 · 星港战队","晚潮_1024是旧社团账号，归属需要对照恢复资料。")],wechat:[appRecord("10/03 20:52","林遥 · 视频约定","江屿说要处理上线回滚，通话只接通46秒。"),appRecord("10/17 21:14","林遥 · 未接来电","江屿回复“今晚走不开，明天补给你”。"),appRecord("10/17 20:41","云台项目群","林晚发布上线清单，21:03回滚完成。")],game:[appRecord("10/03 22:31","晚潮_1024 + 江屿","连续周五组队，设备位置需要和现实行程核对。"),appRecord("10/10 22:30","双排记录","唐芮个人账号当晚在线，旧队伍账号仍在另一设备登录。"),appRecord("10/17 22:30","周五战绩","晚潮账号与 yu_1024 备用账号设备标识相同。")],douyin:[appRecord("10/17 20:02—23:58","唐芮直播回放","平台回放覆盖整段夜间时段，可核对她是否在海棠里。"),appRecord("10/17 22:10","海盐的评论","“东门见，到了发我。”比滴滴订单早两分钟。"),appRecord("工作日 12:16","林晚的点赞","她的互动集中在项目演示视频和午休时间。")],notes:[appRecord("10/01 19:12","置顶备忘 · 第一次看海","约定写在10月24日。隐私空间 PIN 使用月日四位数：1024。")],calendar:[appRecord("10/24 22:30","项目复盘 · 已取消","19:51 删除会议链接；私人日程仍写着“第一次看海”。")],private:[appRecord("10/17 23:21","隐藏照片索引","原图拍于海棠小馆。照片地点与重复行程及外卖地址相同。","photos"),appRecord("10/18 00:41","最近删除","只删除了裁剪副本，原图缩略图仍在本机备份。"),appRecord("10/24","备份摘要","海盐、东门和1204在不同应用里重复出现。独立记录可交叉验证。")]},clues:{},explanation:"滴滴连续三周驶向海棠里；账单收款人和隐藏照片里的同行者都指向许知遥。朋友圈、小号和收货地点补齐了同一条时间线。"},
+      {id:"02",name:"海盐账号",kicker:"CASE 02 · 账号迷雾",heading:"海盐是谁？三个账号指向同一个人",description:"主号几乎没有私聊，备用账号却留下旧网名、书展日期和同城约定。找出“海盐”背后的真实身份。",summary:"三月书展后，江屿与一位大学旧友重新联系。主号备注、小红书昵称和备用号资料各留了一段不完整信息。",question:"通讯录备注 X.Y.、备用号“海盐”和小红书“海盐的周末”属于谁？",answerId:"xu",choices:[{id:"xu",name:"许知遥",hint:"摄影社旧友，住海棠里"},{id:"lin",name:"林晚",hint:"同事，主号工作群联系"},{id:"tang",name:"唐芮",hint:"游戏好友，另有社团账号"}],required:["ep2-contact","ep2-wechat","ep2-redbook"],pin:"0321",pinHint:"备忘录提示：校友书展重逢日是 PIN。",daily:["林遥昨晚发来周末视频邀请，江屿尚未回复。","唐芮的摄影社群正在筹备十周年聚会。"],people:[["许知遥 / 海盐","旧书展后恢复联系，昵称 X.Y.，常住海棠里；说自己只是帮江屿找相机。"],["林晚 / 同事","与江屿讨论发布排期，工作日消息很多，周五夜里没有私聊。"],["唐芮 / 游戏好友","与江屿共用过摄影社旧账号，后来交由许知遥保管。"]],events:[["03/21","校友书展后，江屿把许知遥备注改成“海盐”。"],["04/02","备用号 yu_1024 登录，保存了海盐的主页。"],["10/17","评论、外卖备注与小号资料出现相同的东门暗号。"]],records:{private:[appRecord("03/21 16:42","隐藏相册 · 书展留影","备份缩略图来自摄影社旧相册；边角有蓝色入场章，与校友书展日期吻合。"),appRecord("03/21 20:14","语音附件索引","yu_1024 账号的首条聊天附件是一张旧书签照片。"),appRecord("10/17 23:21","已移除的相册副本","十月的副本引用了三月照片的原始文件哈希。")],wechatAlt:[appRecord("03/21 20:14","书展后重新联系","海盐：没想到你还留着那张旧书签。", "ep2-wechat"),appRecord("04/02 21:08","备用号首次登录","江屿：这个号以后只聊摄影社的事。"),appRecord("10/10 22:16","周五约见","海盐：东门见，别用主号回。")],contacts:[appRecord("09:10","许知遥 · 海盐","备注 X.Y.（“许遥”），大学摄影社旧友；3月21日从“许同学”改名为“海盐”。","ep2-contact"),appRecord("11:42","林晚 · 项目组","仅工作日讨论部署与工单；最近一次通话 2 分钟。"),appRecord("20:15","唐芮 · 星港战队","摄影社旧群成员，称旧账号早已借给知遥。")],redbook:[appRecord("09/28 22:18","私信 · 海盐的周末","许知遥：旧书展那天没聊完，下次还是老地方。","ep2-redbook"),appRecord("10/17 23:30","停车费到账","海盐：看到了，备注不要写全名。"),appRecord("10/18 09:12","收藏更新","海棠小馆、旧书店和海边步道被加进同一个周末清单。")],notes:[appRecord("03/21","校友书展","隐私空间 PIN 用重新联系那天的月日四位数。"),appRecord("10/24","第一次看海","集合地点：海棠里东门。"),appRecord("周末","相机电池","记得充电，备用号不要同步联系人。")]},clues:{"ep2-wechat":{app:"微信小号",title:"备用号的书展重逢",detail:"yu_1024 的聊天从3月21日书展后开始，主号没有这段对话；备注与通讯录的旧网名相符。"},"ep2-contact":{app:"通讯录",title:"备注 X.Y. 对应许知遥",detail:"通讯录把“海盐 / X.Y.”关联到许知遥；她是摄影社旧友，住在后续行程反复出现的海棠里。"},"ep2-redbook":{app:"小红书",title:"同一人的周末私信",detail:"“海盐的周末”私信使用许知遥本名，提到停车费和老地方，与备用号及海棠里行程吻合。"}},explanation:"备用号从校友书展当晚开始活跃；通讯录备注 X.Y. 指向许知遥，小红书私信也使用她的本名，身份链已经闭合。"},
+      {id:"03",name:"夜航相册",kicker:"CASE 03 · 夜航相册",heading:"照片被改过日期？先找回原始时间",description:"隐藏相册的照片显示在十月，文件缓存却留下另一组时间戳。确认原图何时拍摄，关系线索是否比江屿说的更早。",summary:"裁剪版像是10月17日拍的；原图、地图缓存和购物收据会告诉你照片真正来自哪一次出行。",question:"隐藏相册里的同行者是谁？原图最早拍于什么时候？",answerId:"xu",choices:[{id:"xu",name:"许知遥",hint:"相片里有书展时出现的红绳"},{id:"lin",name:"林晚",hint:"公司照片均有工单时间戳"},{id:"tang",name:"唐芮",hint:"直播回放覆盖了关键时段"}],required:["ep3-photo","ep3-file","ep3-map"],pin:"0317",pinHint:"相机配件收据日期就是离线图库密码。",daily:["林遥发来一条未回复的视频邀请。","相机电池已充满，胶卷仍有 12 张。"],people:[["许知遥","三月书展照片中已有同一条红绳；她说两人直到十月才单独见面。"],["林晚","工作照片来自公司共享盘，时间与部署记录吻合。"],["唐芮","十月17日晚间有平台直播，回放由服务端保存。"]],events:[["03/21","隐藏相册原图拍于校友书展东厅。"],["10/17","裁剪版被重新导出，EXIF 创建日期被改成当晚。"],["10/18","图库缓存留下未修改的原始缩略图。"]],records:{contacts:[appRecord("10/17 18:10","林晚 · 项目同事","工单显示她的班次在21:03结束；共享盘照片均有工作时间戳。"),appRecord("10/17 18:12","唐芮 · 游戏好友","直播账号 tang_rui_live 已排定20:00开播。"),appRecord("03/21","许知遥 · 摄影社旧友","书展活动登记和相册里的红绳都能核对到她。")],douyin:[appRecord("10/17 20:02—23:58","唐芮的直播回放","服务器原始回放连续，期间没有离开直播。"),appRecord("10/17 22:10","海盐的评论","评论后两分钟出现滴滴订单。"),appRecord("10/17 12:16","林晚的工作视频","项目演示发布于午休时间，评论讨论的是测试环境。")],private:[appRecord("03/21 16:42","隐藏原图 · 校友书展","还原的原始 EXIF 和照片中许知遥腕上的红绳，证明这张照片并非十月拍摄。","ep3-photo"),appRecord("10/17 23:24","裁剪导出记录","副本移除了书展背景标牌，导出账号是 yu_1024。"),appRecord("10/18 00:41","同步缓存","原始 HEIC 仍保存在云端备份，哈希与三月文件一致。")],photos:[appRecord("03/21 16:42","旧缩略图 · 书展长廊","原始 EXIF 位于校友书展东厅，许知遥手腕有一条红绳。","ep3-photo"),appRecord("10/17 23:21","隐藏副本 · 海棠小馆","副本创建时间较新，但原图哈希对应三月备份。"),appRecord("10/18 00:41","最近删除","裁剪副本被删除，原始缩略图仍在设备缓存。")],files:[appRecord("03/21 18:10","IMG_0321_ORIGINAL.heic","原图哈希未变；摄影社共享盘首次上传于书展当晚。","ep3-file"),appRecord("10/17 23:24","IMG_0321_crop.jpg","裁剪版移除了背景标牌，导出账号 yu_1024。"),appRecord("10/18 00:41","照片整理日志","只删除了副本，没有删除原始云端备份。")],maps:[appRecord("03/21 16:38","校友书展东厅","设备在同一地点停留47分钟，与原图 EXIF 一致。","ep3-map"),appRecord("10/17 22:27","海棠小馆","与滴滴下车点相距180米。"),appRecord("10/17 23:56","海棠里 6 栋","夜间最后一次定位位于住宅区。")],shopping:[appRecord("03/17","相机电池收据","收据日期提示图库 PIN：月日四位数 0317。"),appRecord("10/12","手机壳订单","许知遥收件，颜色与合照里的手机壳相同。"),appRecord("10/16","胶卷冲洗预约","取件时间安排在周五下班后。")],notes:[appRecord("置顶备忘","原始照片不要覆盖","离线图库密码使用相机配件收据的日期。"),appRecord("书展","东厅北侧窗边","那天正好下雨，大家在走廊等雨停。"),appRecord("10/17","照片整理","裁剪版发给小号，原图留在云盘。")]},clues:{"ep3-photo":{app:"照片",title:"隐藏合照原图拍于3月21日",detail:"原始 EXIF 与哈希证明照片不是10月新拍；它来自书展备份，说明两人的联系早于最近几次周五行程。"},"ep3-file":{app:"文件",title:"原图与裁剪版哈希不同",detail:"IMG_0321_ORIGINAL.heic 时间为3月21日；10月17日导出的裁剪版移除了背景标牌。"},"ep3-map":{app:"地图",title:"书展地点与旧照片吻合",detail:"3月21日设备在校友书展东厅停留47分钟，与照片 EXIF 和许知遥活动地点互相验证。"}},explanation:"裁剪图日期被改过，但原始 EXIF、文件哈希与地图位置把时间拉回三月书展。两人的联系并非十月才开始。"},
+      {id:"04",name:"晚潮双排",kicker:"CASE 04 · 晚潮双排",heading:"唐芮的小号？登录记录并不这么说",description:"游戏好友唐芮看起来最可疑；旧社团账号却可能被多人共用。沿 QQ 恢复资料、语音备忘和登录记录查清实际使用者。",summary:"不要把固定组队直接当作出轨证据。账号归属、语音时间和唐芮的直播回放会把三条生活线分开。",question:"“晚潮_1024”在关键周五夜里由谁实际使用？",answerId:"xu",choices:[{id:"xu",name:"许知遥",hint:"恢复资料和海盐别名吻合"},{id:"lin",name:"林晚",hint:"工单时间显示她在公司上线"},{id:"tang",name:"唐芮",hint:"她拥有旧社团账号，但当晚在直播"}],required:["ep4-qq","ep4-game","ep4-live"],pin:"0712",pinHint:"游戏备份盒 PIN 是旧战队成立日期月日。",daily:["唐芮的直播排班已同步，周五20:00开播。","江屿的游戏手柄在10月18日更换摇杆。"],people:[["唐芮","创建过摄影社游戏战队，旧账号后来借给许知遥保管；她本人用 tang_rui_live 直播。"],["许知遥","QQ小号恢复邮箱实名与海盐昵称一致，继续使用旧队伍账号。"],["林晚","部署工单显示她在办公室，和晚潮账号没有登录关联。"]],events:[["07/12","摄影社成立星港战队，晚潮_1024 创建。"],["08/05","唐芮换用个人账号，旧号交由许知遥管理。"],["10/17","晚潮_1024 与江屿双排；唐芮直播回放覆盖同一时段。"]],records:{private:[appRecord("07/12","旧战队备份盒","建立日期在摄影社群公告中可查；月日四位数是设备 PIN：0712。"),appRecord("08/05","账号移交记录","唐芮把晚潮_1024交由许知遥管理，并改用个人账号。"),appRecord("10/17","登录设备摘要","旧号登录设备与 yu_1024 相同，唐芮直播回放覆盖同一时段。","ep4-game")],qq:[appRecord("账号资料","晚潮_1024","恢复邮箱实名为许知遥；唐芮在旧群说已将账号交还知遥。","ep4-qq"),appRecord("摄影社旧群","07/12 战队建立","管理员记录显示许知遥负责账号维护。"),appRecord("消息节选","“晚潮我交给知遥了”","唐芮：以后我用 tang_rui_live，旧号别再算我。")],game:[appRecord("10/03 22:31","晚潮_1024 + 江屿","登录设备位置在海棠里；唐芮主号当晚在战队大厅。","ep4-game"),appRecord("10/17 22:30","连续双排 96 分钟","设备指纹与 yu_1024 备用号相同。"),appRecord("好友备注","海盐","备注更新人与 QQ 账号恢复邮箱一致。")],voiceMemos:[appRecord("10/17 22:45","楼下等你","江屿：我到海棠楼下了。背景能听见咖啡机提示音。"),appRecord("07/12","队伍注册日","便笺提示用这天的月日打开游戏备份。"),appRecord("语音转写","海盐：东门风大","与地图中海棠里东门记录吻合。")],douyin:[appRecord("10/17 20:02—23:58","唐芮直播回放","平台服务器回放显示她一直在直播间。","ep4-live"),appRecord("10/17 12:16","林晚点赞","工作视频互动发生在午间。"),appRecord("10/17 22:10","海盐评论","“东门见”出现在行程开始前。")],health:[appRecord("唐芮","直播间连续步数","手环位置在家中，没有海棠里轨迹。"),appRecord("江屿","22:12—00:05 步行","海棠里附近活动。"),appRecord("林晚","部署值班","办公室工牌 21:03 刷出。")]},clues:{"ep4-qq":{app:"QQ",title:"旧号恢复邮箱属于许知遥",detail:"晚潮_1024 的恢复邮箱实名是许知遥；唐芮在旧群说明已把账号借给她。"},"ep4-game":{app:"游戏中心",title:"双排设备与备用号相同",detail:"晚潮账号与 yu_1024 登录设备指纹一致，10月17日与江屿连续组队。"},"ep4-live":{app:"抖音",title:"唐芮整晚在直播",detail:"平台回放证明唐芮20:02至23:58都在直播，排除她在海棠里赴约。"}},explanation:"唐芮确实创建过晚潮账号，但在关键夜晚有直播回放。QQ恢复邮箱、登录设备与备用微信共同证明，实际使用者是许知遥。"},
+      {id:"05",name:"第一次看海",deviceDate:"2025.11.22",kicker:"CASE 05 · 第一次看海",heading:"那句“第一次看海”，写给谁？",description:"五条线索终于汇到一段旧约。江屿不只是临时改了周五计划；备忘、日历和语音记录解释他为何一直没有告诉林遥。",summary:"回到三月书展与那句“第一次看海”，还原江屿、林遥和许知遥之间被拖延的告白与被隐瞒的关系。",question:"江屿把第一次看海约给了谁？他从什么时候开始对林遥隐瞒？",answerId:"xu",choices:[{id:"xu",name:"许知遥",hint:"旧约、转账与私密语音相互印证"},{id:"lin",name:"林晚",hint:"工单和通讯记录显示只是同事"},{id:"tang",name:"唐芮",hint:"直播与游戏记录已排除"}],required:["ep5-calendar","ep5-notes","ep5-voice"],pin:"1121",pinHint:"日历里第一次海边约定写着11月21日，PIN 用月日四位数。",daily:["林遥发来三条未回复的视频邀请。","许知遥的生日提醒没有同步到主号。"],people:[["林遥","江屿的异地恋伴侣；她以为每周五的取消都是工作所需，直到发现“项目复盘”反复被删除。"],["许知遥","江屿的摄影社旧友。三月重新联系后，两人约定在11月21日第一次一起看海。"],["江屿","明知林遥仍以为两人关系如常，却把异地、项目和旧友当作拖延坦白的借口。"]],events:[["2024/11","江屿与林遥开始异地恋，约定每周五视频。"],["2025/03/21","江屿与许知遥在书展重逢，备用号从此出现。"],["2025/10/17","小号、行程、转账和原图互相印证。"],["2025/10/24","第一次看海原约因林遥临时到访被江屿取消，他改称要加班。"],["2025/11/21","江屿把约会改期后仍未向林遥坦白，未发送草稿留下解释。"]],records:{contacts:[appRecord("2025/11/21","林晚 · 云台发布组","发布工单与公司门禁都显示她下班后未与江屿见面。"),appRecord("2025/11/21","唐芮 · tang_rui_live","战队群聊仍使用个人账号；晚潮旧号管理员为许知遥。"),appRecord("2025/11/21","海盐 · 许知遥","通讯录备注保留“海盐 / X.Y.”，与书展相识记录一致。")],private:[appRecord("11/21","未发送语音草稿","江屿承认应先结束与林遥的关系，再决定是否兑现和许知遥的旧约。","ep5-voice"),appRecord("11/20","海边路线备份","行程原定11月21日；PIN 使用约定日期的月日：1121。"),appRecord("11/21","同步状态","江屿取消订位后，把照片与语音留在离线备份。")],calendar:[appRecord("11/21 22:30","第一次看海 · 海棠里东门","私人日历参与人：海盐；前一天被江屿标记取消。","ep5-calendar"),appRecord("10/17 20:30","项目复盘","已取消；19:51 删除了会议链接。"),appRecord("10/17 21:00","给林遥的视频通话","提醒被静音，未拨出。"),appRecord("10/24 20:30","第一次看海 · 首次延期","林遥临时到访，江屿以工作为由取消赴约，把海边计划改到11月21日。")],notes:[appRecord("置顶 · 3月书展后","不要再拖着不说","林遥以为我还会回去；知遥说等第一次看海之后再一起决定。","ep5-notes"),appRecord("11/21","第一次看海","东门集合，带上书展那卷胶片。"),appRecord("设备提醒","隐私空间 PIN","日期取自第一次看海的月日：1121。")],wechatAlt:[appRecord("10/17 23:48","海盐 · 私聊","许知遥：别再让她等视频了。江屿：我会找时间说。","ep5-voice"),appRecord("11/20 21:10","未发送草稿","林遥，对不起。我应该早点告诉你。"),appRecord("11/21 19:03","约定取消","江屿：我没法继续装作只是老同学。")],alipay:[appRecord("8月—10月","每月固定转账","许知遥每月收¥680，备注从停车位改成水电。","ep5-transfer"),appRecord("10/18","取消周期提醒","之后没有新的周期转账。"),appRecord("11/21","未完成订位","海棠小馆双人预订被取消。")]},clues:{"ep5-calendar":{app:"日历",title:"第一次看海的约定给了许知遥",detail:"11月21日私人日程参与人是海盐；同日给林遥的视频提醒被静音。"},"ep5-notes":{app:"备忘录",title:"江屿知道自己一直在隐瞒",detail:"备忘录写着“林遥以为我还会回去”“我应该早点告诉她”，说明他明知林遥仍以为两人如常。"},"ep5-voice":{app:"微信小号",title:"许知遥要求他停止隐瞒",detail:"私聊和未发送草稿显示江屿与许知遥保持秘密关系，并计划在11月21日坦白。"}},explanation:"五案线索拼成完整时间线：江屿与林遥仍在异地恋时，三月和旧友许知遥重逢，随后用加班作借口取消视频；小号、重复行程、转账和原图证实秘密关系。"}
+    ];
+    let activeChapterIndex=0;
+    function escapeMarkup(value){return String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[char]))}
+    const routineRecords={
+      wechat:[appRecord("08:12","妈妈","周日回来吃饭吗？外婆说想你。"),appRecord("12:16","云台项目组","构建通过，晚上的发布回滚窗口改到周一。"),appRecord("19:05","读书社群","周末书展志愿者还缺一人。")],
+      wechatAlt:[appRecord("09:12","账号安全提醒","备用账号仅在本机登录。"),appRecord("13:28","摄影社群","冲洗胶卷已完成，周末可取。"),appRecord("18:46","置顶备忘","不要和家人群混用账号。")],
+      contacts:[appRecord("09:00","妈妈","家庭联系人，常用。"),appRecord("10:30","顺丰快递","快递员，昨天联系过。"),appRecord("16:20","物业前台","门禁卡补办电话。")],
+      moments:[appRecord("08:50","早餐记录","家附近豆浆店打卡。"),appRecord("12:05","工作动态","项目上线海报，林晚点赞。"),appRecord("20:15","跑步打卡","江边路线 3.2 公里。")],
+      douyin:[appRecord("09:40","猫咪视频","收藏，未评论。"),appRecord("13:22","产品发布视频","林晚评论了工作演示。"),appRecord("20:10","晚间直播","观看音乐频道 12 分钟。")],
+      douyinAlt:[appRecord("10:00","摄影账号","关注 17 人。"),appRecord("15:20","草稿箱","一条未发布的海边短片。"),appRecord("19:42","账号安全","无异地登录。")],
+      didi:[appRecord("08:02","家 → 云台科技园","常用通勤路线，约¥22.40。"),appRecord("18:56","科技园 → 家","周一至周四常见行程。"),appRecord("周三","市图书馆 → 家","下雨天叫车，¥18.20。")],
+      meituan:[appRecord("08:10","早餐 · 豆浆油条","送到云台科技园前台。"),appRecord("12:22","工作日午餐","单人简餐，实付¥28。"),appRecord("周日","猫粮补货","收件地址：江屿住址。")],
+      qq:[appRecord("09:12","高中同学群","周末聚会投票。"),appRecord("14:21","摄影社旧群","分享冲洗胶卷店铺。"),appRecord("19:00","星港战队","周赛改期通知。")],
+      game:[appRecord("20:04","星港日常任务","单人完成，时长14分钟。"),appRecord("周三 21:12","唐芮主号","组队两局后下线。"),appRecord("周日 16:30","战队签到","未开语音。")],
+      redbook:[appRecord("10:15","通勤咖啡清单","收藏了三家公司附近咖啡店。"),appRecord("周末","书店路线","收藏在城西老街。"),appRecord("昨天","相机清洁笔记","浏览时长 2 分钟。")],
+      photos:[appRecord("10/18 09:04","猫咪照片","位置：江屿住址。"),appRecord("10/16 18:20","项目白板","工作记录，无人物。"),appRecord("10/12 15:17","胶卷扫描件","摄影社活动合照。")],
+      private:[appRecord("系统","隐藏文件夹索引","加密，需设备主人口令。"),appRecord("备份","旧相册缩略图","仅本机缓存。"),appRecord("安全","最近解锁记录","系统自动记载。")],
+      alipay:[appRecord("10/20","音乐会员","自动续费¥15。"),appRecord("10/19","电费","家庭账单¥86。"),appRecord("10/15","便利店","矿泉水与早餐，¥12。")],
+      shopping:[appRecord("10/11","机械键盘键帽","寄至江屿住址。"),appRecord("10/13","充电线","公司前台签收。"),appRecord("10/18","猫粮补充装","老地址，已签收。")],
+      notes:[appRecord("周一","购物清单","牛奶、咖啡豆、洗衣液。"),appRecord("10/14","项目待办","准备周会截图。"),appRecord("上周","读书摘抄","未标记共享。")],
+      calendar:[appRecord("周一—周四","每日站会","10:00，云台会议室。"),appRecord("周六","洗衣提醒","下午 15:00。"),appRecord("周日","给妈妈回电话","20:30。")],
+      browser:[appRecord("09:20","机械键盘静音轴对比","阅读 4 分钟。"),appRecord("14:18","猫咪换季掉毛","收藏文章。"),appRecord("周日","青岛天气预报","搜索一次。")],
+      health:[appRecord("今日","步数 6,482","日常通勤与午间散步。"),appRecord("睡眠","6小时42分","周四晚入睡 00:18。"),appRecord("周日","户外步行","3.2 公里。")],
+      music:[appRecord("08:42","通勤播放列表","《慢慢走》循环 3 次。"),appRecord("午间","白噪音","播放 18 分钟。"),appRecord("周日","摄影社歌单","下载 5 首。")],
+      settings:[appRecord("iCloud","同步正常","最近备份 22:06。"),appRecord("蓝牙","已连接车载设备","周五 22:07。"),appRecord("电池","最大容量 86%","系统信息。")],
+      files:[appRecord("昨天","云台项目周报.pdf","1.8 MB，已共享到工作群。"),appRecord("周二","书展报名表.xlsx","摄影社资料。"),appRecord("10/18","猫粮电子收据.pdf","已同步。")],
+      weather:[appRecord("海棠里","多云 18°","东北风 2 级。"),appRecord("周末预报","有风","日落 17:42。"),appRecord("空气质量","良","无预警。")],
+      reminders:[appRecord("今天","缴手机话费","个人清单。"),appRecord("周六","买咖啡豆","未完成。"),appRecord("周日","回家吃饭","家庭清单。")],
+      voiceMemos:[appRecord("10/12","项目灵感","录音 0:34。"),appRecord("10/16","书店地址","录音 0:12。"),appRecord("昨天","猫粮清单","录音 0:08。")],
+      maps:[appRecord("常用地点","家","江屿住址。"),appRecord("常用地点","公司","云台科技园。"),appRecord("最近搜索","城西旧书店","周日 15:00。")]
+    };
+    function chapterClue(id){return chapters[activeChapterIndex]?.clues?.[id]||clueData[id]||null}
+    function renderChapterPanel(){
+      const chapter=chapters[activeChapterIndex];
+      $("#chapter-current").textContent=`第 ${activeChapterIndex+1} 案　·　${chapter.name}`;
+      $("#chapter-choices").innerHTML=chapters.map((item,index)=>`<button type="button" class="chapter-choice ${index===activeChapterIndex?"active":""}" data-chapter-index="${index}" aria-pressed="${index===activeChapterIndex}"><span class="chapter-number">0${index+1}</span><span><strong>${escapeMarkup(item.name)}</strong><small>${escapeMarkup(item.summary)}</small></span></button>`).join("");
+      $("#chapter-summary").innerHTML=`<strong>${escapeMarkup(chapter.heading)}</strong><p>${escapeMarkup(chapter.summary)}</p><p><b>调查问题：</b>${escapeMarkup(chapter.question)}</p>`;
+      const people=(chapter.people||[]).map(([name,detail])=>`<article class="person-card"><strong>${escapeMarkup(name)}</strong><p>${escapeMarkup(detail)}</p></article>`).join("");
+      const events=(chapter.events||[]).map(([date,detail])=>`<div class="story-event"><time>${escapeMarkup(date)}</time><span>${escapeMarkup(detail)}</span></div>`).join("");
+      $("#case-panel-story").innerHTML=`<div class="brief-card"><strong>人物关系与本案背景</strong><p>这些页面来自江屿交付的虚构手机备份。案件可独立调查，也会补齐同一段关系的时间线。</p></div><div class="people-list">${people}</div><div class="case-timeline"><h3>关联时间线</h3>${events}</div><div class="case-note">核对提示：普通生活记录不等于嫌疑证据；账号归属、时间地点与收付款对象需要多处记录互相印证。</div>`;
+      $("#case-kicker").textContent=chapter.kicker;
+      $("#case-heading").textContent=chapter.heading;
+      $("#case-description").textContent=chapter.description;
+      $("#case-code").innerHTML=`DEVICE OWNER　JIANG YU<br>BACKUP DATE　${escapeMarkup(chapter.deviceDate||"2025.10.24")}`;
+      const date=(chapter.deviceDate||"2025.10.24").split(".");
+      const month=Number(date[1])||10,day=Number(date[2])||24;
+      const lockDate=$(".lock-date");if(lockDate)lockDate.textContent=`备份日 · ${month}月${day}日`;
+      const homeDate=$(".home-date-label");if(homeDate)homeDate.textContent=`${month}月${day}日　·　${chapter.name}`;
+      $("#answer-case-label").textContent=`CASE 0${activeChapterIndex+1} / 05`;
+      $("#answer-question").textContent=chapter.question;
+      renderCandidates();
+    }
+    function selectChapter(index,notify=true){
+      if(!Number.isInteger(index)||!chapters[index])return;
+      activeChapterIndex=index;evidence.clear();selectedCandidate="";privateUnlocked=false;previousContent="";
+      $("#result-modal").classList.remove("show");$("#evidence-context").classList.remove("open");pendingEvidence=null;
+      renderChapterPanel();renderEvidence();renderHome();
+      if(notify)showToast(`已打开第 ${index+1} 案 · ${chapters[index].name}`);
+    }
+    function resetChapter(){
+      evidence.clear();selectedCandidate="";privateUnlocked=false;previousContent="";
+      $("#result-modal").classList.remove("show");$("#evidence-context").classList.remove("open");pendingEvidence=null;
+      renderChapterPanel();renderEvidence();renderHome();showToast("本案调查已重置");
+    }
+    function appBackMarkup(label){return `<svg viewBox="0 0 12 16" aria-hidden="true"><path d="M9 2 3 8l6 6"/></svg><span>${escapeMarkup(label)}</span>`}
+    function renderApp(id){
+      currentApp=id;previousContent="";const app=apps.find(item=>item.id===id);$("#app-title").textContent=app?.name||({wechatAlt:"微信小号",douyinAlt:"抖音小号"}[id]||"应用");const backButton=$("#back-home");delete backButton.dataset.subpageBack;backButton.innerHTML=appBackMarkup("返回");currentAppTabLabel=(appTabsById[id]||[["⌂","概览"]])[0][1];$("#lock-screen").style.display="none";$("#sim-phone").classList.remove("locked");$("#home-screen").style.display="none";closeSystemOverlays();$("#evidence-context").classList.remove("open");pendingEvidence=null;$("#app-page").classList.add("open");renderNativeTabs(id);
+      const content=$("#app-content");let html="";const chapter=chapters[activeChapterIndex];
+      if(id==="private"&&!privateUnlocked){html=`<div class="pin-panel"><div class="pin-icon">⌑</div><div class="eyebrow">DEVICE LOCK</div><h3>隐私空间已锁定</h3><p>${chapter.pinHint}<br>请从手机内的备忘录、日程或票据中推理四位密码。</p><form id="pin-form"><input class="pin-input" id="pin-code" type="password" inputmode="numeric" maxlength="4" placeholder="••••" aria-label="四位密码"><button class="app-button" type="submit">解锁隐私空间</button><div class="pin-error" id="pin-error"></div></form></div>`;}
+      else {html=episodeAppHtml(id,chapter);}
+      content.innerHTML=html;
+    }
+    function renderHome(){currentApp="";$("#app-page").classList.remove("open");$("#app-content").innerHTML="";$("#lock-screen").style.display="none";$("#sim-phone").classList.remove("locked");$("#home-screen").style.display="flex";closeSystemOverlays();$("#evidence-context").classList.remove("open");pendingEvidence=null}
+    function removeEvidence(id){if(!id||!evidence.has(id))return;evidence.delete(id);renderEvidence();showToast(`已从证据面板撤回 · 当前 ${evidence.size} 条`)}
+    function renderEvidence(){const host=$("#evidence-list");$("#evidence-count").textContent=`${evidence.size} 条`;const badge=$("#evidence-tab-count");badge.textContent=evidence.size>9?"9+":String(evidence.size);badge.classList.toggle("visible",evidence.size>0);if(!evidence.size){host.innerHTML='<div class="evidence-empty">右键或长按手机内任意记录即可固定。普通生活信息也可以成为线索。</div>';return}host.innerHTML=[...evidence.entries()].map(([id,item])=>`<article class="evidence-item"><small>${item.app}　·　已固定</small><strong>${item.title}</strong><p>${item.detail}</p><button class="row" data-evidence="${id}" aria-pressed="true"><span>从证据面板撤回</span><span class="chevron">×</span></button></article>`).join("")}
+    function openSubpage(title,summary,sourceId=currentApp,recordTime="",evidenceId=""){
+      if(currentApp==="private"&&!privateUnlocked){renderApp("private");showToast("隐私空间仍处于锁定状态，请先输入 PIN");return}
+      previousContent=$("#app-content").innerHTML;const appName=appTitleForId(currentApp);const sourceName=appTitleForId(sourceId);const chapter=chapters[activeChapterIndex];
+      const related=chapterRecords(sourceId,chapter).filter(record=>record.title!==title).slice(0,2);
+      const relatedHtml=related.map(record=>`<button type="button" class="row detail-related" data-page="${escapeMarkup(record.title)}" data-record-app="${escapeMarkup(sourceId)}" data-record-time="${escapeMarkup(record.time)}" data-record-summary="${escapeMarkup(record.text)}"${record.evidenceId?` data-evidence-id="${escapeMarkup(record.evidenceId)}"`:""}><span><b>${escapeMarkup(record.title)}</b><small>${escapeMarkup(record.time)}　·　${escapeMarkup(record.text)}</small></span><span class="chevron">›</span></button>`).join("");
+      const backButton=$("#back-home");backButton.dataset.subpageBack="true";backButton.innerHTML=appBackMarkup("返回");
+      $("#app-content").innerHTML=`<div class="timeline-card detail-record" data-record-app="${escapeMarkup(sourceId)}" data-record-time="${escapeMarkup(recordTime)}"${evidenceId?` data-evidence-id="${escapeMarkup(evidenceId)}"`:""}><div class="message-meta">${escapeMarkup(sourceName)}　·　${escapeMarkup(chapter.name)}　·　${escapeMarkup(recordTime||"备份记录")}</div><strong>${escapeMarkup(title)}</strong><p>${escapeMarkup(summary)}</p><div class="detail-meta"><span>来源应用：${escapeMarkup(sourceName)}</span><span>设备主人：江屿</span><span>记录类型：本机备份</span></div></div><div class="section-title">同一应用的关联记录</div>${relatedHtml||`<div class="soft-card"><strong>${escapeMarkup(sourceName)} · 最近使用</strong><p>${escapeMarkup(summary)}</p></div>`}<small class="hint">以上均为虚构备份内容。可右键或长按任一记录，将其固定到证据面板。</small>`;
+      $("#app-content").scrollTop=0;
+    }
+    function renderCandidates(){const people=chapters[activeChapterIndex].choices;$("#candidate-list").innerHTML=people.map(person=>`<button class="candidate ${selectedCandidate===person.id?"selected":""}" data-candidate="${person.id}"><span class="radio"></span><span><b>${escapeMarkup(person.name)}</b><br><small>${escapeMarkup(person.hint)}</small></span></button>`).join("")}
+    function showResult(){
+      if(!selectedCandidate){showToast("先选择一位候选对象");return}
+      const chapter=chapters[activeChapterIndex],chosen=chapter.choices.find(person=>person.id===selectedCandidate),correct=selectedCandidate===chapter.answerId;
+      const missing=chapter.required.filter(id=>!evidence.has(id));const complete=missing.length===0;const card=$("#result-card");
+      if(correct&&complete){
+        const next=activeChapterIndex<chapters.length-1?`<button data-next-chapter="${activeChapterIndex+1}">继续第 ${activeChapterIndex+2} 案</button>`:"<button data-close-result>返回调查档案</button>";
+        card.innerHTML=`<div class="eyebrow">结案报告　·　第 0${activeChapterIndex+1} 案</div><h2>${escapeMarkup(chapter.name)}：结案</h2><p>${escapeMarkup(chapter.explanation)}</p><p>你已固定本案要求的 ${chapter.required.length} 条独立证据，人物身份、关键时间和容易误认的线索都能互相核对。</p>${next}<button data-close-result>返回手机</button>`;
+      }else if(correct){
+        const needed=missing.map(id=>chapterClue(id)?.title||id).map(escapeMarkup).join("、");
+        card.innerHTML=`<div class="eyebrow">判断方向合理　·　证据还不完整</div><h2>暂时不能结案</h2><p>当前选择与已发现的线索相符，但还需要固定这些关键记录：${needed}。</p><p>回到手机查找原始记录，再提交一次判断。普通互动或单条暧昧留言不能单独构成结论。</p><button data-close-result>继续调查</button>`;
+      }else{
+        card.innerHTML=`<div class="eyebrow">复核判断　·　第 0${activeChapterIndex+1} 案</div><h2>现有记录不支持${escapeMarkup(chosen?.name||"这位候选人")}</h2><p>目前固定的线索更适合用来确认账号、时间或地点。继续核对 ${escapeMarkup(chapter.question)}，特别留意人物背景里能解释误导线索的记录。</p><p>${complete?"要求的证据已经齐全，可以重新选择更符合证据链的判断。":"还需固定："+missing.map(id=>chapterClue(id)?.title||id).map(escapeMarkup).join("、")}</p><button data-close-result>返回手机</button>`;
+      }
+      $("#result-modal").classList.add("show");
+    }
+    function showToast(message,destination){const toast=$("#toast");$("#toast-message").textContent=message;$("#toast-evidence").hidden=!destination;toast.classList.toggle("actionable",Boolean(destination));toast.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove("show"),2600)}
+    renderChapterPanel();renderEvidence();
+    document.body.addEventListener("click",event=>{
+      const mobileScreen=event.target.closest("[data-mobile-screen]");
+      const pinContext=event.target.closest("[data-context-pin]");const closeContext=event.target.closest("[data-close-context]");
+      const lockNotice=event.target.closest("[data-lock-open]");const nativeTab=event.target.closest("[data-native-tab]");const controlToggle=event.target.closest("[data-control]");const appBack=event.target.closest("#back-home");const homeBar=event.target.closest("#home-bar");
+      const open=event.target.closest("[data-app]");const route=event.target.closest("[data-open-app]");const launch=event.target.closest("[data-launch]");const page=event.target.closest("[data-page]");const clue=event.target.closest("[data-evidence]");const answer=event.target.closest("[data-candidate]");
+      if(Date.now()<suppressContextClickUntil&&event.target.closest(".app-content")){event.preventDefault();return}
+      if(pinContext){pinManualEvidence();return}
+      if(closeContext){$("#evidence-context").classList.remove("open");pendingEvidence=null;return}
+      if($("#evidence-context").classList.contains("open")&&!event.target.closest("#evidence-context")){$("#evidence-context").classList.remove("open");pendingEvidence=null}
+      if(mobileScreen){document.body.dataset.mobileView=mobileScreen.dataset.mobileScreen;document.querySelectorAll(".mobile-game-tabs button").forEach(tab=>tab.classList.toggle("active",tab===mobileScreen));$("#evidence-context").classList.remove("open");pendingEvidence=null;return}
+      const chapterButton=event.target.closest("[data-chapter-index]");
+      if(chapterButton){selectChapter(Number(chapterButton.dataset.chapterIndex));return}
+      if(event.target.closest("#reset-chapter")){resetChapter();document.body.dataset.mobileView="case";document.querySelectorAll(".mobile-game-tabs button").forEach(tab=>tab.classList.toggle("active",tab.dataset.mobileScreen==="case"));return}
+      const nextChapter=event.target.closest("[data-next-chapter]");
+      if(nextChapter){$("#result-modal").classList.remove("show");selectChapter(Number(nextChapter.dataset.nextChapter));document.body.dataset.mobileView="case";document.querySelectorAll(".mobile-game-tabs button").forEach(tab=>tab.classList.toggle("active",tab.dataset.mobileScreen==="case"));return}
+      if(event.target.closest("#toggle-case-info")){const panel=$(".case-panel");const expanded=panel.classList.toggle("open");event.target.closest("#toggle-case-info").textContent=expanded?"收起调查档案　⌃":"查看调查档案　⌄";return}
+      if(event.target.closest("#face-unlock")){unlockToHome();return}
+      if(event.target.closest("[data-lock-flash]")){event.target.closest("[data-lock-flash]").classList.toggle("on");showToast("手电筒（模拟）");return}
+      if(event.target.closest("[data-lock-camera]")){renderApp("photos");return}
+      if(lockNotice){renderApp(lockNotice.dataset.lockOpen);return}
+      if(controlToggle){controlToggle.classList.toggle("on");showToast(`${controlToggle.querySelector("span").textContent}（模拟）`);return}
+      if(event.target.closest("[data-clear-notifications]")){document.querySelectorAll("#notification-center .lock-notice").forEach(item=>item.remove());showToast("通知已清除");return}
+      if(event.target.id==="control-center"||event.target.id==="notification-center"){closeSystemOverlays();return}
+      if(nativeTab){renderAppSection(currentApp,nativeTab.dataset.nativeTab);return}
+      if(launch){renderApp(launch.dataset.launch);return}
+      if(open){const id=open.dataset.app;if(id==="private"&&!privateUnlocked)showToast("先从日历和备忘录里找 PIN 提示");renderApp(id);return}
+      if(route){const id=route.dataset.openApp;if(id==="private"&&!privateUnlocked){renderApp("private");return}renderApp(id);return}
+      if(page){const label=page.dataset.page;if(page.classList.contains("app-tab")){renderAppSection(currentApp,label);return}if(label==="微信小号"||label.includes("切换微信账号")){renderApp("wechatAlt");return}if(label==="抖音切换账号"||label.includes("切换抖音账号")){renderApp("douyinAlt");return}const summary=page.dataset.recordSummary||`${appPageDescriptions[currentApp]||appTitleForId(currentApp)} ${tabPurposes[currentAppTabLabel]||"打开了该条记录的完整备份内容。"}`;openSubpage(label,summary,page.dataset.recordApp||currentApp,page.dataset.recordTime||"",page.dataset.evidenceId||"");return}
+      if(clue){removeEvidence(clue.dataset.evidence);return}
+      if(answer){selectedCandidate=answer.dataset.candidate;document.querySelectorAll(".candidate").forEach(item=>item.classList.toggle("selected",item===answer));return}
+      if(appBack){if(appBack.dataset.subpageBack){delete appBack.dataset.subpageBack;appBack.innerHTML=appBackMarkup("返回");$("#app-content").innerHTML=previousContent;$("#app-content").scrollTop=0}else renderHome();return}
+      if(homeBar){renderHome();return}
+      if(event.target.closest("[data-back-subpage]")){ $("#app-content").innerHTML=previousContent;return }
+      if(event.target.closest("[data-close-result]")){ $("#result-modal").classList.remove("show");return }
+      if(event.target.closest("#submit-answer")){showResult();return}
+      if(event.target.closest("#app-menu")){const recent=chapterRecords(currentApp,chapters[activeChapterIndex])[0];openSubpage("应用选项",`${appPageDescriptions[currentApp]||appTitleForId(currentApp)} 当前打开「${currentAppTabLabel}」页；最近记录为“${recent.title}”（${recent.time}）。账号和同步信息均来自本机虚构备份。`,currentApp,recent.time);return}
+      if(event.target.closest("[data-translate]"))return;
+      if(event.target.closest("[data-page]")===null){const rowClick=event.target.closest(".row,.photo-thumb");if(rowClick){openSubpage(rowClick.textContent.trim(),"这条记录已打开。检查时间、地点、账号与订单信息是否能同其他线索吻合。")}}
+    });
+    document.body.addEventListener("submit",event=>{
+      if(event.target.id==="pin-form"){event.preventDefault();const code=$("#pin-code").value;const chapter=chapters[activeChapterIndex];if(code===chapter.pin){privateUnlocked=true;renderApp("private");showToast("隐私空间已解锁")}else{$("#pin-error").textContent="密码不正确；"+chapter.pinHint;$("#pin-code").value=""}return}
+    });
+    document.body.addEventListener("input",event=>{if(event.target.id==="chat-search"){document.querySelectorAll("#chat-results .row").forEach(item=>item.style.display=item.textContent.toLowerCase().includes(event.target.value.toLowerCase())?"flex":"none")}if(event.target.matches(".record-search")){const query=event.target.value.trim().toLocaleLowerCase();const records=[...document.querySelectorAll("#app-content .episode-record")];let shown=0;records.forEach(item=>{const match=item.textContent.toLocaleLowerCase().includes(query);item.style.display=match?"":"none";if(match)shown++});const empty=$("#record-search-empty");if(empty)empty.hidden=shown>0}});
+    document.body.addEventListener("input",event=>{if(event.target.matches(".cc-slider input")){const brightness=document.querySelector(".cc-slider input[aria-label='屏幕亮度']");if(event.target===brightness)$("#phone-screen").style.filter=`brightness(${Number(brightness.value)/100})`}});
+    function openSystemPanel(id){openSystemOverlay(id)}
+    const simulatedPhone=$("#sim-phone");
+    const evidenceTargetSelector=".app-content .soft-card,.app-content .timeline-card,.app-content .row,.app-content .bubble,.app-content .photo-thumb,.app-content p,.app-content h3,.app-content .section-title,.app-content .message-meta,.app-content,.lock-notice,.home-widget,.notice,.nc-time";
+    function cancelLongPress(){if(longPressTimer){clearTimeout(longPressTimer);longPressTimer=null}}
+    simulatedPhone.addEventListener("pointerdown",event=>{const rect=simulatedPhone.getBoundingClientRect();gestureStart={x:event.clientX-rect.left,y:event.clientY-rect.top,width:rect.width,height:rect.height,lock:$("#lock-screen").style.display!=="none",system:$("#control-center").classList.contains("open")||$("#notification-center").classList.contains("open"),home:$("#home-screen").style.display!=="none",app:$("#app-page").classList.contains("open")};cancelLongPress();longPressFired=false;const target=event.target.closest(evidenceTargetSelector);if(event.pointerType==="touch"&&target&&!event.target.closest("input,textarea,.app-tab,.app-tabbar,.app-button")){longPressTimer=setTimeout(()=>{longPressFired=true;suppressContextClickUntil=Date.now()+800;openEvidenceContext(target)},540)}});
+    simulatedPhone.addEventListener("pointermove",event=>{if(!longPressTimer||!gestureStart)return;const rect=simulatedPhone.getBoundingClientRect();if(Math.abs(event.clientX-rect.left-gestureStart.x)>12||Math.abs(event.clientY-rect.top-gestureStart.y)>12)cancelLongPress()});
+    simulatedPhone.addEventListener("pointercancel",cancelLongPress);
+    simulatedPhone.addEventListener("contextmenu",event=>{const target=event.target.closest(evidenceTargetSelector);if(!target||event.target.closest("input,textarea,.app-tab,.app-tabbar,.app-button"))return;event.preventDefault();suppressContextClickUntil=Date.now()+500;openEvidenceContext(target)});
+    simulatedPhone.addEventListener("pointerup",event=>{
+      if(longPressTimer)cancelLongPress();
+      if(longPressFired){longPressFired=false;gestureStart=null;return}
+      if(!gestureStart)return;
+      const rect=simulatedPhone.getBoundingClientRect();const deltaX=event.clientX-rect.left-gestureStart.x;const deltaY=event.clientY-rect.top-gestureStart.y;const start=gestureStart;gestureStart=null;
+      if(start.system&&deltaY<-45){closeSystemOverlays();return}
+      if(start.lock&&deltaY<-45){unlockToHome();return}
+      if(deltaY>55&&start.y<54&&start.x>start.width*.62){openSystemPanel("control-center");return}
+      if(deltaY>55&&start.y<54){openSystemPanel("notification-center");return}
+      if(start.app&&deltaY<-45&&start.y>start.height-70){renderHome();return}
+    });
+    document.body.addEventListener("click",event=>{if(event.target.closest("#start-game"))$("#welcome").classList.add("hidden");if(event.target.closest("#skip-intro")){$("#welcome").classList.add("hidden");showToast("调查档案已打开")}});
+  </script>
+</body>
+</html>
